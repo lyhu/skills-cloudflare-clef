@@ -1,50 +1,51 @@
-# Clef-Browser 浏览器链接导航可行性评测报告
+**English** | [简体中文](CLEF_BROWSER_REPORT_zh.md)
 
-**核心结论**：在受限只读超链接导航场景下，Clef 决策原型表现稳健，3 个目标任务各 3 次测试**全部顺利通过（9/9 完成）**。通用全自主浏览器 Agent 仍需更多工程支持。
+# Clef-Browser Navigation Feasibility Report
+
+**Core Finding**: Across constrained read-only hyperlink navigation scenarios, the Clef decision prototype demonstrated rock-solid reliability: 3 target tasks evaluated across 3 trials each **completed successfully (9/9 passed)**. Fully autonomous general browser agents remain an area requiring further engineering.
 
 ---
 
-## 1. 实验设计与实测数据
+## 1. Experimental Design & Measured Telemetry
 
-评测日期：2026-10-04 · 部署环境：真实私网 Clef HTTP 服务 + `ego-browser` 真实会话。
-实验设计：3 个已知目标任务分别执行 3 次独立循环（顺序：ABC / CBA / BAC）。单步采用 `choice` 原语，置信度阈值设为 0.6，单任务预算上限 5 步 / 45 秒。任务完成要求同时满足模型输出 DONE 与独立的目标 URL 校验。
+Evaluation Date: 2026-10-04 · Deployment: Live private Clef HTTP backend + `ego-browser` active session.
+Experimental Design: 3 deterministic navigation tasks executed across 3 independent cycles (order: ABC / CBA / BAC). Single steps leveraged the `choice` primitive with a 0.6 confidence threshold and a budget of 5 steps / 45 seconds per run. Completion required both the model's `DONE` emission and independent goal URL verification.
 
-| 目标任务 | 成功率 | 端到端耗时中位数 | 累计决策耗时中位数 | 单次请求数 |
+| Target Navigation Task | Success Rate | Median End-to-End Latency | Median Cumulative Decision Latency | Requests per Task |
 | :--- | :---: | :---: | :---: | :---: |
-| **GitHub 仓库 → CONTRIBUTING.md** | 3/3 | 4.82 s | 2.18 s | 2 |
-| **GitHub 仓库 → src/cli.ts** | 3/3 | 6.41 s | 3.20 s | 3 |
-| **X 搜索页 → 指定 Jev 案例原帖** | 3/3 | 5.42 s | 2.05 s | 2 |
+| **GitHub Repo → CONTRIBUTING.md** | 3/3 | 4.82 s | 2.18 s | 2 |
+| **GitHub Repo → src/cli.ts** | 3/3 | 6.41 s | 3.20 s | 3 |
+| **X Search → Specific Jev Case Tweet** | 3/3 | 5.42 s | 2.05 s | 2 |
 
-- **耗时构成**：端到端耗时涵盖初始页面加载、DOM 提取、HTTP 决策请求、CDP 导航跳转及异步渲染等待；累计决策耗时包含 Python CLI 启动与网络通信（单步决策中位数区间：0.57s ~ 1.62s）。
-- **上下文开销**：当页面候选链接达到 19 项时单步耗时约 1.6s；简短的完成度判定约 0.6s。
-
----
-
-## 2. 关键工程问题与发现
-
-在初版 X 平台测试中，模型准确选择了目标推文链接，但由于推文异步正文尚未渲染完毕，校验层过早判定未就绪并触发 HANDOFF。在引入显式的正文就绪等待条件（`waitForFunction`）后，后续 3 次重复测试均以 100% 成功率完成。
-- 初期未就绪轨迹归档：[x-browser-before-readiness.json](reports/clef-browser/x-browser-before-readiness.json)
-- 最终测试结果与驱动哈希：[results.json](reports/clef-browser/results.json)
+- **Latency Breakdown**: End-to-end latency includes initial page navigation, DOM extraction, HTTP decision RPCs, CDP navigation dispatches, and async render waits; cumulative decision latency accounts for Python CLI invocation and network round-trips (median step latency range: 0.57s ~ 1.62s).
+- **Candidate Scaling**: Evaluating 19 link candidates took ~1.6s; lightweight completion checks took ~0.6s.
 
 ---
 
-## 3. 工程难度与演进边界评估
+## 2. Key Engineering Challenges & Discoveries
 
-| 阶段定位 | 难度等级 | 现状与核心工程要求 |
+During initial X platform trials, the model accurately picked the target tweet anchor, but because tweet text rendered asynchronously, verification fired prematurely and triggered a `HANDOFF`. Introducing explicit readiness predicates (`waitForFunction`) resolved the issue, and all subsequent repeated trials passed with 100% success.
+- Pre-readiness traces archived: [x-browser-before-readiness.json](reports/clef-browser/x-browser-before-readiness.json)
+- Final verified runs and harness hashes: [results.json](reports/clef-browser/results.json)
+
+---
+
+## 3. Engineering Complexity & Scope Assessment
+
+| Maturity Tier | Complexity | Status & Core Engineering Demands |
 | :--- | :---: | :--- |
-| **当前原型（只读链接寻路）** | **中等（已完成）** | 复用现有浏览器会话；运行时代码严格控制候选链接白名单、去重、防死循环与独立结果校验。 |
-| **扩展交互（表单/菜单/筛选）** | **中高（已验证）** | 依赖高可靠的 DOM 元素定位、确定性已知输入传参、显式页面就绪等待及操作后状态校验。 |
-| **全自主通用 Agent** | **极高（需持续演进）** | 涉及全局规划、复杂视觉排版理解、多因子认证、操作副作用防护及自愈重试等。 |
+| **Current Prototype (Read-only Navigation)** | **Moderate (Shipped)** | Reuses existing browser session; runtime code enforces candidate whitelisting, deduplication, cycle detection, and independent assertions. |
+| **Extended Controls (Forms/Menus/Selects)** | **Medium-High (Verified)** | Relies on robust DOM element extraction, deterministic known-value injection, explicit render predicates, and post-action assertions. |
+| **Autonomous General Agent** | **Very High (Ongoing)** | Requires global task planning, visual layout understanding, multi-factor authentication, side-effect safety gates, and self-healing. |
 
-> **方法论提示**：本实验专一验证已知目标的链接导航，未设置自回归大模型基准对照，因此不作为浏览器端到端提速比率的宣称依据。
+> **Methodological Caveat**: This experiment isolated deterministic link navigation without an autoregressive LLM baseline; it is not presented as an end-to-end speedup comparison.
 
 ---
 
-## 4. 默认路由接入验证
+## 4. Default Routing Verification
 
-借鉴 Agent 内部循环模式，通过 `scripts/install-browser.py` 写入本机配置并在 `ego-browser` 技能中注入路由提示。在去除脚本显式环境变量后，两项中文目标测试均顺利跑通：
-- **贡献指南导航**：循环耗时 3.16s
-- **X 原帖定位**：循环耗时 3.38s
+Following internal Agent routing patterns, `scripts/install-browser.py` writes local configuration and injects routing hints into `ego-browser`. With explicit environment variables cleared, two Chinese natural language tasks completed smoothly:
+- **Contributing Guide Navigation**: Loop latency 3.16s
+- **X Original Tweet Discovery**: Loop latency 3.38s
 
-详细测试记录见 [default-routing.json](reports/clef-browser/default-routing.json)。
-
+Detailed execution traces: [default-routing.json](reports/clef-browser/default-routing.json).

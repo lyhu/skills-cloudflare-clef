@@ -1,55 +1,56 @@
 ---
 name: ego-clef
-description: 为 ego-browser 提供强类型语义决策支持。针对网页导航、搜索、菜单、筛选、已知值填写、原生下拉选择及页面滚动，通过 Clef 评估并选定下一步操作；完全复用既有浏览器会话，依赖 ego-browser 与通用 cloudflare-clef。
+description: Provides strongly-typed semantic decision support for ego-browser. Evaluates and selects browser actions (navigation, search, menus, filters, form filling, native selects, scrolling) via Clef while reusing existing browser sessions; depends on ego-browser and cloudflare-clef.
 license: Apache-2.0
 metadata:
   version: "1.0.0"
   author: "Open Source Contributor"
 ---
 
-# Ego Clef 浏览器语义决策技能
+**English** | [简体中文](SKILL_zh.md)
 
-本技能作为 `ego-browser` 的可选语义决策层，调用底层的 `cloudflare-clef` 决策客户端，在浏览器交互循环中为页面操作提供结构化判定。技能本身不包含模型权重，亦不启动冗余的浏览器实例。
+# Ego Clef Browser Semantic Decision Skill
 
----
-
-## 1. 运行依赖与路径解析
-
-- **环境要求**：Node.js 22+、Python 3.9+，以及可访问的 Clef 服务端点。
-- **技能依赖**：需预先安装 `ego-browser` 与 `cloudflare-clef`。
-- **路径解析**：优先读取环境变量 `CLEF_SKILL_DIR`；未指定时自动回退至同级目录 `cloudflare-clef`、`~/.agents/skills/cloudflare-clef` 或 `~/.codex/skills/cloudflare-clef`。若未检测到通用客户端，自动将任务交回主 Agent。
+This skill serves as an optional semantic decision-making layer for `ego-browser`. It invokes the underlying `cloudflare-clef` client to provide structured next-step evaluation within the browser interaction loop. The skill does not bundle model weights and does not launch redundant browser instances.
 
 ---
 
-## 2. 交互模式与核心接口
+## 1. Runtime Requirements & Path Resolution
 
-在同一个 TaskSpace / Page 中，对无需决策的固定操作直接执行；对需依据页面实时语义推断下一步的场景，调用以下接口：
-
-- **`navigate(page, goal, options)`**：多步超链接语义导航，从可见链接中挑选符合目标的最优路径。
-- **`interact(page, goal, options)`**：富交互控件操作，支持菜单展开、筛选应用、关键词搜索、已知值填写及页面滚动。
-- **动态策略约束**：主 Agent 根据具体任务提供 `allowAction`（操作与选择器白名单）及 `verify`（结果独立验证）。默认仅允许同源导航及页面滚动；点击、输入、提交等操作必须严格受控。
-- **输入安全规范**：`values` 仅传递已知、确定且非敏感的输入映射（如搜索关键词）。Clef 仅做键选择，由运行时代码原样填入，严禁要求模型生成凭据、密码或验证码。
+- **Environment**: Node.js 22+, Python 3.9+, and an accessible Clef service endpoint.
+- **Dependencies**: Requires prior installation of `ego-browser` and `cloudflare-clef`.
+- **Path Resolution**: Checks the `CLEF_SKILL_DIR` environment variable first; automatically falls back to sibling `cloudflare-clef`, `~/.agents/skills/cloudflare-clef`, or `~/.codex/skills/cloudflare-clef`. If the shared client is missing, control is yielded back to the primary agent.
 
 ---
 
-## 3. 架构分工与安全边界
+## 2. Interaction Patterns & Core Interfaces
 
-| 角色 | 核心职责 |
+Within the same TaskSpace / Page, deterministic actions are executed directly. For scenarios requiring real-time page semantic inference, use the following interfaces:
+
+- **`navigate(page, goal, options)`**: Multi-step hyperlink navigation, selecting the optimal path toward the goal from visible links.
+- **`interact(page, goal, options)`**: Rich interactive controls supporting menu expansion, filter application, keyword search, known-value filling, and page scrolling.
+- **Dynamic Policy Constraints**: The primary agent supplies `allowAction` (action and selector whitelist) and `verify` (independent post-action verification) per task. Default policies only allow same-origin navigation and scrolling; click, input, and submit operations must be strictly scoped.
+- **Input Safety Standards**: `values` only passes predetermined, non-sensitive input dictionaries (e.g., search keywords). Clef only performs key selection, and the runtime injects the mapped value verbatim. Generating credentials, passwords, or CAPTCHA answers via model inference is strictly prohibited.
+
+---
+
+## 3. Architectural Division & Safety Boundaries
+
+| Role | Core Responsibilities |
 | :--- | :--- |
-| **Clef 决策引擎** | 依据当前页面观察（最多 24 个候选动作）输出强类型下一步决策或 DONE/HANDOFF。 |
-| **ego-browser** | 负责底层 CDP 会话管理、DOM 事件触发、页面渲染与滚动执行。 |
-| **主 Agent** | 掌控全局任务规划、权限边界授权、输入字段提供、独立结果核验及异常兜底。 |
+| **Clef Engine** | Evaluates current page observations (up to 24 candidates) and outputs a strongly-typed next action, `DONE`, or `HANDOFF`. |
+| **ego-browser** | Manages underlying CDP sessions, DOM events, page rendering, and scrolling execution. |
+| **Primary Agent** | Controls high-level task planning, permission gating, input value provision, independent verification, and fallback handling. |
 
-### 兜底与交接契约（Handoff）
-遇到以下情况时立即中断循环并触发 `handoff`，由主 Agent 在既有浏览器会话中接管：
-- 配置缺失、服务网络异常或单步置信度低于阈值（默认 `0.6`）。
-- 页面状态未发生实质进展（死循环防护）或超出预算步数（默认 6 步，上限 20 步）。
-- 涉及登录认证、支付交易、内容发布/删除、文件下载、Canvas/拖拽及对话框确认等高敏感场景。
+### Handoff & Fallback Contract
+The loop terminates immediately with a `handoff` back to the primary agent within the existing browser session under the following conditions:
+- Missing configuration, network failure, or single-step confidence below threshold (default `0.6`).
+- No substantive progress detected across steps (infinite loop guard) or budget exceeded (default 6 steps, maximum 20).
+- Highly sensitive contexts encountered: authentication/login, payment transactions, content publication/deletion, file downloads, Canvas/drag-and-drop, or native modal dialogs.
 
 ---
 
-## 4. 可观测性与详细参考
+## 4. Observability & References
 
-- **任务日志**：浏览器操作流记录于 `~/.local/state/clef-browser/events.jsonl`，底层模型调用记录于 `~/.local/state/clef/events.jsonl`（`source: ego-clef`），二者通过 `call_id` 与 `run_id` 严格关联。
-- **详细参考**：完整 API 参数、操作类型表及安装指南详见 [references/browser.md](references/browser.md)。
-
+- **Telemetry Logs**: Browser interaction streams are recorded to `~/.local/state/clef-browser/events.jsonl`, and underlying model calls are recorded to `~/.local/state/clef/events.jsonl` (`source: ego-clef`), correlated via `call_id` and `run_id`.
+- **Detailed Reference**: For full API signatures, action schemas, and setup instructions, see [references/browser.md](references/browser.md) (or [references/browser_zh.md](references/browser_zh.md)).

@@ -1,24 +1,25 @@
-# 社区生产场景与实战案例调研
+**English** | [简体中文](X-APPLICATIONS_zh.md)
 
-检索基准：`jev typesafe` · X Latest · 2026-10-04。汇总公开推文与开发者分享的 System One 结构化决策应用线索（相关作者声称的指标未经独立第三方复核）。
+# Community Production Use Cases & Field Survey
+
+Search Baseline: `jev typesafe` · X Latest · 2026-10-04. Aggregated public posts and developer discussions showcasing structured System One decision applications (author-claimed performance metrics are not independently verified).
 
 ---
 
-## 1. 典型应用场景矩阵
+## 1. Production Scenario Matrix
 
-| 业务场景 | 核心价值与应用模式 | 原始证据与信源 |
+| Business Scenario | Core Value & Application Pattern | Source Evidence |
 | :--- | :--- | :--- |
-| **测试失败智能分流** (OpenClaw) | 将测试故障归类为 Harness、应用自身、环境、偶发抖动或数据异常，减少主模型大 Token 思考开销。 | [作者原帖说明](https://x.com/Colourpixels/status/2106636574423503176) |
-| **上下文注意力与记忆过滤** (OpenClaw) | 判定外部事件是否值得交互回复、日志是否沉淀至长期向量记忆；代码处理确定性过滤，Clef 处理语义判定。 | [作者原帖说明](https://x.com/Colourpixels/status/2106636574423503176) |
-| **编辑器文本质量复核** (Neovim) | 组合使用 `noul`（检查语病与不自然表达）与 `score`（文风与专业度打分），判定是否需触发二次重构。 | [作者发布帖](https://x.com/umiyosh/status/2106620158060183727) · [项目代码](https://github.com/umiyosh/ai-polish.nvim) |
-| **浏览器候选动作推断** (Browser Use) | 在可访问性无障碍树（Accessibility Tree）与候选动作列表中判定下一步操作。 | [社区分享推文](https://x.com/LilTea_eth/status/2106634441720557615) |
-| **文档审核流水线分流** (LangGraph) | 输出强类型审核结论（Pass/Reject/Review），由编排引擎依据枚举标签执行自动化分支流转。 | [LangChainJP 社区讨论](https://x.com/LangChainJP/status/2106648085577240797) |
-| **语音识别 (ASR) 语义容错** | 评估转录词元差异是否改变原句核心语义，补充单纯基于编辑距离的字错率指标。 | [行业线索探讨](https://x.com/SupersocksIntel/status/2106649139744235748) |
+| **Intelligent Test Failure Triage** (OpenClaw) | Categorizes test failures into harness issues, app bugs, env errors, flake, or data drift, eliminating large-LLM thinking tokens. | [Author Post](https://x.com/Colourpixels/status/2106636574423503176) |
+| **Contextual Attention & Memory Gating** (OpenClaw) | Evaluates whether inbound events warrant replies or long-term vector storage; code filters noise, Clef decides semantics. | [Author Post](https://x.com/Colourpixels/status/2106636574423503176) |
+| **Editor Text Quality Auditing** (Neovim) | Pairs `noul` (detects phrasing awkwardness) with `score` (style & professionalism rating) to trigger automated refinement. | [Release Post](https://x.com/umiyosh/status/2106620158060183727) · [Repository](https://github.com/umiyosh/ai-polish.nvim) |
+| **Browser Action Candidate Selection** (Browser Use) | Evaluates next-step interaction candidates against the live Accessibility Tree. | [Community Tweet](https://x.com/LilTea_eth/status/2106634441720557615) |
+| **Document Review Routing** (LangGraph) | Emits strongly-typed review outcomes (Pass/Reject/Review), driving automated branch transitions in graph workflows. | [LangChainJP Discussion](https://x.com/LangChainJP/status/2106648085577240797) |
+| **ASR Semantic Error Tolerance** | Evaluates whether transcription token substitutions alter core semantic intent, complementing raw character error rate. | [Field Note](https://x.com/SupersocksIntel/status/2106649139744235748) |
 
 ---
 
-## 2. 工程落地与落地建议
+## 2. Engineering Recommendations
 
-1. **高价值切入点**：流水线失败分类与文本初筛。输入固定上下文证据，输出强类型判定标签；低确定性样本自动回退至主 Agent。
-2. **职责清晰切分**：网络请求、页面加载与固定 DOM 选择器保持纯代码处理；仅在面临模糊分类与语义概率判定时接入 Clef。
-
+1. **High-ROI Entrypoints**: Pipeline failure triage and initial text filtering. Feed fixed contextual evidence and receive typed verdicts; fall back to the primary LLM when uncertainty is high.
+2. **Clear Division of Labor**: Network calls, page navigation, and fixed DOM queries remain native code; Clef is reserved strictly for ambiguous classification and semantic probabilities.

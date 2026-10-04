@@ -5,3 +5,6 @@ node_modules/
 .env
 .venv/
 .local/
+.DS_Store
+*.DS_Store
+.plans/
