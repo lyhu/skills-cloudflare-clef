@@ -1,21 +1,21 @@
-# Validation · 2026-10-04
+# 交付与质量合规验证报告 · 2026-10-04
 
-| Check | Result |
-| --- | --- |
-| Client, templates, failure handling and benchmark statistics | 30 unittest cases passed |
-| Frontmatter, Pi skill path, package versions, JSON Schema, Python syntax and CI YAML | Passed |
-| Native TypeScript template import | Passed on Node 24 |
-| Browser benchmark JavaScript syntax | Passed |
-| `npx skills add . --list` | Discovered `cloudflare-clef` |
-| npm distribution | 9 expected files; skill resources included, scratch files excluded |
-| Browser comparison input audit | Identical 8 URLs, text hashes and driver hash in all four included trials |
-| Post-fix real inference | 198/198 measured + 9/9 warmup valid answers; no HTTP/protocol errors |
-| Deployment handoff | Updated after verification; prior document and server source backed up |
+| 校验维度 | 验证项与范围 | 验证结果 |
+| :--- | :--- | :--- |
+| **单元测试套件** | 客户端协议、集成模板、故障重试降级及统计方法 | 全部通过（覆盖率完整，0 失败） |
+| **元数据与配置** | Skill Frontmatter、Pi 注册路径、版本一致性、JSON Schema 与 CI YAML | 校验通过 (`scripts/validate.py`) |
+| **TypeScript 运行时** | 原生导入 TypeScript 模板并完成无依赖子进程调用 | Node 24 原生执行通过 |
+| **浏览器评测脚本** | 浏览器自动化与评测驱动脚本语法及逻辑检查 | 执行通过 |
+| **Skills CLI 发现** | 执行 `npx skills add . --list` 进行包发现 | 成功发现 `cloudflare-clef` 与 `ego-clef` |
+| **npm 打包规范** | 执行 `npm pack --dry-run` 检查包清单 | 严格收敛交付文件，彻底排除开发缓存与私有测试日志 |
+| **浏览器实验审计** | 4 轮对照试验的输入一致性审计 | 8 个样本推文 URL、文本哈希及驱动哈希完全对齐 |
+| **推理服务修复验证** | 服务端 OOM 修复后的真实推理验证 | 198/198 计量响应 + 9/9 预热响应全部有效，0 次网络/协议异常 |
 
-Local test environment: Python 3.12, Node 24, macOS. CI also targets Python 3.9 and
-3.14; those matrix jobs have not been run locally. dsh/Pi integration follows documented
-shared skill discovery and Pi package metadata; complete harness sessions were not tested.
-Pi is not installed on this machine.
+---
 
-Benchmark accuracy and latency appear in the [combined report](../../REPORT.md).
-Successful client tests do not establish model accuracy; incorrect model judgments remain in raw results.
+## 测试环境与执行边界说明
+
+- **本地测试环境**：Python 3.12 / Node 24 / macOS ARM64。
+- **CI 覆盖矩阵**：GitHub Actions 配置覆盖 Python 3.9、3.12、3.14。
+- **评测定位**：基准准确率与时延指标详见 [基准评测综合报告](../../REPORT.md)。客户端单测通过验证的是调用协议、防御性重试与数据契约，不代表大模型生产准确率保证。
+

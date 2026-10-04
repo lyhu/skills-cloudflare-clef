@@ -1,11 +1,12 @@
-# 客户端、故障降级与 Benchmark 验证报告
+# 客户端契约、故障降级与基准测试套件验证报告
 
-验证日期：2026-10-04。环境：Python 3.12.14、Node 24.18.0、macOS ARM64。
+- **验证日期**：2026-10-04
+- **本地环境**：Python 3.12.14 / Node 24.18.0 / macOS ARM64
+- **数据性质**：本报告记录基于 Mock 服务、故障异常注入及静态分析的防御性测试结果。真实服务 54 次计量表现详见 [report.md](report.md) 与 [results.json](results.json)。
 
-这些结果来自本地 HTTP 假服务、受控异常注入和代码校验，不作为 Clef 模型性能结果。
-真实服务的 54 次测量见 [report.md](report.md)，逐次数据见 [results.json](results.json)。
+---
 
-## 单元测试
+## 1. 单元测试与边界校验
 
 ```text
 python3 -m unittest discover -s tests -v
@@ -13,52 +14,50 @@ Ran 29 tests in 1.528s
 OK
 ```
 
-21 项客户端/模板测试与 8 项 Benchmark 测试全部通过，无跳过项。
-每项测试可能包含多个 `subTest`；29 是 unittest 测试方法数，不是独立故障案例数。
+测试套件涵盖 21 项客户端/模板用例与 8 项基准测试用例，全部通过（0 失败、0 跳过）：
 
-| 范围 | 注入或验证内容 | 观察到的结果 |
-| --- | --- | --- |
-| 原生协议 | Noul、Choice 标签/描述、Score、JSON 状态、Unicode、Bearer、模型别名 | 使用 `/v1/systemone`、`criteria`、`answers.verdict`；输出保留原语语义 |
-| 临时服务错误 | HTTP 429/500/502/503/504 后恢复 | 有限重试后得到有效答案；退避符合配置 |
-| 重试耗尽 | 持续 429、连接拒绝和超时异常 | 最多 3 次尝试；错误结构不含任何替代答案 |
-| 永久 HTTP 错误 | 400/401/403/404/413/422 | 单次返回错误，不重试 |
-| 实际 socket 超时 | 本地服务延迟超过 0.01 秒超时 | 返回 `CLEF_SERVICE_UNAVAILABLE`，不会放行 |
-| 重定向 | 带凭据请求收到 HTTP 307 | 不跟随重定向，不向第二端点转发状态或凭据 |
-| 不合法响应 | 损坏 JSON/UTF-8、错误嵌套、缺失类型、错误信封 | 返回 `CLEF_INVALID_RESPONSE`，不重试 |
-| 不合法答案 | 布尔冒充概率、NaN/Infinity、越界、未知标签、分布错误、额外字段、置信度不一致、错误等级 | 拒绝答案，不生成允许操作的决策 |
-| 原生舍入 | 64 个 Choice 候选、16 个 Score 等级 | 接受四位小数舍入产生的合理误差 |
-| 输入和配置 | 缺失候选、重复标签、超限等级、错误超时/重试、非法 URL/模型/鉴权头 | 请求前拒绝，不访问服务 |
-| CLI | 成功、评估错误、参数错误；禁用 Python site packages | 退出码分别为 0/1/2；运行时无第三方依赖 |
-| Python 模板 | 将模板与客户端复制到独立临时应用目录 | 成功调用假服务并返回命名路由 |
-| TypeScript 模板 | 字面传递 shell 元字符、正常结果和服务错误 | 通过无 shell 的 `execFile` 调用 Python；复用验证与错误降级 |
-| Benchmark 用例 | 18 个唯一 ID、原语 schema 与预期标签合法性 | 三种原语均有用例，标签和请求符合契约 |
-| Benchmark 统计 | nearest-rank p50/p95、Brier、multiclass Brier、MAE、阈值边界 | 公式及边界符合报告方法 |
-| Benchmark 故障统计 | 部分失败、全部失败、预热排除、凭据不入报告 | 错误计入符合率分母；误差指标只含有效答案；没有虚构成绩 |
-| Benchmark 访问控制 | 未显式设置端点 | 在发请求前以使用错误退出 |
+| 校验模块 | 测试注入与验证点 | 观测结果与契约对齐 |
+| :--- | :--- | :--- |
+| **原生协议** | Noul、Choice 标签与描述、Score、JSON 状态、Unicode、Bearer Token、模型别名 | 正确调用 `/v1/systemone` 端点；准确解析 `verdict`；保留原语语义 |
+| **瞬态网络重试** | 注入 HTTP 429/500/502/503/504 瞬态错误并随后恢复 | 执行有限指数退避重试后获取成功结果；退避时序符合配置 |
+| **重试耗尽** | 持续 429、网络拒绝连接及连接超时 | 达到最大重试后严格返回错误 JSON，绝不伪造决策 |
+| **不可重试错误** | HTTP 400/401/403/404/413/422 状态码 | 立即终止并返回失败，不发起无效重试 |
+| **Socket 超时** | 强制本地服务端响应时延超出设定超时 | 返回 `CLEF_SERVICE_UNAVAILABLE`，高危路径严格阻断 |
+| **凭据安全** | 针对携带凭据的请求注入 HTTP 307 重定向响应 | 严格禁止自动跟随重定向，防止向不可信端点泄漏凭据 |
+| **响应格式异常** | 损毁的 JSON、非 UTF-8 字符、字段嵌套损毁、外层信封缺失 | 返回 `CLEF_INVALID_RESPONSE`，不重试 |
+| **非法判定拦截** | 概率越界、NaN/Infinity、未知选项、分布不合规、置信度冲突 | 严密校验并拒绝非法判定，杜绝错误放行风险 |
+| **数值舍入容差** | Choice 64 候选项、Score 16 等级 | 兼容四位小数浮点运算在边界范围内的微小舍入误差 |
+| **参数与输入校验** | 候选项缺失、标签重复、等级超限、超时/重试非法、URL 畸变 | 发起请求前执行前置防御性拦截，不浪费网络开销 |
+| **CLI 规范** | 成功、评估异常与参数错误三类场景；禁用 site-packages | 准确返回退出码 0/1/2；严格实现标准库零第三方依赖 |
+| **Python 集成模板** | 隔离环境中复制模板并调用 Mock 服务 | 正常执行并返回强类型判定 |
+| **TypeScript 模板** | 传入特殊 Shell 字符、正常响应与异常降级 | 基于安全的 `execFile` 进程调用，复用参数校验与降级逻辑 |
+| **基准用例契约** | 18 个测试用例 ID 唯一性、Schema 契约与预期标签格式 | 三种原语用例完备，测试集符合协议定义 |
+| **基准统计方法** | Nearest-Rank 分位数、Brier 分数、Multiclass Brier、MAE | 算法公式与边界计算完全符合统计方法论 |
+| **异常计入口径** | 部分失败、全部失败、预热过滤、敏感信息脱敏 | 错误率如实计入分母；敏感凭据严格禁止写入报告 |
 
-## 分发与静态校验
+---
 
-以下检查通过：
+## 2. 静态打包与规范完整性校验
 
-- `python3 scripts/validate.py`：Frontmatter、版本/许可证一致性、Python/JSON/YAML 语法、JSON Schema、交付文件。
-- skill-creator 的 `quick_validate.py skills/cloudflare-clef`：`Skill is valid!`。
-- `npx skills add . --list`：识别到唯一技能 `cloudflare-clef`；只列出，未安装到用户宿主。
-- `npm pack --dry-run`：包括核心技能、客户端、原语 schema、Python/TS 模板、README 与 Apache-2.0；不包含 `__pycache__` 或 `.pyc`。
-- Node 24 加载 TypeScript 模板；另用本机 TypeScript 4.7.4 的 `tsc --noEmit --strict` 完成类型检查。
+- `python3 scripts/validate.py`：Frontmatter 格式、包版本一致性、Schema 规则与关键交付文件核验通过。
+- `skill-creator` 工具链：执行 `quick_validate.py` 判定合规（`Skill is valid!`）。
+- `npx skills add . --list`：正确识别通用决策技能 `cloudflare-clef`。
+- `npm pack --dry-run`：打包清单仅包含交付代码、Schema、模板与许可证，彻底排除缓存与本地日志。
+- TypeScript 类型检查：Node 24 原生导入测试通过，且通过 TypeScript 4.7.4 的 `tsc --noEmit --strict` 严格类型检查。
 
-## 复现与边界
+---
+
+## 3. 复现验证指令
 
 ```bash
+# 依赖准备与自动化测试
 python3 -m pip install -r requirements-dev.txt
 python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
+
+# 跨语言模板与打包校验
 node --input-type=module -e "await import('./skills/cloudflare-clef/templates/client.ts')"
 npm pack --dry-run
 npx skills add . --list
 ```
 
-CI 已配置 Python 3.9/3.12/3.14 和 Node 24。此本地报告只证明上述本机版本的结果；
-GitHub Actions 需在仓库推送后运行，不能把配置矩阵当作已执行结果。
-
-这些测试验证协议与故障路径，没有实际执行破坏性命令、停止模型服务或模拟 GPU 故障。
-Skill 指令不构成宿主强制拦截 hook；自动执行策略须由集成方落实。

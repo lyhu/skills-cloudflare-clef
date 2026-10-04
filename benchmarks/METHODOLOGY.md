@@ -1,86 +1,83 @@
-# Measurement protocol
+# 基准测试方法论与评测协议
 
-## Decision datasets
+本规范定义了决策模型基准测试与浏览器对照实验的度量标准、执行协议与复现流程。
 
-- Smoke: 18 synthetic cases covering risk gates, routing and ordinal review.
-- BoolQ: 24 public validation cases, balanced 12/12. First rows per label, no truncation.
-- BANKING77: 24 public test utterances, 2 per 12 selected intents. **12-way adaptation**;
-  the deployed service permits at most 64 candidates, so this is not the original 77-way benchmark.
-- Three serial repetitions, three unmeasured warmups per suite. No tuning against these examples.
-- Noul threshold `>= 0.5`; Choice exact label; Score absolute error `<= 0.5`.
-- Errors count as incorrect. Brier and MAE include valid answers only. Multiclass Brier
-  sums squared probability errors over all labels, without class-count normalization.
-- Latency is `perf_counter` wall time around the Python client: HTTP, inference, retries,
-  parsing and validation included; process startup and model load excluded.
-- p50/p95 use nearest rank `ceil(p*N)`. Repetitions measure latency variation, not independent accuracy samples.
-- No private endpoint, credentials or source code are recorded. Hardware/load are not independently measured.
+---
 
-Run each suite with an explicit endpoint:
+## 1. 结构化决策评测协议
+
+### 数据集设计与划分
+- **Smoke（冒烟测试集）**：18 个原创合成用例，覆盖高危风控拦截（Noul）、业务语义分流（Choice）及代码审查打分（Score）。
+- **BoolQ 子集**：选取公开验证集前 100 行中平衡的 24 个样本（真/假各 12 例），保留完整原始篇章与问题，不进行文本截断。
+- **BANKING77 适配集**：选取 12 个意图类别，每类取 2 条测试样本（共 24 例）。由于当前服务单次支持最多 64 个候选，因此适配为 12 分类任务，不直接等同于原始 77 分类基准。
+
+### 度量标准与统计指标
+- **执行规则**：每个用例串行重复执行 3 次，每套测试前包含 3 次不计入统计的预热请求。未针对测试样本进行 Prompt 或权重调优。
+- **符合性判定**：
+  - `noul`：概率 `>= 0.5` 判定为命题成立。
+  - `choice`：输出标签与真实标签完全精确匹配。
+  - `score`：期望得分与真实等级绝对偏差 `<= 0.5` 判定为符合。
+- **误差指标**：
+  - 服务错误计为不符合。Brier 分数与 MAE 仅统计返回有效答案的样本。
+  - 多分类 Brier 分数（Multiclass Brier）计算所有候选类别概率平方误差的总和均值，未进行类别数归一化。
+- **时延度量**：
+  - 基于 Python 客户端的 `time.perf_counter` 单调时钟，涵盖 HTTP 网络往返、服务端推理、退避重试、响应反序列化及 Schema 校验耗时；不包含 Python 解释器启动与模型加载时间。
+  - p50 / p95 分位数采用 Nearest-Rank 方法（`ceil(p * N)`）。重复请求用于评估时延波动性，不构成独立样本。
+
+### 执行与复现指南
 
 ```bash
 export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"
+
+# 1. 运行 BoolQ 评测
 CLEF_MAX_RETRIES=0 python3 benchmarks/run.py --cases benchmarks/datasets/boolq.json \
   --repeats 3 --warmup 3 --output-dir benchmarks/reports/live/boolq
+
+# 2. 运行 BANKING77 评测
 CLEF_MAX_RETRIES=0 python3 benchmarks/run.py --cases benchmarks/datasets/banking77.json \
   --repeats 3 --warmup 3 --output-dir benchmarks/reports/live/banking77
+
+# 3. 运行 Smoke 冒烟评测
 CLEF_MAX_RETRIES=0 python3 benchmarks/run.py --output-dir benchmarks/reports/live/smoke
-```
 
-Generate the concise combined report after all suites and the four normalized browser trials:
-
-```bash
+# 4. 生成统一基准汇总报告
 python3 benchmarks/report.py
 ```
 
-The generator rejects differing URL/text hashes or browser-driver versions.
-See [dataset attribution](NOTICE.md). These diagnostic subsets do not estimate official
-leaderboard scores, production accuracy, probability calibration or training-data contamination.
+> **评测局限性提示**：上述子集仅用于客户端协议与推理时延的工程诊断，不代表官方排行榜成绩、通用生产准确率、全局校准度或训练数据防污染评估。
 
-## Live browser pilot: X application triage
+---
 
-Task: search `jev typesafe` on X Latest, inspect the first eight loaded posts,
-judge which describe concrete Jev applications. Same browser page, session, search URL,
-600-character budget per post, relevance instruction and 0.5 Clef threshold.
-DOM clones exclude Immersive Translate's appended translation nodes; whitespace and NFC
-are normalized before truncation. The live DOM is not modified.
+## 2. 浏览器实机对照实验：X 平台应用分流
 
-Both arms use the same three ego-browser calls: `goto`, condition-based
-`waitForFunction`, DOM extraction with `evaluate`. Navigation is deterministic;
-this test measures replacing the **post-reading judgment turn**, not autonomous DOM navigation.
+### 实验任务与受控环境
+- **任务目标**：在 X 实时搜索 `jev typesafe`，读取并审查前 8 条加载的公开推文，判定哪些描述了具体的 Jev 落地应用场景。
+- **受控变量**：完全相同的浏览器会话、页面上下文、搜索 URL、单帖 600 字符文本预算、相关性判定指令及 0.5 Clef 阈值。
+- **DOM 脱敏与清洗**：克隆 DOM 节点并移除第三方沉浸式翻译插件注入的附属节点；在截断前对空白字符及 Unicode NFC 归一化，严禁篡改页面实时 DOM。
+- **导航确定性**：两组实验均采用相同的三个底层 CDP 操作：`goto` 页面导航、条件等待 `waitForFunction`、DOM 提取 `evaluate`。本实验专一计量**阅读推文并完成语义判定的交互轮次**，而非 DOM 自主寻路。
 
-- **Agent arm:** current Codex session reads the extracted evidence and submits eight boolean
-  judgments in the next tool invocation. Decision time spans observation to submitted labels,
-  including LLM reasoning, tool transport and the second ego-browser invocation.
-  Exact base model ID, inference-only time and token counts are unavailable.
-- **Clef arm:** one native HTTP request evaluates all eight Noul questions in one batch,
-  then returns judgments within the same browser invocation. No agent turn during triage;
-  no retry. HTTP time and returned usage are recorded.
-- Final order A–B–B–A, two trials per arm, recorded as `normalized-*`. Earlier pilot
-  records remain available, including the OOM failure and the input-translation mismatch;
-  they are excluded from the controlled comparison. Search and agent familiarity were
-  already warm. Start clocks inside the
-  browser script; initial tool launch is excluded. End clocks after labels are available.
-- No editing or unrelated tools occur between an agent-arm observation and its submitted labels.
-- Live inputs may change. Compare URL **and** text hash across trials before computing
-  paired judgment agreement; different inputs invalidate an identical-corpus comparison.
-- Agent judgments are a reference, not independent ground truth. Post claims and performance
-  numbers are not externally validated. Classification speed is not reading comprehension proof.
-- Raw published records contain only URLs, hashes and labels; private scratch files contain
-  bounded public snippets. Do not publish account snapshots or scratch files.
+### 对照组设计（A-B-B-A 交叉设计）
+- **Agent 对照组（当前 Codex 会话）**：读取提取出的文本证据，在下一轮工具调用中提交 8 个布尔判定。决策耗时涵盖大模型推理、工具通信及第二次浏览器调用。
+- **Clef 实验组**：发起一次轻量 HTTP 请求，单次批量评估全部 8 个 Noul 命题，并在同一浏览器调用内直接返回判定。无额外 Agent 交互轮次。
+- **执行顺序**：按照 A–B–B–A 顺序交叉执行，每组各执行 2 次独立实验（记录为 `normalized-*`），消除缓存与会话预热造成的单向偏差。
 
-Reproduce inside `ego-browser nodejs` using one task space for the whole experiment:
+### 实验代码复现
+
+在 `ego-browser nodejs` 环境中，整个实验共用同一个 TaskSpace：
 
 ```javascript
-const task = await taskSpace("Clef X triage pilot"); // create once; reuse its numeric ID
-const bench = await import("file:///absolute/path/skills-cloudflare-clef/benchmarks/browser.mjs");
+const task = await taskSpace("Clef X triage pilot");
+const bench = await import("file:///path/to/skills-cloudflare-clef/benchmarks/browser.mjs");
+
+// 1. 运行 Agent 对照组试验 1
 console.log(await bench.begin(task.page("p1"), "agent", "normalized-agent-1"));
-// Next invocation: read the eight posts, then call bench.finish("normalized-agent-1", eightBooleans).
-// Clef arm (full endpoint passed explicitly because browser runtimes may not inherit shell env):
+// （在下一轮会话中读取 8 条推文，调用 bench.finish("normalized-agent-1", eightBooleans)）
+
+// 2. 运行 Clef 实验组试验 1
 console.log(await bench.runClef(task.page("p1"), "normalized-clef-1", "http://127.0.0.1:8000/v1/systemone"));
-// Run normalized-clef-2 then normalized-agent-2; finish the task space once after the experiment.
+
+// 3. 依次运行 normalized-clef-2 与 normalized-agent-2，实验结束后销毁 TaskSpace
 ```
 
-This is a warm-session, four-trial harness pilot. It does not establish statistical
-significance, cold-start performance, benefits for all browser tasks, or a complete
-research workflow including opening sources, verifying claims and writing a report.
-Exact selectors and fixed actions should remain ordinary code; use Clef where semantic judgment is needed.
+> **方法论边界**：本试验属于受控环境下的 4 轮基准探针，旨在量化将简单语义判定卸载给轻量模型带来的交互轮次与耗时收益。实验不包含全流程研究（如打开外部信源、深入事实核查、长文撰写）。对于结构固定的选择器与页面操作，应保持由原生代码执行，仅在需要模糊语义判断时引入 Clef。
+

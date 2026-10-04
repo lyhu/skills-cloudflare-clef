@@ -124,11 +124,11 @@ def run_benchmark(cases, repeats=3, warmup=3, transport_note="HTTP endpoint; net
 
 def markdown_report(result):
     metadata, summary = result["metadata"], result["summary"]
-    lines = ["# Clef Decision Benchmark", "",
-             f"UTC {metadata['timestamp_utc']} · `{metadata.get('dataset', 'benchmarks/cases.json')}` · "
-             f"{metadata['case_count']} cases × {metadata['repeats']} repeats · {metadata['warmup_requests']} warmups excluded.", "",
-             "| Primitive | Valid / requests | Matched / requests | p50 ms | p95 ms | Brier / MAE |",
-             "| --- | --- | --- | --- | --- | --- |"]
+    lines = ["# Clef 结构化决策基准评测报告", "",
+             f"UTC 时间：{metadata['timestamp_utc']} · 数据集：`{metadata.get('dataset', 'benchmarks/cases.json')}` · "
+             f"{metadata['case_count']} 用例 × {metadata['repeats']} 次重复 · 排除 {metadata['warmup_requests']} 次预热。", "",
+             "| 原语 | 有效 / 请求 | 符合 / 请求 | p50 ms | p95 ms | Brier / MAE |",
+             "| :--- | :--- | :--- | :--- | :--- | :--- |"]
     for kind, metrics in result["by_primitive"].items():
         if not metrics["requests"]:
             continue
@@ -139,18 +139,19 @@ def markdown_report(result):
         p95 = f"{latency['p95']:.2f}" if latency else "N/A"
         lines.append(f"| {kind} | {metrics['successful']}/{metrics['requests']} | "
                      f"{metrics['matched']}/{metrics['requests']} | {p50} | {p95} | {value} |")
-    lines += ["", f"Transport: {metadata['transport_note']}. Model: `{metadata['model']}`; "
-              f"timeout {metadata['timeout_seconds']} s; retries {metadata['max_retries']}; errors {summary['errors']}.", "",
-              "Successful-request latency includes HTTP, inference, retries and validation. Nearest-rank percentiles. "
-              "Noul threshold 0.5; exact Choice labels; Score tolerance 0.5. "
-              "Brier/MAE exclude errors; agreement includes errors. Repeats are not independent examples.", "",
-              "Small selected subsets are diagnostic, not official leaderboard scores or calibration evidence. "
-              "See [methodology](../../../METHODOLOGY.md) and [raw results](results.json)."]
+    lines += ["", f"网络与部署：{metadata['transport_note']}。模型：`{metadata['model']}`; "
+              f"超时：{metadata['timeout_seconds']} s; 重试：{metadata['max_retries']}; 异常数：{summary['errors']}。", "",
+              "说明：有效请求时延涵盖 HTTP 往返、推理、重试退避与 Schema 校验；分位数采用 Nearest-Rank。 "
+              "判定准则：Noul 阈值 0.5；Choice 标签精确匹配；Score 容差 0.5。 "
+              "Brier/MAE 仅统计有效响应；符合率包含异常请求。重复测试用于检验时延方差，不构成独立样本。", "",
+              "子集评测仅供工程验证与性能诊断，不代表官方排行榜或生产环境全貌。 "
+              "详见 [评测方法论](../../../METHODOLOGY.md) 与 [原始结果](results.json)。"]
     failures = [r for r in result["records"] if not r["matched"]]
     if failures:
-        lines += ["", "Failures: " + ", ".join(dict.fromkeys(
-            f"`{r['case_id']}` ({r['answer'].get('error', r['answer'].get(r['type']))})" for r in failures)) + "."]
+        lines += ["", "未符合用例： " + ", ".join(dict.fromkeys(
+            f"`{r['case_id']}` ({r['answer'].get('error', r['answer'].get(r['type']))})" for r in failures)) + "。"]
     return "\n".join(lines) + "\n"
+
 
 
 def main():

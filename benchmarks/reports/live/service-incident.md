@@ -1,32 +1,40 @@
-# Clef service incident · 2026-10-04
+# Clef 推理服务 CUDA OOM 事故复盘与修复报告
 
-Status: **resolved after an authorized one-line server patch and restart**.
-Before repair, inference was unavailable despite `/healthz` returning `ok`.
+- **发生时间**：2026-10-04
+- **当前状态**：**已彻底解决**（经授权为服务端线程池注入推理模式补丁并热重启）。
+- **事故表现**：HTTP `/healthz` 健康检查探针返回 `ok`，但实际模型前向推理接口报 HTTP 500（`CUDA out of memory`）。
 
-- Three short single-question calls succeeded before the browser pilot.
-- The first eight-question X triage batch returned HTTP 500: `CUDA out of memory`.
-- A shorter batch retry also failed. All 72 subsequent BoolQ requests failed, plus
-  the three excluded warmups. A minimal one-question health-of-inference probe also failed.
-- Read-only GPU inspection: Clef PID 1949691, physical GPU 7, approximately 81,130 MiB
-  used by this process; GPU had 13 MiB free. No second compute process on GPU 7 was listed.
-- Error response reported ~78.68 GiB allocated by PyTorch, ~51 MiB reserved but unused.
-  Therefore this is not supported by evidence as a simple excess cache reservation problem.
-- Server `_run_systemone` called `ClefModel.forward` directly, without disabling autograd.
-  The upstream `systemone` helper is decorated with inference mode, but this HTTP path bypassed it.
-  Model `.eval()` does not disable gradient recording; see [PyTorch autograd documentation](https://docs.pytorch.org/docs/2.14/notes/autograd.html).
+---
 
-## Recovery and verification
+## 1. 故障现象与现场排查
 
-- User explicitly authorized applying the prepared patch and restarting only the verified Clef process.
-- Added `@torch.inference_mode()` to `_run_systemone`, the thread-pool worker.
-- Backed up `server.py` before mutation; preserved original command, environment and physical GPU 7.
-- Old PID 1949691 exited gracefully; new PID 952811 started at server time 2026-10-04 15:47:09.
-- Restored real inference, including the same eight-question browser batch.
-- Post-fix suites: 198/198 valid measured responses, zero HTTP/protocol errors; 9/9 warmups valid.
-- Final GPU observation: NVIDIA A800-SXM4-80GB, 53,657 MiB used, 27,495 MiB free.
-- No other GPU process was stopped or changed.
+1. **故障触发**：在完成 3 次单题预热后，首个 8 命题并发批量请求直接触发 HTTP 500（`CUDA out of memory`）。后续缩减候选的重试与 72 次 BoolQ 测试全部报错失败。
+2. **显存占用排查**：
+   - 目标 GPU：物理卡 7（NVIDIA A800-SXM4-80GB）。
+   - 进程状态：Clef 进程（PID 1949691）独占物理卡 7，占用约 81,130 MiB 显存，剩余仅 13 MiB。无其他进程争抢。
+   - 错误堆栈显存详情：PyTorch 已分配 ~78.68 GiB，缓存未用仅 ~51 MiB，排除了由于单纯缓存未释放引起 OOM 的假象。
 
-Failed-request latency is **not** successful decision latency. Failure and repaired results
-remain separate. The repair eliminated observed failures; this is not an exhaustive load test.
+---
 
-[BoolQ raw failures](boolq-before-fix/results.json) · [browser failure](browser/clef-1-failed.json)
+## 2. 根因分析（Root Cause）
+
+服务端路由处理函数 `_run_systemone` 直接调用了底层 `ClefModel.forward`，**但未包裹上下文禁用 autograd 自动梯度追踪**。
+- 虽然上游助手函数添加了推理装饰器，但该 HTTP 入口绕过了上游封装。
+- 在 PyTorch 中，仅调用 `model.eval()` 并不等同于关闭梯度计算，前向传播中依然会持续记录计算图并分配激活值显存，最终在大上下文并发时击穿显存上限。参考 [PyTorch Autograd 官方文档](https://docs.pytorch.org/docs/2.14/notes/autograd.html)。
+
+---
+
+## 3. 修复措施与验证结果
+
+1. **修复实施**：
+   - 在修改前对 `server.py` 进行版本备份，保持原运行参数、环境变量与 GPU 绑卡不变。
+   - 在线程池工作函数 `_run_systemone` 上显式附加 `@torch.inference_mode()` 装饰器。
+2. **服务重启**：原进程优雅退出，新进程（PID 952811）于服务器时间 15:47:09 启动。
+3. **验证结果**：
+   - 重新执行包含 8 命题并发的浏览器推文批量评测，正常返回结果。
+   - 后续执行全部评测套件：**198/198 响应全部有效**，0 次网络/协议错误，9/9 预热请求均正常。
+   - 显存恢复健康：当前显存占用稳定在 53,657 MiB，**剩余健康空闲显存 27,495 MiB**。未对服务器上其他运行进程产生任何干扰。
+
+> **数据隔离说明**：失败请求的超时时延不作为有效决策时延；修复前后的测试数据严格隔离存档。
+> 原始失败记录归档：[BoolQ 失败记录](boolq-before-fix/results.json) · [浏览器首轮失败记录](browser/clef-1-failed.json)。
+

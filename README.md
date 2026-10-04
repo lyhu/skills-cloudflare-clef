@@ -1,33 +1,38 @@
 # Cloudflare Clef Agent Skill
 
-面向 Claude Code、Codex、Google Antigravity、Grok Build、Pi 等 Coding Agent 的强类型 System One 决策技能。通过本地或内网部署的 **Cloudflare Clef (Qwen3.8-27B)** 决策引擎，快速返回 `noul`、`choice`、`score` 结构化判定与校准概率。
+面向 Claude Code、Codex CLI、Google Antigravity、Grok Build、Pi 等 Coding Agent 的强类型 System One 决策技能。通过本地或内网部署的 **Cloudflare Clef (Qwen3.8-27B)** 决策引擎，快速返回 `noul`、`choice`、`score` 结构化判定与校准概率。
 
 遵循 [Agent Skills 规范](https://agentskills.io/specification) 与 [typesafe-ai/skills](https://github.com/typesafe-ai/skills) 目录组织标准。本项目独立开源维护，不代表 Cloudflare 或 TypeSafe 官方发布。
 
-本仓库分发两个独立技能，可按需安装：
+---
 
-| 技能 | 职责 | 运行依赖 |
+## 技能组件架构
+
+仓库分发两个解耦的独立技能，可按需组合安装：
+
+| 技能 | 职责定位 | 核心运行依赖 |
 | :--- | :--- | :--- |
-| [cloudflare-clef](skills/cloudflare-clef/SKILL.md) | 通用决策：语义分流、风险评估、候选选择、评分 | Python 标准库与 Clef 服务 |
-| [ego-clef](skills/ego-clef/SKILL.md) | ego-browser 的语义页面操作决策与浏览器日志 | cloudflare-clef、ego-browser、Node.js |
+| **[cloudflare-clef](skills/cloudflare-clef/SKILL.md)** | 通用强类型决策：语义分流、高危风控阻断、候选项选取、多维打分 | Python 3.9+ 标准库、Clef 服务端点 |
+| **[ego-clef](skills/ego-clef/SKILL.md)** | 浏览器语义操作决策：页面控件交互、超链接导航与工作流可观测性 | cloudflare-clef、ego-browser、Node.js 22+ |
 
-`cloudflare-clef` 可独立用于任意 Agent 或应用，不包含浏览器路由、安装提示或浏览器日志。`ego-clef` 通过它调用模型，浏览器执行与完成检查由浏览器技能负责。单独安装通用技能不会修改 ego-browser。
+- `cloudflare-clef` 可独立服务于任意 Agent 或后台系统，不绑定浏览器环境。
+- `ego-clef` 依托通用客户端进行模型推断，页面执行与完成度核验由宿主浏览器技能闭环。
 
 ---
 
 ## 核心特性
 
-- ⚡️ **单次前向极速决策**：基于非自回归架构，免除自回归生成自由文本的延迟与 Token 开销，直接输出强类型决策与校准概率。
+- ⚡️ **单次前向极速决策**：基于非自回归（Non-Autoregressive）架构，省除自回归文本生成的延迟与 Token 开销，直接输出强类型判定与校准概率。
 - 🎯 **三大强类型决策原语**：
-  - `noul`：二元布尔命题概率（`[0, 1]`），精准量化风险与前置条件。
+  - `noul`：布尔命题成立概率（`[0, 1]`），精准量化风险概率与前置条件。
   - `choice`：多分类语义路由（1–64 选项），直连业务分流处理器。
-  - `score`：多级梯度打分（0-based 加权期望值），实现代码审查与测试完备性评估。
-- 🪶 **纯标准库零外部依赖**：仅需 **Python 3.9+ 标准库**，客户端不下载模型权重、不依赖重型推理框架，开箱即用。
+  - `score`：多级有序梯度打分（0-based 加权期望值），量化代码审查与测试完备性。
+- 🪶 **纯标准库零外部依赖**：仅需 **Python 3.9+ 标准库**，客户端免下载模型权重、不依赖重型推理框架，开箱即用。
 - 🛡️ **安全隔离与容灾降级**：
-  - **Prompt 防注入**：严格隔离数据（`--state`）与判定指令（`--instructions`）。
-  - **故障封闭 (Fail-closed)**：高危操作遇服务不可用或低确定性时严禁自动放行。
-  - **智能重试**：内置有限指数退避重试，防重定向以保障凭据安全。
-- 🔌 **多 Agent 生态开箱支持**：适配 Claude Code、Codex CLI、Google Antigravity、Grok Build、DeepSeek Harness (dsh)、Pi 等平台。
+  - **Prompt 防注入**：严格物理隔离业务状态数据（`--state`）与判定指令（`--instructions`）。
+  - **故障封闭 (Fail-closed)**：高危操作遇到服务异常或低确定性时绝对禁止放行。
+  - **有限指数退避**：内置网络重试保护，严格禁止跨域重定向转发鉴权凭据。
+- 🔌 **多 Agent 生态原生支持**：即开即用地适配 Claude Code、Codex CLI、Google Antigravity、Grok Build、Pi 及 DeepSeek Harness。
 
 ---
 
@@ -36,17 +41,17 @@
 在实际的“搜索结果语义筛选与场景识别”任务中，将 Agent 耗时的语义判断卸载至本地 Clef 处理：
 **端到端决策耗时从 9.04 秒降至 4.02 秒，提速约 2.25 倍（耗时降低 55.6%）**。
 
-| 评估指标 | 主 Agent 直接推断 | 接入 Clef 批量判断 | 收益变化 |
+| 评估阶段 | 主 Agent 直接推断 | 接入 Clef 批量推断 | 性能提升 |
 | :--- | :--- | :--- | :--- |
-| **搜索读取与筛选总耗时** | 9.04 s | 4.02 s | **提速 2.25x (-55.6%)** |
-| 页面导航与文本读取耗时 | 2.94 s | 2.81 s | 基本持平 |
-| **语义判断阶段耗时** | 6.10 s | 1.21 s | **耗时降低 80.2%** |
-| 交互轮次开销 | 1 轮长 Token 推理交互 | 1 次轻量 HTTP 请求 (8 并发命题) | 显著节省上下文开销 |
+| **端到端总耗时** | 9.04 s | 4.02 s | **提速 2.25x (-55.6%)** |
+| 页面导航与文本读取 | 2.94 s | 2.81 s | 基本持平 |
+| **语义判定阶段** | 6.10 s | 1.21 s | **耗时降低 80.2%** |
+| 交互上下文开销 | 1 轮长 Token 推理交互 | 1 次轻量 HTTP 请求 (8 并发命题) | 显著节省上下文开销 |
 
 ### 质量与准确率验证
 - **BANKING77 适配集**（12 分类任务，24 样本 × 3 重复）：分类符合率达 **95.8%**。
 - **BoolQ 公开子集**（文章级命题判定，24 样本 × 3 重复）：符合率达 **91.7%**。
-- 完整评测方案与原始数据详见 [实测报告](benchmarks/REPORT.md) 与 [基准测试方法论](benchmarks/METHODOLOGY.md)。
+- 完整评测设计与原始数据见 [实测报告](benchmarks/REPORT.md) 与 [基准测试方法论](benchmarks/METHODOLOGY.md)。
 
 ---
 
@@ -55,11 +60,11 @@
 ### 1. 配置端点并运行
 
 ```bash
-# 1. 克隆仓库
+# 1. 克隆代码仓库
 git clone https://github.com/lyhu/skills-cloudflare-clef.git
 cd skills-cloudflare-clef
 
-# 2. 配置 Clef 本地/内网服务端点
+# 2. 配置 Clef 服务端点（本地或私网 GPU）
 export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"
 
 # 3. 发起一次语义分流评估
@@ -72,7 +77,7 @@ python3 skills/cloudflare-clef/scripts/evaluate.py \
 
 ### 2. 输出示例
 
-CLI 仅在 stdout 输出结构化 JSON（退出码 `0` 表示成功）：
+CLI 仅在 stdout 输出符合 Schema 的结构化 JSON（成功退出码为 `0`）：
 
 ```json
 {
@@ -96,7 +101,7 @@ CLI 仅在 stdout 输出结构化 JSON（退出码 `0` 表示成功）：
 
 ## 决策原语与使用场景
 
-| 原语 | 核心定义 | CLI 参数规范 | 输出结构与范围 |
+| 原语 | 核心定义 | CLI 参数规范 | 输出结构与格式 |
 | :--- | :--- | :--- | :--- |
 | **`noul`** | 单一命题成立的概率 | 无候选项参数 | `noul`：`[0, 1]` 区间浮点数（接近 0.5 表示高度不确定） |
 | **`choice`** | 从离散候选集中选出单项 | `--choices` (1–64 个唯一标签) | `choice`、`confidence`、`probabilities` |
@@ -114,7 +119,7 @@ python3 skills/cloudflare-clef/scripts/evaluate.py \
 > **安全准则**：此评估不构成执行授权。若服务不可用或结果呈高度不确定性，宿主系统必须中断自动化流程并转由人工确认（Fail-closed）。
 
 ### 场景 2：工作流语义动态路由（Choice）
-替代复杂的 Prompt 交互，将用户反馈或故障信息精准分流至指定业务模块：
+替代复杂的自然语言 Prompt 判定，将用户反馈或故障信息精准分流至指定业务模块：
 
 ```bash
 python3 skills/cloudflare-clef/scripts/evaluate.py \
@@ -139,57 +144,48 @@ python3 skills/cloudflare-clef/scripts/evaluate.py \
 
 ## 安装与平台接入
 
-### 💬 Agent 对话部署安装话术（推荐）
+### 💬 Agent 对话式部署话术（推荐）
 
-无需手动记忆终端参数，可直接将以下自然语言指令复制发送给你的 Coding Agent（如 Claude Code、Codex、Google Antigravity 等），Agent 将自动完成安装、环境配置与连通性验证：
+直接将以下指令发送给 Coding Agent（如 Claude Code、Codex、Google Antigravity 等），Agent 将自动完成安装、环境配置与连通性验证：
 
-#### 基础一键安装部署
+#### 基础一键部署
 > **📋 复制发给 Agent**：
 >
 > 「请帮我在当前项目中部署并配置 `cloudflare-clef` 决策技能：
 > 1. 执行 `npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef` 安装技能；
 > 2. 检查本地环境，确保具备 Python 3.9+ 运行环境；
-> 3. 设置后端服务环境变量：`export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"`（可按实际服务端点修改）；
-> 4. 执行一条简单的 Noul 评估测试，确认技能安装成功且服务连通。」
+> 3. 设置后端服务环境变量：`export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"`；
+> 4. 执行一条 Noul 评估测试，确认技能安装成功且服务连通。」
 
-#### 内网/远程 GPU 服务器接入话术
+#### 内网/远程 GPU 服务器接入
 > **📋 复制发给 Agent**：
 >
 > 「请帮我接入远程私有网络中的 Clef 决策服务并安装技能：
 > 1. 安装技能：`npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef`；
-> 2. 在后台建立到远程主机的端口映射：`ssh -N -L 8000:127.0.0.1:8000 <user>@<clef-host>`；
+> 2. 建立到远程主机的端口映射：`ssh -N -L 8000:127.0.0.1:8000 <user>@<clef-host>`；
 > 3. 设置端点环境变量：`export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"`；
 > 4. 发起一次测试请求验证网络连通性与模型判定输出。」
 
-#### Cloudflare 官方 Workers AI 托管服务接入话术
+#### Cloudflare 官方 Workers AI 托管服务接入
 > **📋 复制发给 Agent**：
 >
 > 「请帮我将当前项目的 `cloudflare-clef` 技能接入 Cloudflare 官方 Workers AI：
 > 1. 安装技能：`npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef`；
 > 2. 设置官方 API 端点：`export CLEF_BACKEND_URL="https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/run/@cf/cloudflare/clef"`；
 > 3. 设置 API Token 凭证：`export CLEF_API_KEY="<CLOUDFLARE_AUTH_TOKEN>"`；
-> 4. 发起一条简单的 Noul 评估测试，确认能够正常与官方 Workers AI 通信。」
-
-#### 💡 Agent 日常任务调用话术示例
-安装就绪后，可在日常会话中直接通过自然语言指示 Agent 触发决策评估：
-- **高危操作前置风控**：
-  > “在执行清理命令前，请先调用 `cloudflare-clef` 技能评估命令风险，若 Noul 风险概率高于 0.7 则暂停并提示我确认。”
-- **语义路由分流**：
-  > “请读取工单内容，使用 `cloudflare-clef` 的 choice 原语在 `[billing, technical, fraud, review]` 中做出分类并分发。”
-- **代码审查打分**：
-  > “请分析最近一次 commit 的 diff，调用 `cloudflare-clef` 用 score 原语评估测试覆盖完备性，并报告分值。”
+> 4. 发起一条 Noul 评估测试，确认与官方 Workers AI 通信正常。」
 
 ---
 
 ### 命令行快速安装
 
-通过官方 [skills CLI](https://github.com/vercel-labs/skills) 可一键安装至任意支持的 Coding Agent：
+通过官方 [skills CLI](https://github.com/vercel-labs/skills) 安装至任意支持的 Coding Agent：
 
 ```bash
-# 全局安装（所有项目可用）
+# 全局安装（所有项目通用）
 npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef -g
 
-# 或安装至当前项目
+# 安装至当前项目
 npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef
 ```
 
@@ -219,50 +215,50 @@ ln -s "$PWD/.vendor/skills-cloudflare-clef/skills/cloudflare-clef" .agents/skill
 
 ## 协议契约与运行配置
 
-本客户端采用统一适配层设计，**开箱同时支持本地私有化部署（System One 原生接口）与 Cloudflare 官方 Workers AI 托管服务**，自动解包并对齐响应数据。
+客户端内置统一适配层，**同时支持本地私有化部署（System One 原生接口）与 Cloudflare 官方 Workers AI 托管服务**，自动解包并对齐响应数据。
 
 ### 双模式接入配置
 
 #### 模式 A：本地 / 私网 GPU 私有化部署（默认）
-适合低延迟、数据隐私敏感、无需外部网络依赖的本地推理场景：
+适合低延迟、数据隐私敏感、无外部网络依赖的本地推理场景：
 ```bash
 export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"
 export CLEF_MODEL="clef"
 ```
 
 #### 模式 B：Cloudflare 官方 Workers AI 托管服务
-适合免运维、全球边缘网络托管直接调用的云端场景：
+适合免运维、全球边缘托管直接调用的云端场景：
 ```bash
 # 配置为官方 Client v4 API 端点
 export CLEF_BACKEND_URL="https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/run/@cf/cloudflare/clef"
 export CLEF_API_KEY="<CLOUDFLARE_AUTH_TOKEN>"
-export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
+export CLEF_MODEL="clef"  # 亦支持 @cf/cloudflare/clef 或 clef-flash
 ```
 
 ---
 
 ### 私有化接口 vs 官网 Workers AI 差异对比
 
-| 对比维度 | 本地私有化部署 (System One) | 官网 Workers AI 托管服务 | 客户端适配与兼容机制 |
+| 对比维度 | 本地私有化部署 (System One) | 官网 Workers AI 托管服务 | 客户端适配机制 |
 | :--- | :--- | :--- | :--- |
 | **接入端点** | `http://<ip>:<port>/v1/systemone` | `https://api.cloudflare.com/client/v4/accounts/{id}/ai/run/@cf/cloudflare/clef` | 通过 `CLEF_BACKEND_URL` 动态切换，完全兼容 |
-| **鉴权认证** | 默认免密直连；网关可选 Bearer Token | 必须提供 Cloudflare API Token | 通过 `CLEF_API_KEY` 注入 `Authorization: Bearer` 头部 |
+| **鉴权认证** | 默认免密直连；支持网关 Bearer Token | 必须提供 Cloudflare API Token | 通过 `CLEF_API_KEY` 注入 `Authorization: Bearer` 头部 |
 | **请求载荷** | `{"model": "...", "state": ..., "questions": {...}}` | `{"model": "...", "state": ..., "questions": {...}}` | **完全一致**（底层同宗同源决策协议） |
-| **响应信封** | 直接返回原生 `{"answers": {...}, "usage": {...}}` | 标准 Cloudflare v4 信封 `{"result": {...}, "success": true}` | **自动解包**：自动识别 `result` 信封，提取 `answers` |
+| **响应信封** | 原生 `{"answers": {...}, "usage": {...}}` | 标准 v4 信封 `{"result": {...}, "success": true}` | **自动解包**：自动提取 `result.answers` |
 | **错误透传** | HTTP 状态码 + 结构化错误 JSON | 包含 `errors: [{"code": ..., "message": ...}]` | 自动捕获官方错误明细并格式化输出 |
-| **上下文上限** | 默认配置通常为 **4,096 tokens** | 标称支持 **65,536 tokens** | 本地环境聚焦高频低延迟推理，超限即报警 |
-| **超限处理** | **Fail-closed 严格语义**：超限返回 HTTP 413，**绝不静默截断** | 超限静默截断长文本 (`Long text is truncated`) | 本地模式严密保障高危操作风险判定的完整性 |
+| **上下文上限** | 默认配置通常为 **4,096 tokens** | 标称支持 **65,536 tokens** | 本地环境聚焦高频低延迟，超限即报错 |
+| **超限处理** | **Fail-closed 严格语义**：超限返回 HTTP 413，**绝不静默截断** | 超限静默截断长文本 (`Long text is truncated`) | 本地模式严格保障安全判定的完整性 |
 | **候选规模** | Choice 1–64 项；Score 1–16 级 | Choice 2–255 项；Score 2–10 级 | 均覆盖标准业务路由与代码审查需求 |
-| **多模态** | 客户端聚焦纯文本子集（Text-only） | 支持 `images` 参数（Base64 / Data URL 最多 4 张） | 客户端后续可无缝拓展图像支持 |
+| **多模态** | 客户端聚焦纯文本子集（Text-only） | 支持 `images` 参数（Base64 / Data URL 最多 4 张） | 客户端保留后续图像支持扩展位 |
 
 ---
 
-### 环境变量配置
+### 环境变量速查
 
 | 变量名 | 默认值 | 作用说明 |
 | :--- | :--- | :--- |
 | `CLEF_BACKEND_URL` | `http://127.0.0.1:8000/v1/systemone` | Clef 服务的完整 HTTP(S) API 端点（本地私网或官方 v4 端点） |
-| `CLEF_MODEL` | `clef` | 模型标识符（支持 `clef`、`clef-flash`、`Cloudflare/clef`、`@cf/cloudflare/clef`、`@cf/cloudflare/clef-flash`） |
+| `CLEF_MODEL` | `clef` | 模型标识符（支持 `clef`、`clef-flash`、`Cloudflare/clef`、`@cf/cloudflare/clef` 等） |
 | `CLEF_API_KEY` | 空 | 可选的网关 Bearer Token 或 Cloudflare API Auth Token |
 | `CLEF_TIMEOUT` | `10.0` | 单次 Socket 连接与读取超时（秒） |
 | `CLEF_MAX_RETRIES` | `2` | 瞬态网络故障的最大重试次数（0–5，指数退避 0.5s/1.0s） |
@@ -279,56 +275,51 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 ```
 
 - **错误类型**：`CLEF_INVALID_INPUT`、`CLEF_INVALID_CONFIG`、`CLEF_HTTP_ERROR`、`CLEF_INVALID_RESPONSE`、`CLEF_SERVICE_UNAVAILABLE`。
-- **重试范围**：仅对网络异常、超时及 HTTP 429/500/502/503/504 进行有限重试；配置错误、鉴权失败（401/403）与超限（413）等立即失败返回。
+- **重试范围**：仅对网络异常、超时及 HTTP 429/500/502/503/504 进行有限重试；配置错误、鉴权失败（401/403）与超限（413）立即失败返回。
 
 ---
 
 ## 应用集成示例
 
-### 调用日志与统计
+### 1. 本地调用日志与统计
 
-也可直接对 Agent 说：**“查看 Clef 日志统计”**，默认返回今日汇总；“只看今天 ego-clef 的调用”“统计最近七天 Clef 调用”“查看 ego-clef 任务完成情况”也支持。Agent 读取本地日志并返回中文摘要，无需用户执行命令。
+元数据日志默认开启，覆盖 CLI、Python/TypeScript 模板及 `ego-clef`。模型调用日志位于 `~/.local/state/clef/events.jsonl`，浏览器任务日志位于 `~/.local/state/clef-browser/events.jsonl`。
 
-默认开启元数据日志，直接调用 CLI/Python/TypeScript 及 ego-clef 都会记录。模型调用日志位于 `~/.local/state/clef/events.jsonl`，浏览器任务日志位于 `~/.local/state/clef-browser/events.jsonl`。以 `call_id` 和 `run_id` 关联：一次 `call` 可以包含多个 HTTP `attempt`，浏览器的 `decision` 是同次调用的视图，不额外计数。
+对 Agent 提问：“**查看 Clef 日志统计**”或“**查看今天 ego-clef 的调用**”，Agent 将自动读取本地日志并返回结构化摘要。亦可通过 CLI 查询：
 
 ```bash
-# 今天全部来源的调用情况
+# 查询今日全部来源调用情况
 python3 skills/cloudflare-clef/scripts/log_stats.py --today
 
-# 只看 ego-clef；JSON 方便导入后续分析
+# 仅查看 ego-clef 来源并输出 JSON
 python3 skills/cloudflare-clef/scripts/log_stats.py --today --source ego-clef --json
 ```
 
-统计包含来源/原语/模型分组、调用量、HTTP 尝试与重试、成功率、p50/p95、错误码与 token 用量覆盖率。只保存统计元数据，不保存正文、候选文字、密钥或完整 URL。stdout 和原调用协议保持不变。配置、计数口径及多日志/浏览器任务统计见 [日志说明](skills/cloudflare-clef/references/logging.md) 和 [浏览器日志说明](skills/ego-clef/references/browser.md#查看是否生效)。
+统计包含来源/原语/模型分组、调用量、HTTP 尝试与重试、成功率、p50/p95 耗时及 Token 覆盖率。日志仅保存脱敏元数据，详见 [日志说明](skills/cloudflare-clef/references/logging.md)。
 
-### ego-clef：跨站点的 ego-browser 语义决策技能
+---
 
-**一次配置，日常只说任务。** 例如：“搜索文档里的 retry 用法”“展开菜单、选择工具分类再搜索”“填写这些已知筛选条件”。Agent 在内部根据当前页面语义选择下一步，用户无需提到 Clef、编写函数或查看置信度；GitHub/X 只是已有评测示例。
+### 2. ego-clef：浏览器语义决策扩展
 
-先安装 ego-browser，再安装两个 Clef 技能：
+面向各类网站的通用语义页面操作（导航、搜索、菜单、筛选、已知值填写、原生下拉及滚动）。完全复用现有 `ego-browser` 会话，无需额外安装自动化框架。
 
 ```bash
+# 安装通用技能与浏览器决策技能
 npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef
 npx skills add lyhu/skills-cloudflare-clef --skill ego-clef
+
+# 执行一次性配置
+python3 skills/ego-clef/scripts/install-browser.py --endpoint "http://127.0.0.1:8000/v1/systemone"
 ```
 
-也可分别将仓库中的两个技能目录软链接到 `~/.agents/skills/`。Pi 通过本仓库的包配置发现两个技能。
+**运行机制**：
+- **职责划分**：Clef 负责依据当前 DOM 控件（最多 24 个候选）决策下一步动作，ego-browser 负责底层执行，主 Agent 负责策略白名单（`allowAction`）与独立结果核验（`verify`）。
+- **执行边界**：登录、支付、发布/删除、文件下载及 Canvas/拖拽由主 Agent 在原生流程接管。
+- 详细 API 与策略配置详见 [浏览器调用指南](skills/ego-clef/references/browser.md)；真实场景评测详见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md) 与 [语义操作评测](benchmarks/SEMANTIC_BROWSER_REPORT.md)。
 
-可把一次性接入交给 Agent：“请安装 cloudflare-clef 和 ego-clef，运行 ego-clef 内的 `scripts/install-browser.py`，接入我提供的 Clef 端点。”仅该浏览器安装脚本会保存本机配置、备份已有 ego-browser 技能并加入指向 ego-clef 的默认路由提示。服务异常、低置信度或未覆盖的页面由主 Agent 继续同一任务；正常回答只展示结果与来源。自动选择取决于 Agent 是否加载技能，不是对所有浏览器调用的底层拦截。
+---
 
-通用客户端默认从同级 `cloudflare-clef` 或用户级 `~/.agents/skills/cloudflare-clef`、`~/.codex/skills/cloudflare-clef` 查找；其他安装位置设置 `CLEF_SKILL_DIR` 为通用技能目录。原有 `~/.config/clef-browser/config.json` 与日志路径继续使用，历史记录保留。
-
-已提供 [Clef-Browser 模块](skills/ego-clef/scripts/browser.mjs)，在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择操作 → ego-browser 执行 → 核对完成条件”的循环；不需要另装浏览器自动化框架。不按网站名单限制；默认保持同源，Agent 可按任务收窄范围或明确允许跨域。
-
-`navigate` 支持多步链接导航；`interact` 还支持语义按钮/菜单、悬停、筛选、原样填写已知值、原生下拉选择、Enter 与滚动。控件操作由主 Agent 在任务授权范围内提供策略。支持目标重新检查、无进展交接、预算与独立完成验证。登录、付款、发布、文件和视觉操作由主 Agent 使用普通 ego-browser 接手。
-
-需要核对是否生效时，查看本机 `~/.local/state/clef-browser/events.jsonl`：`decision` 的 HTTP 成功记录证明收到有效 Clef 答案，`run` 记录独立验证结果和调用次数。同次运行以 `run_id` 关联；不记录正文、完整 URL 或密钥。也可直接让 Agent 查看最近一次日志，日常回答仍保持简洁。
-
-使用方法见 [调用说明](skills/ego-clef/references/browser.md)，真实 GitHub 与 X 导航测试见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md)。该测试独立于前面的搜索结果筛选评测，速度收益须通过同任务的配对实验测量。
-
-跨站点搜索、菜单和筛选的真实服务验证见 [语义操作评测](benchmarks/SEMANTIC_BROWSER_REPORT.md)，提供受控页面与复现入口。
-
-### Python 集成
+### 3. Python 客户端集成
 使用随技能分发的 [Python 模板](skills/cloudflare-clef/templates/client.py)：
 
 ```python
@@ -342,8 +333,8 @@ handler = "review" if "error" in result else result["choice"]
 print(f"Assigning to: {handler}")
 ```
 
-### TypeScript / Node.js 集成
-使用 [TypeScript 模板](skills/cloudflare-clef/templates/client.ts)（零外部 npm 依赖，安全调用 Python CLI 进程）：
+### 4. TypeScript / Node.js 集成
+使用随技能分发的 [TypeScript 模板](skills/cloudflare-clef/templates/client.ts)（零外部 npm 依赖，安全调用 Python CLI 进程）：
 
 ```typescript
 import { evaluateClef } from "./client.ts";
@@ -387,4 +378,5 @@ CLEF_MAX_RETRIES=0 python3 benchmarks/run.py --repeats 3 --warmup 3
 
 - **模型与权重**：[Cloudflare Clef 模型权重与文档 (HuggingFace)](https://huggingface.co/Cloudflare/clef)
 - **协议规范**：[Agent Skills 规范标准](https://agentskills.io/specification) | [TypeSafe 决策原语文档](https://docs.typesafe.ai/primitives/noul)
-- **代码许可**：本项目代码基于 [Apache-2.0](LICENSE) 协议开源。公开基准测试集遵循其各自原许可协议，详见 [NOTICE](benchmarks/NOTICE.md)。
+- **代码许可**：本项目代码基于 [Apache-2.0](LICENSE) 协议开源。公开基准测试集遵循各自原许可协议，详见 [NOTICE](benchmarks/NOTICE.md)。
+
