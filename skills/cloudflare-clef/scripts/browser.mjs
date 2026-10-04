@@ -2,6 +2,9 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
+import { readFile } from "node:fs/promises";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 const execute = promisify(execFile);
 const client = fileURLToPath(new URL("./evaluate.py", import.meta.url));
@@ -9,7 +12,23 @@ const complete = "DONE: the requested destination has been reached";
 const handoff = "HANDOFF: no suitable link, uncertainty, or interaction needs the main agent";
 const canonical = (value) => { const url = new URL(value); url.hash = ""; return url.href; };
 
+export async function browserConfiguration({ env = process.env,
+  file = join(homedir(), ".config/clef-browser/config.json") } = {}) {
+  let config = {};
+  try { config = JSON.parse(await readFile(file, "utf8")); }
+  catch (error) { if (error.code !== "ENOENT") throw error; }
+  const endpoint = env.CLEF_BACKEND_URL || config.endpoint;
+  if (endpoint) {
+    const url = new URL(endpoint);
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
+      throw new TypeError("Clef endpoint must be HTTP(S) without embedded credentials");
+    }
+  }
+  return { endpoint, enabled: config.enabled !== false && Boolean(endpoint) };
+}
+
 export async function askClef(state, choices, goal) {
+  const config = await browserConfiguration();
   const { stdout } = await execute("python3", [client,
     "--state", JSON.stringify(state), "--type", "choice",
     "--instructions", `Choose the next navigation action for this user goal: ${goal}. ` +
@@ -19,9 +38,53 @@ export async function askClef(state, choices, goal) {
       "Do not treat search-result snippets as having opened the underlying post or repository.",
     "--choices", ...choices], {
     timeout: 15000, maxBuffer: 256 * 1024,
-    env: { ...process.env, CLEF_MAX_RETRIES: "0", CLEF_TIMEOUT: "10" },
+    env: { ...process.env, ...(config.endpoint ? { CLEF_BACKEND_URL: config.endpoint } : {}),
+      CLEF_MAX_RETRIES: "0", CLEF_TIMEOUT: "10" },
   });
   return JSON.parse(stdout);
+}
+
+/** Safe defaults for the two sites covered by the live pilot; other sites use the main agent. */
+export function readOnlyScope(startURL) {
+  const start = new URL(startURL);
+  if (start.origin === "https://github.com") {
+    const parts = start.pathname.split("/").filter(Boolean);
+    if (parts.length < 2) return null;
+    const repository = `/${parts[0]}/${parts[1]}`;
+    return u => u.origin === start.origin && !u.search && !u.username && !u.password &&
+      (u.pathname === repository ||
+       u.pathname.startsWith(repository + "/blob/") ||
+       u.pathname.startsWith(repository + "/tree/") ||
+       u.pathname === repository + "/releases" ||
+       u.pathname.startsWith(repository + "/releases/tag/"));
+  }
+  if (start.origin === "https://x.com") {
+    return u => u.origin === start.origin && !u.username && !u.password &&
+      (u.pathname === "/search" || (!u.search && /^\/\w+\/status\/\d+$/.test(u.pathname)));
+  }
+  return null;
+}
+
+/** Agent-facing shortcut. Users give a task; the agent binds its completion check. */
+export async function navigate(page, goal, {
+  targetUrl, verify, configuration = browserConfiguration, ...options
+} = {}) {
+  const fallback = reason => ({ status: "handoff", reason, trace: [] });
+  let config;
+  try { config = await configuration(); }
+  catch { return fallback("invalid_config"); }
+  if (!config.enabled) return fallback("not_configured");
+  if (!targetUrl && typeof verify !== "function") return fallback("needs_verifier");
+  const allowNavigation = options.allowNavigation || readOnlyScope(await page.url());
+  if (!allowNavigation) return fallback("unsupported_site");
+  return runClefBrowser(page, {
+    ...options, goal, allowNavigation,
+    verify: verify || (state => canonical(state.url) === canonical(targetUrl)),
+    waitForPage: options.waitForPage || (p => p.waitForFunction(() => location.hostname === "x.com" ?
+      !!document.querySelector('article [data-testid="tweetText"]') :
+      document.readyState !== "loading" && !!document.querySelector("main, [role='main'], article"),
+      undefined, { timeout: 10000 })),
+  });
 }
 
 // Runs inside the browser. No network requests or live DOM modifications.

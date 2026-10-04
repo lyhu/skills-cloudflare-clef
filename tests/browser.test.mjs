@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { candidates, runClefBrowser } from "../skills/cloudflare-clef/scripts/browser.mjs";
+import { candidates, runClefBrowser, navigate, readOnlyScope, browserConfiguration }
+  from "../skills/cloudflare-clef/scripts/browser.mjs";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const home = "https://example.test/docs";
 const target = "https://example.test/docs/contributing";
@@ -81,4 +85,57 @@ test("failed navigation is handed back without a retry", async () => {
     decide: async (_, choices) => verdict(choices[0]) });
   assert.equal(result.reason, "navigation_error");
   assert.deepEqual(page.calls, [target]);
+});
+
+test("local configuration works without inherited shell variables; environment wins", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "clef-config-"));
+  const file = join(dir, "config.json");
+  try {
+    await writeFile(file, JSON.stringify({ endpoint: "http://local.test/v1/systemone" }));
+    assert.deepEqual(await browserConfiguration({ env: {}, file }),
+      { endpoint: "http://local.test/v1/systemone", enabled: true });
+    assert.equal((await browserConfiguration({ env: { CLEF_BACKEND_URL: "http://override.test/" }, file })).endpoint,
+      "http://override.test/");
+    await writeFile(file, JSON.stringify({ endpoint: "http://local.test/", enabled: false }));
+    assert.equal((await browserConfiguration({ env: {}, file })).enabled, false);
+    await writeFile(file, "invalid json");
+    await assert.rejects(browserConfiguration({ env: {}, file }));
+  } finally { await rm(dir, { recursive: true }); }
+});
+
+test("default site scopes allow reading and reject write/account routes", () => {
+  const github = readOnlyScope("https://github.com/owner/repo/tree/main/src");
+  assert.equal(github(new URL("https://github.com/owner/repo/blob/main/README.md")), true);
+  for (const path of ["/owner/other/blob/main/a", "/owner/repo/settings", "/owner/repo/issues/new",
+    "/owner/repo/delete", "/owner/repo/blob/main/a?edit=true"]) {
+    assert.equal(github(new URL("https://github.com" + path)), false);
+  }
+  const x = readOnlyScope("https://x.com/search?q=test");
+  assert.equal(x(new URL("https://x.com/author/status/123")), true);
+  assert.equal(x(new URL("https://x.com/compose/post")), false);
+  assert.equal(x(new URL("https://x.com/i/chat")), false);
+  assert.equal(readOnlyScope("https://unknown.test/"), null);
+});
+
+test("automatic shortcut navigates with inferred scope and a target URL", async () => {
+  const page = fakePage();
+  const start = "https://github.com/owner/repo";
+  const end = start + "/blob/main/CONTRIBUTING.md";
+  let url = start;
+  page.url = async () => url;
+  page.goto = async next => { url = next; page.calls.push(next); };
+  page.evaluate = async () => ({ url, title: "Repo", text: "Contribution guide",
+    links: [{ url: end, text: "CONTRIBUTING.md", context: "" }] });
+  const result = await navigate(page, "Open contribution guide", {
+    targetUrl: end, configuration: async () => ({ enabled: true }),
+    decide: async (state, choices) => verdict(state.url === start ? choices[0] : choices.at(-2)),
+  });
+  assert.equal(result.status, "completed");
+  assert.deepEqual(page.calls, [end]);
+});
+
+test("unconfigured shortcut returns to the main agent before touching the browser", async () => {
+  const result = await navigate({}, "Open guide", { configuration: async () => ({enabled:false}) });
+  assert.equal(result.reason, "not_configured");
+  assert.deepEqual(result.trace, []);
 });

@@ -278,7 +278,11 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 ### Clef-Browser：浏览器导航原型
 
-已提供 [Clef-Browser 模块](skills/cloudflare-clef/scripts/browser.mjs)，可在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择链接 → 导航 → 核对完成条件”的循环。主 Agent 给定目标与只读路由范围，Clef 每步返回强类型决策，代码执行并记录耗时；不需要另装浏览器自动化框架。
+**一次配置，日常只说任务。** 例如：“打开这个 GitHub 项目的贡献指南”或“在 X 上找 Jev 浏览器应用案例，打开原帖看看”。Agent 在内部选择合适的链接导航循环，用户无需提到 Clef、编写函数或查看置信度。
+
+可把一次性接入交给 Agent：“请安装本仓库的技能，并运行技能内的 `scripts/install-browser.py`，接入我提供的 Clef 端点。”安装会保存本机配置、备份已有 ego-browser 技能并加入默认路由提示。服务异常、低置信度或未覆盖的页面由主 Agent 继续同一任务；正常回答只展示结果与来源。自动选择取决于 Agent 是否加载技能，不是对所有浏览器调用的底层拦截。
+
+已提供 [Clef-Browser 模块](skills/cloudflare-clef/scripts/browser.mjs)，在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择链接 → 导航 → 核对完成条件”的循环；不需要另装浏览器自动化框架。默认接入覆盖 GitHub 仓库阅读和 X 搜索/原帖导航。
 
 支持多步链接导航、低置信度交接、步数与时间预算，以及独立完成检查。当前范围为只读导航；按钮、表单、登录、发布及视觉操作需要后续实现。
 

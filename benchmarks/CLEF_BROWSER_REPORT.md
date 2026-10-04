@@ -25,3 +25,9 @@
 本实验只验证已知目标的链接导航，没有大模型基线，因此**不能据此宣称浏览器任务加速倍数**。也未测开放式搜索、长文理解或任意网站成功率。24 个链接与 1,800 字符正文的预算可能遗漏目标，较长上下文还会增加服务延迟。
 
 复现入口：[benchmarks/clef-browser.mjs](clef-browser.mjs)；安装与调用：[浏览器模块说明](../skills/cloudflare-clef/references/browser.md)。在同一个 TaskSpace 中调用 `trial(page, taskIndex, repeat)`，完成九次后调用 `summarize()`；环境变量提供端点，报告不保存端点、密钥或完整正文。
+
+## 默认接入验证
+
+参考 [ego-jev](https://github.com/ZephyrDeng/ego-jev) 的 Agent 内部循环模式，增加一次性本机配置与浏览器技能路由提示，正常任务不要求用户点名模型或查看技术日志。清除浏览器脚本的 `CLEF_BACKEND_URL` 后，两个中文目标均通过：贡献指南 3.16 秒、X 原帖 3.38 秒（导航循环耗时，不含初始页面加载）。记录见 [默认入口验证](reports/clef-browser/default-routing.json)，本地 33 项 Python 与 14 项 Node 测试通过。
+
+此验证证明配置发现和简化入口可用；技能自动选择依赖宿主加载技能，没有对所有浏览器 API 做底层拦截。原有 9 次评测与本节使用不同驱动版本，分别保留哈希。
