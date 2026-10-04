@@ -287,6 +287,8 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 ### 调用日志与统计
 
+也可直接对 Agent 说：**“查看 Clef 日志统计”**，默认返回今日汇总；“只看今天 ego-clef 的调用”“统计最近七天 Clef 调用”“查看 ego-clef 任务完成情况”也支持。Agent 读取本地日志并返回中文摘要，无需用户执行命令。
+
 默认开启元数据日志，直接调用 CLI/Python/TypeScript 及 ego-clef 都会记录。模型调用日志位于 `~/.local/state/clef/events.jsonl`，浏览器任务日志位于 `~/.local/state/clef-browser/events.jsonl`。以 `call_id` 和 `run_id` 关联：一次 `call` 可以包含多个 HTTP `attempt`，浏览器的 `decision` 是同次调用的视图，不额外计数。
 
 ```bash
