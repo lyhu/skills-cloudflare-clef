@@ -29,10 +29,10 @@ def install(endpoint, *, config_dir=None, browser_skill=None):
         content = browser_skill.read_text()
         skill = Path(__file__).resolve().parents[1] / "SKILL.md"
         block = f"""{START}
-## Local decision routing
+## Ego Clef navigation
 
 For tasks that require choosing among read-only page links, prefer the configured
-local Clef navigation loop. Read [{skill.name}]({skill}) and use its `navigate`
+local Clef navigation loop. Read [ego-clef]({skill}) and use its `navigate`
 entry point with the user's goal and an agent-owned completion check. Reuse this
 task's Page and TaskSpace. The user need not name a model, skill or function.
 Report task results normally; omit backend names, confidence and timing tables

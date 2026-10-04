@@ -4,8 +4,8 @@ import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createServer } from "node:http";
-import { appendBrowserEvent } from "../skills/cloudflare-clef/scripts/browser-log.mjs";
-import { runClefBrowser } from "../skills/cloudflare-clef/scripts/browser.mjs";
+import { appendBrowserEvent } from "../skills/ego-clef/scripts/browser-log.mjs";
+import { runClefBrowser } from "../skills/ego-clef/scripts/browser.mjs";
 
 test("logs metadata only, appends valid lines and restricts file permissions", async () => {
   const dir = await mkdtemp(join(tmpdir(), "clef-log-"));

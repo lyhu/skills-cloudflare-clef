@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { candidates, runClefBrowser, navigate, readOnlyScope, browserConfiguration }
-  from "../skills/cloudflare-clef/scripts/browser.mjs";
+  from "../skills/ego-clef/scripts/browser.mjs";
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";

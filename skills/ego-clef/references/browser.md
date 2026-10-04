@@ -28,6 +28,8 @@ tail -f ~/.local/state/clef-browser/events.jsonl
 
 ## 一次性安装（Agent 执行）
 
+先安装 `cloudflare-clef`、`ego-clef` 与 `ego-browser`。`ego-clef` 不复制通用客户端；默认查找同级或用户级共享技能目录中的 cloudflare-clef。其他位置设置 `CLEF_SKILL_DIR` 为通用技能目录。缺少客户端时交回主 Agent，不能伪造模型决策。
+
 用用户给定的端点运行 `<skill-dir>/scripts/install-browser.py --endpoint <url>`。它写入 `~/.config/clef-browser/config.json`，并在已有 `~/.agents/skills/ego-browser/SKILL.md` 中加入默认路由提示。原文件备份在配置目录中，重复安装不追加重复提示；未安装 ego-browser 时不创建冒充的浏览器技能。
 
 配置文件仅需 `{"endpoint":"http://127.0.0.1:8000/v1/systemone","enabled":true}`。进程中的 `CLEF_BACKEND_URL` 优先；浏览器运行时不继承终端变量时仍可读取该文件。将 `enabled` 改为 `false` 可停用默认接入。浏览器技能升级可能覆盖本地提示，此时重新运行安装脚本即可恢复。
@@ -37,7 +39,7 @@ tail -f ~/.local/state/clef-browser/events.jsonl
 读取 ego-browser 的 TaskSpace/Page 规则。用户指定的单一 URL 可以直接打开；当需要选择页面链接时，使用当前 Page 调用：
 
 ```javascript
-const { navigate } = await import('/absolute/path/cloudflare-clef/scripts/browser.mjs');
+const { navigate } = await import('/absolute/path/ego-clef/scripts/browser.mjs');
 const result = await navigate(page, userGoal, { targetUrl: observedTargetUrl });
 ```
 
@@ -51,7 +53,7 @@ const result = await navigate(page, userGoal, { targetUrl: observedTargetUrl });
 
 将已有 ego-browser Page 的**链接导航决策**交给 Clef。代码提取页面文字和链接，Clef 每步用一次 `choice` 选择链接、完成或交接；代码控制范围、预算与执行，并独立核对完成条件。主 Agent 仍负责目标拆解和内容总结。
 
-运行依赖：已安装且可用的 ego-browser、Node.js 22+、Python 3.9+、可达的 Clef 服务。模块只使用 Node 标准库和随技能分发的 `evaluate.py`，不安装或启动另一个浏览器。
+运行依赖：已安装且可用的 ego-browser、Node.js 22+、Python 3.9+、可达的 Clef 服务。模块只使用 Node 标准库和独立 cloudflare-clef 技能的 `evaluate.py`，不安装或启动另一个浏览器。
 
 ### 高级调用示例
 
@@ -60,7 +62,7 @@ const result = await navigate(page, userGoal, { targetUrl: observedTargetUrl });
 ```bash
 export CLEF_BACKEND_URL="http://127.0.0.1:8000/v1/systemone"
 ego-browser nodejs <<'JS'
-const { runClefBrowser } = await import('/absolute/path/cloudflare-clef/scripts/browser.mjs');
+const { runClefBrowser } = await import('/absolute/path/ego-clef/scripts/browser.mjs');
 const task = await taskSpace('Clef-Browser: read contribution guide');
 const page = task.page('p1');
 await page.goto('https://github.com/jkudish/jev-browser');

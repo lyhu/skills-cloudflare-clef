@@ -2,14 +2,28 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { appendBrowserEvent } from "./browser-log.mjs";
 
 const execute = promisify(execFile);
-const client = fileURLToPath(new URL("./evaluate.py", import.meta.url));
+export async function resolveClefClient(skillDir = process.env.CLEF_SKILL_DIR) {
+  const directories = skillDir ? [skillDir] : [
+    fileURLToPath(new URL("../../cloudflare-clef/", import.meta.url)),
+    join(homedir(), ".agents/skills/cloudflare-clef"),
+    join(homedir(), ".codex/skills/cloudflare-clef"),
+  ];
+  for (const directory of directories) {
+    const client = join(directory, "scripts/evaluate.py");
+    try { await access(client); return client; }
+    catch (error) { if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error; }
+  }
+  const error = new Error("Install cloudflare-clef or set CLEF_SKILL_DIR to its directory");
+  error.code = "CLEF_CLIENT_NOT_INSTALLED";
+  throw error;
+}
 const complete = "DONE: the requested destination has been reached";
 const handoff = "HANDOFF: no suitable link, uncertainty, or interaction needs the main agent";
 const canonical = (value) => { const url = new URL(value); url.hash = ""; return url.href; };
@@ -35,6 +49,7 @@ export async function askClef(state, choices, goal, { runId = randomUUID(), logF
     site: new URL(state.url).hostname };
   try {
     const config = await browserConfiguration();
+    const client = await resolveClefClient();
     const { stdout } = await execute("python3", [client,
       "--state", JSON.stringify(state), "--type", "choice",
       "--instructions", `Choose the next navigation action for this user goal: ${goal}. ` +
@@ -54,6 +69,7 @@ export async function askClef(state, choices, goal, { runId = randomUUID(), logF
       duration_ms: performance.now() - started }, logFile);
     return answer;
   } catch (error) {
+    if (error.code === "CLEF_CLIENT_NOT_INSTALLED") event.error_code = error.code;
     try {
       const failure = JSON.parse(error.stdout);
       if (/^CLEF_[A-Z_]+$/.test(failure.error)) event.error_code = failure.error;
@@ -156,7 +172,7 @@ export function selectAction(answer, links, threshold) {
       answer.confidence < 0 || answer.confidence > 1 || !choices.includes(answer.choice)) {
     return { kind: "handoff", reason: "invalid_answer" };
   }
-  // The bundled Python client validates the complete probability distribution.
+  // The generic Python client validates the complete probability distribution.
   if (answer.confidence < threshold) return { kind: "handoff", reason: "low_confidence" };
   if (answer.choice === complete) return { kind: "done" };
   if (answer.choice === handoff) return { kind: "handoff", reason: "model_handoff" };

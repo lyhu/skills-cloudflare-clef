@@ -4,6 +4,15 @@
 
 遵循 [Agent Skills 规范](https://agentskills.io/specification) 与 [typesafe-ai/skills](https://github.com/typesafe-ai/skills) 目录组织标准。本项目独立开源维护，不代表 Cloudflare 或 TypeSafe 官方发布。
 
+本仓库分发两个独立技能，可按需安装：
+
+| 技能 | 职责 | 运行依赖 |
+| :--- | :--- | :--- |
+| [cloudflare-clef](skills/cloudflare-clef/SKILL.md) | 通用决策：语义分流、风险评估、候选选择、评分 | Python 标准库与 Clef 服务 |
+| [ego-clef](skills/ego-clef/SKILL.md) | ego-browser 的可选只读导航循环与浏览器日志 | cloudflare-clef、ego-browser、Node.js |
+
+`cloudflare-clef` 可独立用于任意 Agent 或应用，不包含浏览器路由、安装提示或浏览器日志。`ego-clef` 通过它调用模型，浏览器执行与完成检查由浏览器技能负责。单独安装通用技能不会修改 ego-browser。
+
 ---
 
 ## 核心特性
@@ -276,19 +285,30 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 ## 应用集成示例
 
-### Clef-Browser：浏览器导航原型
+### ego-clef：可选的 ego-browser 导航技能
 
 **一次配置，日常只说任务。** 例如：“打开这个 GitHub 项目的贡献指南”或“在 X 上找 Jev 浏览器应用案例，打开原帖看看”。Agent 在内部选择合适的链接导航循环，用户无需提到 Clef、编写函数或查看置信度。
 
-可把一次性接入交给 Agent：“请安装本仓库的技能，并运行技能内的 `scripts/install-browser.py`，接入我提供的 Clef 端点。”安装会保存本机配置、备份已有 ego-browser 技能并加入默认路由提示。服务异常、低置信度或未覆盖的页面由主 Agent 继续同一任务；正常回答只展示结果与来源。自动选择取决于 Agent 是否加载技能，不是对所有浏览器调用的底层拦截。
+先安装 ego-browser，再安装两个 Clef 技能：
 
-已提供 [Clef-Browser 模块](skills/cloudflare-clef/scripts/browser.mjs)，在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择链接 → 导航 → 核对完成条件”的循环；不需要另装浏览器自动化框架。默认接入覆盖 GitHub 仓库阅读和 X 搜索/原帖导航。
+```bash
+npx skills add lyhu/skills-cloudflare-clef --skill cloudflare-clef
+npx skills add lyhu/skills-cloudflare-clef --skill ego-clef
+```
+
+也可分别将仓库中的两个技能目录软链接到 `~/.agents/skills/`。Pi 通过本仓库的包配置发现两个技能。
+
+可把一次性接入交给 Agent：“请安装 cloudflare-clef 和 ego-clef，运行 ego-clef 内的 `scripts/install-browser.py`，接入我提供的 Clef 端点。”仅该浏览器安装脚本会保存本机配置、备份已有 ego-browser 技能并加入指向 ego-clef 的默认路由提示。服务异常、低置信度或未覆盖的页面由主 Agent 继续同一任务；正常回答只展示结果与来源。自动选择取决于 Agent 是否加载技能，不是对所有浏览器调用的底层拦截。
+
+通用客户端默认从同级 `cloudflare-clef` 或用户级 `~/.agents/skills/cloudflare-clef`、`~/.codex/skills/cloudflare-clef` 查找；其他安装位置设置 `CLEF_SKILL_DIR` 为通用技能目录。原有 `~/.config/clef-browser/config.json` 与日志路径继续使用，历史记录保留。
+
+已提供 [Clef-Browser 模块](skills/ego-clef/scripts/browser.mjs)，在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择链接 → 导航 → 核对完成条件”的循环；不需要另装浏览器自动化框架。默认接入覆盖 GitHub 仓库阅读和 X 搜索/原帖导航。
 
 支持多步链接导航、低置信度交接、步数与时间预算，以及独立完成检查。当前范围为只读导航；按钮、表单、登录、发布及视觉操作需要后续实现。
 
 需要核对是否生效时，查看本机 `~/.local/state/clef-browser/events.jsonl`：`decision` 的 HTTP 成功记录证明收到有效 Clef 答案，`run` 记录独立验证结果和调用次数。同次运行以 `run_id` 关联；不记录正文、完整 URL 或密钥。也可直接让 Agent 查看最近一次日志，日常回答仍保持简洁。
 
-使用方法见 [调用说明](skills/cloudflare-clef/references/browser.md)，真实 GitHub 与 X 导航测试见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md)。该测试独立于前面的搜索结果筛选评测，速度收益须通过同任务的配对实验测量。
+使用方法见 [调用说明](skills/ego-clef/references/browser.md)，真实 GitHub 与 X 导航测试见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md)。该测试独立于前面的搜索结果筛选评测，速度收益须通过同任务的配对实验测量。
 
 ### Python 集成
 使用随技能分发的 [Python 模板](skills/cloudflare-clef/templates/client.py)：
@@ -335,7 +355,7 @@ python3 -m pip install -r requirements-dev.txt
 # 1. 元数据、语法、Schema 与打包完整性校验
 python3 scripts/validate.py
 
-# 2. 执行完整单元测试集（30 项测试用例，覆盖协议、退避重试与安全边界）
+# 2. 执行 Python 单元测试集（覆盖协议、退避重试与安全边界）
 python3 -m unittest discover -s tests -v
 
 # 3. 运行基准测试集

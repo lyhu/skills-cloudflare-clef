@@ -24,7 +24,7 @@
 
 本实验只验证已知目标的链接导航，没有大模型基线，因此**不能据此宣称浏览器任务加速倍数**。也未测开放式搜索、长文理解或任意网站成功率。24 个链接与 1,800 字符正文的预算可能遗漏目标，较长上下文还会增加服务延迟。
 
-复现入口：[benchmarks/clef-browser.mjs](clef-browser.mjs)；安装与调用：[浏览器模块说明](../skills/cloudflare-clef/references/browser.md)。在同一个 TaskSpace 中调用 `trial(page, taskIndex, repeat)`，完成九次后调用 `summarize()`；环境变量提供端点，报告不保存端点、密钥或完整正文。
+复现入口：[benchmarks/clef-browser.mjs](clef-browser.mjs)；安装与调用：[浏览器模块说明](../skills/ego-clef/references/browser.md)。在同一个 TaskSpace 中调用 `trial(page, taskIndex, repeat)`，完成九次后调用 `summarize()`；环境变量提供端点，报告不保存端点、密钥或完整正文。
 
 ## 默认接入验证
 

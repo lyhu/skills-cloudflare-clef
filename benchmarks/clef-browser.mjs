@@ -2,7 +2,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { runClefBrowser } from "../skills/cloudflare-clef/scripts/browser.mjs";
+import { runClefBrowser } from "../skills/ego-clef/scripts/browser.mjs";
 
 const repository = "https://github.com/jkudish/jev-browser";
 export const tasks = [
@@ -58,7 +58,7 @@ export async function summarize() {
   for (const task of tasks) for (let repeat = 1; repeat <= 3; repeat++) {
     records.push(JSON.parse(await readFile(`${output}${task.id}-${repeat}.json`, "utf8")));
   }
-  const driver = fileURLToPath(new URL("../skills/cloudflare-clef/scripts/browser.mjs", import.meta.url));
+  const driver = fileURLToPath(new URL("../skills/ego-clef/scripts/browser.mjs", import.meta.url));
   const report = { model: "clef", transport: "Python stdlib client over HTTP", browser: "ego-browser",
     threshold: 0.6, max_steps: 5, repeats: 3,
     driver_sha256: createHash("sha256").update(await readFile(driver)).digest("hex"),

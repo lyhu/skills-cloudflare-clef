@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-path = Path(__file__).resolve().parents[1] / "skills/cloudflare-clef/scripts/install-browser.py"
+path = Path(__file__).resolve().parents[1] / "skills/ego-clef/scripts/install-browser.py"
 spec = importlib.util.spec_from_file_location("install_browser", path)
 installer = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(installer)
@@ -36,3 +36,22 @@ class InstallBrowserTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 installer.install("https://user:secret@server.test/", config_dir=directory / "config")
             self.assertFalse((directory / "config").exists())
+
+    def test_migrates_existing_generic_hook_and_preserves_configuration(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            skill = directory / "SKILL.md"
+            original = ("# ego-browser\n\n" + installer.START + "\n"
+                "Read /old/cloudflare-clef/SKILL.md\n" + installer.END + "\nOriginal rules.\n")
+            skill.write_text(original)
+            config_dir = directory / "config"
+            config_dir.mkdir()
+            (config_dir / "config.json").write_text(json.dumps({"custom": "preserved"}))
+            installer.install("http://local.test/v1/systemone", config_dir=config_dir, browser_skill=skill)
+            updated = skill.read_text()
+            self.assertNotIn("/old/cloudflare-clef/SKILL.md", updated)
+            self.assertIn(str(path.parents[1] / "SKILL.md"), updated)
+            self.assertIn("Original rules.", updated)
+            self.assertEqual(updated.count(installer.START), 1)
+            self.assertEqual(json.loads((config_dir / "config.json").read_text())["custom"], "preserved")
+            self.assertEqual(next(config_dir.glob("ego-browser-SKILL.before-*.md")).read_text(), original)

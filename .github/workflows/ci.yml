@@ -33,7 +33,12 @@ jobs:
         run: |
           node --check benchmarks/browser.mjs
           node --check benchmarks/clef-browser.mjs
-          node --check skills/cloudflare-clef/scripts/browser.mjs
+          node --check skills/ego-clef/scripts/browser.mjs
           node --test tests/*.test.mjs
       - name: Check npm distribution contents
-        run: npm pack --dry-run
+        run: |
+          npm pack --dry-run
+          cd skills/cloudflare-clef
+          npm pack --dry-run
+          cd ../ego-clef
+          npm pack --dry-run

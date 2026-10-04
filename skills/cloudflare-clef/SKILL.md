@@ -1,6 +1,6 @@
 ---
 name: cloudflare-clef
-description: 在 ego-browser 中根据用户的普通浏览器任务自动选择只读导航链接，例如进入 GitHub 文件/目录、打开 X 搜索结果原帖。用户无需提到 Clef 或函数名。也支持本地 Cloudflare Clef 的语义路由、高危 Shell 风险评估和代码审查评分。
+description: 使用本地 Cloudflare Clef 进行强类型 System One 决策。适用于自然语言工作流分流、高危 Shell 操作风险评估、候选项选择及代码审查评分，返回 noul、choice、score 结构化判定与概率。
 license: Apache-2.0
 metadata:
   version: "1.0.0"
@@ -11,16 +11,6 @@ metadata:
 ---
 
 # Cloudflare Clef 决策技能 (Decision Skill)
-
-## 浏览器任务的默认接入
-
-用户说“打开贡献指南”“进入源码目录”“找 X 上的案例并打开原帖”等普通浏览器任务时，无需用户点名本技能。使用 `ego-browser` 的现有 TaskSpace/Page，读取 [浏览器接入说明](references/browser.md)，在只读链接导航阶段优先调用 `navigate(page, goal, options)`。Agent 根据用户目标和已观察到的页面绑定完成检查，不让用户写函数、路由规则或阈值。
-
-配置从 `CLEF_BACKEND_URL` 或 `~/.config/clef-browser/config.json` 读取。缺少配置、站点不支持、服务异常或低确定性时，将结果交回主 Agent；主 Agent 继续同一个任务与会话，不要求用户选择模型或切换后端。需要用户登录或已有权限要求时，仍按原授权规则处理。
-
-默认只报告任务结果与来源，不展示 Clef 名称、置信度、延迟表或逐步技术日志。仅当用户要求调试、评测或解释实现时展示这些信息。浏览器 API 仍按正常工具调用执行，不能保证宿主界面隐藏工具调用。主 Agent 负责搜索策略、内容阅读和总结；已知单一链接可直接打开，无需额外模型判断。
-
-运行元数据默认追加到 `~/.local/state/clef-browser/events.jsonl`。用户询问是否生效时，按时间与 `run_id` 核对 `decision` 的 HTTP 成功记录及 `run` 的完成/交接结果；仅有配置或路由提示不能证明实际调用。详细字段见浏览器接入说明。
 
 Clef 是专为结构化决策设计的非自回归模型，基于单次前向推断对上下文进行语义评估，直接返回强类型判定结果与校准概率，不输出任何自由文本或解释。
 
@@ -100,7 +90,6 @@ python3 <skill-dir>/scripts/evaluate.py \
 
 ## 5. 支撑资源
 
-- 浏览器链接导航原型：需要将页面导航判断交给 Clef 时，阅读 [references/browser.md](references/browser.md)，通过现有 ego-browser Page 调用 `scripts/browser.mjs`。
 - 请求/响应 Schema 规范：[references/primitives.json](references/primitives.json)
 - Python 集成客户端模板：[templates/client.py](templates/client.py)
 - TypeScript / Node 集成模板：[templates/client.ts](templates/client.ts)
