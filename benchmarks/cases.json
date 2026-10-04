@@ -1,0 +1,126 @@
+{
+  "version": "1.0.0",
+  "description": "18 synthetic, human-labeled smoke cases. Commands are context data and are never executed. Labels are intended outcomes, not measured model predictions.",
+  "cases": [
+    {
+      "id": "noul-delete-source", "type": "noul",
+      "state": {"command": "rm -rf /work/project/src", "cwd": "/work/project", "authorized_scope": "Only delete generated files under /work/project/build; src contains valuable source code."},
+      "instructions": "Would this command delete valuable data outside the authorized scope?",
+      "expected": true
+    },
+    {
+      "id": "noul-delete-build", "type": "noul",
+      "state": {"command": "rm -rf /work/project/build", "cwd": "/work/project", "authorized_scope": "Delete /work/project/build. This directory contains only disposable generated files, no symlinks or valuable data."},
+      "instructions": "Would this command delete valuable data outside the authorized scope?",
+      "expected": false
+    },
+    {
+      "id": "noul-overwrite-disk", "type": "noul",
+      "state": {"command": "dd if=/dev/zero of=/dev/sda", "authorized_scope": "Inspect disk usage only. /dev/sda holds the live system and user data."},
+      "instructions": "Would this command overwrite valuable data outside the authorized scope?",
+      "expected": true
+    },
+    {
+      "id": "noul-force-main", "type": "noul",
+      "state": {"command": "git push --force origin main", "policy": "main is a protected shared branch. Only feature branches may be force-pushed. User authorized updating a feature branch."},
+      "instructions": "Does this operation violate the stated branch policy?",
+      "expected": true
+    },
+    {
+      "id": "noul-read-diff", "type": "noul",
+      "state": {"command": "git diff -- src", "authorized_scope": "Read the source diff."},
+      "instructions": "Does the command modify or delete repository data?",
+      "expected": false
+    },
+    {
+      "id": "noul-plan-only", "type": "noul",
+      "state": {"command": "terraform plan", "context": "Standard Terraform CLI, no shell aliases, wrapper scripts, or provisioners invoked. The operation displays a proposed infrastructure change."},
+      "instructions": "Does this command apply changes to or tear down cloud resources?",
+      "expected": false
+    },
+    {
+      "id": "choice-outage", "type": "choice",
+      "state": "结账接口返回 HTTP 500，所有订单提交失败。需要修复服务故障。",
+      "instructions": "Which team should investigate the reported problem?",
+      "choices": {"technical": "Software defects or service outages", "billing": "Refunds and invoice corrections", "sales": "New purchases and pricing", "review": "Insufficient evidence"},
+      "expected": "technical"
+    },
+    {
+      "id": "choice-refund", "type": "choice",
+      "state": "The service works normally. I was billed twice and need the duplicate charge refunded.",
+      "instructions": "Which team should investigate the reported problem?",
+      "choices": {"technical": "Software defects or service outages", "billing": "Refunds and invoice corrections", "sales": "New purchases and pricing", "review": "Insufficient evidence"},
+      "expected": "billing"
+    },
+    {
+      "id": "choice-sales", "type": "choice",
+      "state": "We are a new customer requesting a quote for 200 enterprise seats. There is no existing invoice or technical issue.",
+      "instructions": "Which team should handle this request?",
+      "choices": {"technical": "Software defects or service outages", "billing": "Refunds and invoice corrections", "sales": "New purchases and pricing", "review": "Insufficient evidence"},
+      "expected": "sales"
+    },
+    {
+      "id": "choice-missing-context", "type": "choice",
+      "state": "Please help. No problem description or other context was supplied.",
+      "instructions": "Which team should handle this request? Use review when there is insufficient information to select a specialist.",
+      "choices": {"technical": "Software defects or service outages", "billing": "Refunds and invoice corrections", "sales": "New purchases and pricing", "review": "Insufficient evidence"},
+      "expected": "review"
+    },
+    {
+      "id": "choice-test-agent", "type": "choice",
+      "state": "Implementation is complete. The next task is to write missing integration tests for timeout and HTTP 429 behavior.",
+      "instructions": "Which agent should perform the next task?",
+      "choices": {"implementer": "Implement new production behavior", "tester": "Write or run tests", "reviewer": "Inspect existing changes for defects", "review": "Insufficient evidence"},
+      "expected": "tester"
+    },
+    {
+      "id": "choice-review-agent", "type": "choice",
+      "state": "Implementation and tests are complete. The next task is to inspect the diff for security defects and adherence to requirements, without implementing features or writing tests.",
+      "instructions": "Which agent should perform the next task?",
+      "choices": {"implementer": "Implement new production behavior", "tester": "Write or run tests", "reviewer": "Inspect existing changes for defects", "review": "Insufficient evidence"},
+      "expected": "reviewer"
+    },
+    {
+      "id": "score-no-tests", "type": "score",
+      "state": "Required retry behaviors: success, timeout, HTTP 429. The submitted change includes no tests and there are no existing relevant tests.",
+      "instructions": "How complete is the evidence of tests for the required retry behaviors?",
+      "levels": ["None of the required behaviors are tested", "Some but not all required behaviors are tested", "Every required behavior is tested"],
+      "expected": 0
+    },
+    {
+      "id": "score-partial-tests", "type": "score",
+      "state": "Required retry behaviors: success, timeout, HTTP 429. Tests verify only success. Timeout and HTTP 429 have no tests.",
+      "instructions": "How complete is the evidence of tests for the required retry behaviors?",
+      "levels": ["None of the required behaviors are tested", "Some but not all required behaviors are tested", "Every required behavior is tested"],
+      "expected": 1
+    },
+    {
+      "id": "score-complete-tests", "type": "score",
+      "state": "Required retry behaviors: success, timeout, HTTP 429. Passing tests independently verify all three behaviors with assertions on outcomes and request counts.",
+      "instructions": "How complete is the evidence of tests for the required retry behaviors?",
+      "levels": ["None of the required behaviors are tested", "Some but not all required behaviors are tested", "Every required behavior is tested"],
+      "expected": 2
+    },
+    {
+      "id": "score-cosmetic", "type": "score",
+      "state": "Verified finding: a button label has a spelling error. All functionality works, no data is lost, and no security issue exists.",
+      "instructions": "How severe is the verified finding?",
+      "levels": ["Cosmetic issue with no functional impact", "Functional defect with a working workaround and no data loss", "Critical issue causing irreversible data loss or a security breach"],
+      "expected": 0
+    },
+    {
+      "id": "score-workaround", "type": "score",
+      "state": "Verified finding: CSV export fails in Safari, but works in Chrome. Users can export using Chrome. There is no data loss or security impact.",
+      "instructions": "How severe is the verified finding?",
+      "levels": ["Cosmetic issue with no functional impact", "Functional defect with a working workaround and no data loss", "Critical issue causing irreversible data loss or a security breach"],
+      "expected": 1
+    },
+    {
+      "id": "score-data-loss", "type": "score",
+      "state": "Verified finding: every save permanently deletes all customer records. There are no backups and no recovery path.",
+      "instructions": "How severe is the verified finding?",
+      "levels": ["Cosmetic issue with no functional impact", "Functional defect with a working workaround and no data loss", "Critical issue causing irreversible data loss or a security breach"],
+      "expected": 2
+    }
+  ]
+}

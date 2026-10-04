@@ -1,0 +1,26 @@
+{
+  "name": "@lyhu/skills-cloudflare-clef",
+  "version": "1.0.0",
+  "description": "Agent skill for local Cloudflare Clef (Qwen3.8-27B) typed System One decisions",
+  "keywords": ["agent-skills", "typesafe-ai", "claude-code", "codex", "clef"],
+  "license": "Apache-2.0",
+  "pi": {"skills": ["./skills/cloudflare-clef"]},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lyhu/skills-cloudflare-clef.git"
+  },
+  "files": [
+    "skills/cloudflare-clef/SKILL.md",
+    "skills/cloudflare-clef/package.json",
+    "skills/cloudflare-clef/scripts/*.py",
+    "skills/cloudflare-clef/references/*.json",
+    "skills/cloudflare-clef/templates/*.py",
+    "skills/cloudflare-clef/templates/*.ts"
+  ],
+  "scripts": {
+    "test": "python3 -m unittest discover -s tests -v",
+    "check": "python3 scripts/validate.py",
+    "benchmark": "python3 benchmarks/run.py"
+  },
+  "publishConfig": {"access": "public"}
+}

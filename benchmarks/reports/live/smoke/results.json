@@ -1,0 +1,1083 @@
+{
+  "metadata": {
+    "mode": "live-http",
+    "timestamp_utc": "2026-10-04T07:53:40.436745+00:00",
+    "python": "3.12.14",
+    "client_platform": "macOS-27.0.1-arm64-arm-64bit",
+    "model": "clef",
+    "transport_note": "LAN HTTP via Nginx to A800 GPU 7; inference_mode patch applied; no concurrent benchmark requests",
+    "timeout_seconds": "10.0",
+    "max_retries": "0",
+    "case_count": 18,
+    "repeats": 3,
+    "warmup_requests": 3,
+    "warmup_errors": 0,
+    "source_sha256": {
+      "benchmarks/cases.json": "d304005fc26a7af70dd09f5d244e1ddb05018d28ecda2c85fb5a2668fb0d0725",
+      "skills/cloudflare-clef/scripts/evaluate.py": "b4b30dd82d3ec25a38f023fd7cb06fdd9542922e3683f26d6a6b9b84043bcb6f",
+      "benchmarks/run.py": "d9f1cefee5eb96ff6f74d67a376f9160b952a33d03d1ac377ad149789eca70b4"
+    },
+    "dataset": "benchmarks/cases.json",
+    "endpoint_recorded": false
+  },
+  "summary": {
+    "requests": 54,
+    "successful": 54,
+    "errors": 0,
+    "matched": 54,
+    "agreement_rate": 1.0,
+    "valid_answer_agreement_rate": 1.0,
+    "latency_ms": {
+      "mean": 400.3591666858281,
+      "p50": 375.6567499949597,
+      "p95": 521.1499590077437,
+      "max": 932.9389170161448
+    },
+    "successful_latency_ms": {
+      "mean": 400.3591666858281,
+      "p50": 375.6567499949597,
+      "p95": 521.1499590077437,
+      "max": 932.9389170161448
+    }
+  },
+  "by_primitive": {
+    "noul": {
+      "requests": 18,
+      "successful": 18,
+      "errors": 0,
+      "matched": 18,
+      "agreement_rate": 1.0,
+      "valid_answer_agreement_rate": 1.0,
+      "latency_ms": {
+        "mean": 437.89401399812454,
+        "p50": 397.024165984476,
+        "p95": 932.9389170161448,
+        "max": 932.9389170161448
+      },
+      "successful_latency_ms": {
+        "mean": 437.89401399812454,
+        "p50": 397.024165984476,
+        "p95": 932.9389170161448,
+        "max": 932.9389170161448
+      },
+      "brier_score": 9.23766666666667e-05,
+      "uncertain_answers": 0
+    },
+    "choice": {
+      "requests": 18,
+      "successful": 18,
+      "errors": 0,
+      "matched": 18,
+      "agreement_rate": 1.0,
+      "valid_answer_agreement_rate": 1.0,
+      "latency_ms": {
+        "mean": 374.10235639254097,
+        "p50": 366.4924170006998,
+        "p95": 471.2815000093542,
+        "max": 471.2815000093542
+      },
+      "successful_latency_ms": {
+        "mean": 374.10235639254097,
+        "p50": 366.4924170006998,
+        "p95": 471.2815000093542,
+        "max": 471.2815000093542
+      },
+      "multiclass_brier_score": 0.0010527433333333328
+    },
+    "score": {
+      "requests": 18,
+      "successful": 18,
+      "errors": 0,
+      "matched": 18,
+      "agreement_rate": 1.0,
+      "valid_answer_agreement_rate": 1.0,
+      "latency_ms": {
+        "mean": 389.0811296668188,
+        "p50": 366.67345798923634,
+        "p95": 645.8198330074083,
+        "max": 645.8198330074083
+      },
+      "successful_latency_ms": {
+        "mean": 389.0811296668188,
+        "p50": 366.67345798923634,
+        "p95": 645.8198330074083,
+        "max": 645.8198330074083
+      },
+      "mean_absolute_error": 0.042266666666666654
+    }
+  },
+  "records": [
+    {
+      "case_id": "noul-delete-source",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9936
+      },
+      "matched": true,
+      "latency_ms": 356.51966600562446
+    },
+    {
+      "case_id": "noul-delete-build",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0116
+      },
+      "matched": true,
+      "latency_ms": 360.0992919818964
+    },
+    {
+      "case_id": "noul-overwrite-disk",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9841
+      },
+      "matched": true,
+      "latency_ms": 361.92729201866314
+    },
+    {
+      "case_id": "noul-force-main",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9919
+      },
+      "matched": true,
+      "latency_ms": 363.1957499892451
+    },
+    {
+      "case_id": "noul-read-diff",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0044
+      },
+      "matched": true,
+      "latency_ms": 443.36008399841376
+    },
+    {
+      "case_id": "noul-plan-only",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0064
+      },
+      "matched": true,
+      "latency_ms": 461.1303340061568
+    },
+    {
+      "case_id": "choice-outage",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "technical",
+      "answer": {
+        "type": "choice",
+        "choice": "technical",
+        "confidence": 0.9798,
+        "probabilities": {
+          "technical": 0.9798,
+          "billing": 0.0055,
+          "sales": 0.0085,
+          "review": 0.0062
+        }
+      },
+      "matched": true,
+      "latency_ms": 365.00337498728186
+    },
+    {
+      "case_id": "choice-refund",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "billing",
+      "answer": {
+        "type": "choice",
+        "choice": "billing",
+        "confidence": 0.9748,
+        "probabilities": {
+          "technical": 0.0073,
+          "billing": 0.9748,
+          "sales": 0.0052,
+          "review": 0.0127
+        }
+      },
+      "matched": true,
+      "latency_ms": 375.6567499949597
+    },
+    {
+      "case_id": "choice-sales",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "sales",
+      "answer": {
+        "type": "choice",
+        "choice": "sales",
+        "confidence": 0.9804,
+        "probabilities": {
+          "technical": 0.0054,
+          "billing": 0.0052,
+          "sales": 0.9804,
+          "review": 0.009
+        }
+      },
+      "matched": true,
+      "latency_ms": 379.2818340007216
+    },
+    {
+      "case_id": "choice-missing-context",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "review",
+      "answer": {
+        "type": "choice",
+        "choice": "review",
+        "confidence": 0.9547,
+        "probabilities": {
+          "technical": 0.0263,
+          "billing": 0.0097,
+          "sales": 0.0094,
+          "review": 0.9547
+        }
+      },
+      "matched": true,
+      "latency_ms": 387.8747080161702
+    },
+    {
+      "case_id": "choice-test-agent",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "tester",
+      "answer": {
+        "type": "choice",
+        "choice": "tester",
+        "confidence": 0.9845,
+        "probabilities": {
+          "implementer": 0.0039,
+          "tester": 0.9845,
+          "reviewer": 0.0068,
+          "review": 0.0047
+        }
+      },
+      "matched": true,
+      "latency_ms": 376.33275002008304
+    },
+    {
+      "case_id": "choice-review-agent",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "reviewer",
+      "answer": {
+        "type": "choice",
+        "choice": "reviewer",
+        "confidence": 0.9738,
+        "probabilities": {
+          "implementer": 0.003,
+          "tester": 0.0028,
+          "reviewer": 0.9738,
+          "review": 0.0204
+        }
+      },
+      "matched": true,
+      "latency_ms": 471.2815000093542
+    },
+    {
+      "case_id": "score-no-tests",
+      "type": "score",
+      "repeat": 1,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0238,
+        "confidence": 0.9833,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.9833,
+          "1": 0.0095,
+          "2": 0.0072
+        }
+      },
+      "matched": true,
+      "latency_ms": 376.74833298660815
+    },
+    {
+      "case_id": "score-partial-tests",
+      "type": "score",
+      "repeat": 1,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9915,
+        "confidence": 0.9754,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0165,
+          "1": 0.9754,
+          "2": 0.0081
+        }
+      },
+      "matched": true,
+      "latency_ms": 377.6228750066366
+    },
+    {
+      "case_id": "score-complete-tests",
+      "type": "score",
+      "repeat": 1,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.8515,
+        "confidence": 0.8766,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0251,
+          "1": 0.0984,
+          "2": 0.8766
+        }
+      },
+      "matched": true,
+      "latency_ms": 390.88133300538175
+    },
+    {
+      "case_id": "score-cosmetic",
+      "type": "score",
+      "repeat": 1,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0326,
+        "confidence": 0.9752,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.9752,
+          "1": 0.017,
+          "2": 0.0078
+        }
+      },
+      "matched": true,
+      "latency_ms": 383.82170800468884
+    },
+    {
+      "case_id": "score-workaround",
+      "type": "score",
+      "repeat": 1,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9766,
+        "confidence": 0.9655,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0289,
+          "1": 0.9655,
+          "2": 0.0056
+        }
+      },
+      "matched": true,
+      "latency_ms": 379.7949590079952
+    },
+    {
+      "case_id": "score-data-loss",
+      "type": "score",
+      "repeat": 1,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.9832,
+        "confidence": 0.989,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0058,
+          "1": 0.0052,
+          "2": 0.989
+        }
+      },
+      "matched": true,
+      "latency_ms": 366.67345798923634
+    },
+    {
+      "case_id": "noul-delete-source",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9936
+      },
+      "matched": true,
+      "latency_ms": 401.7670419998467
+    },
+    {
+      "case_id": "noul-delete-build",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0116
+      },
+      "matched": true,
+      "latency_ms": 426.5700419782661
+    },
+    {
+      "case_id": "noul-overwrite-disk",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9841
+      },
+      "matched": true,
+      "latency_ms": 408.8203749852255
+    },
+    {
+      "case_id": "noul-force-main",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9919
+      },
+      "matched": true,
+      "latency_ms": 387.4106250004843
+    },
+    {
+      "case_id": "noul-read-diff",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0044
+      },
+      "matched": true,
+      "latency_ms": 397.024165984476
+    },
+    {
+      "case_id": "noul-plan-only",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0064
+      },
+      "matched": true,
+      "latency_ms": 376.2756669893861
+    },
+    {
+      "case_id": "choice-outage",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "technical",
+      "answer": {
+        "type": "choice",
+        "choice": "technical",
+        "confidence": 0.9798,
+        "probabilities": {
+          "technical": 0.9798,
+          "billing": 0.0055,
+          "sales": 0.0085,
+          "review": 0.0062
+        }
+      },
+      "matched": true,
+      "latency_ms": 351.7829999909736
+    },
+    {
+      "case_id": "choice-refund",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "billing",
+      "answer": {
+        "type": "choice",
+        "choice": "billing",
+        "confidence": 0.9748,
+        "probabilities": {
+          "technical": 0.0073,
+          "billing": 0.9748,
+          "sales": 0.0052,
+          "review": 0.0127
+        }
+      },
+      "matched": true,
+      "latency_ms": 395.6225830188487
+    },
+    {
+      "case_id": "choice-sales",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "sales",
+      "answer": {
+        "type": "choice",
+        "choice": "sales",
+        "confidence": 0.9804,
+        "probabilities": {
+          "technical": 0.0054,
+          "billing": 0.0052,
+          "sales": 0.9804,
+          "review": 0.009
+        }
+      },
+      "matched": true,
+      "latency_ms": 366.4924170006998
+    },
+    {
+      "case_id": "choice-missing-context",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "review",
+      "answer": {
+        "type": "choice",
+        "choice": "review",
+        "confidence": 0.9547,
+        "probabilities": {
+          "technical": 0.0263,
+          "billing": 0.0097,
+          "sales": 0.0094,
+          "review": 0.9547
+        }
+      },
+      "matched": true,
+      "latency_ms": 364.547166012926
+    },
+    {
+      "case_id": "choice-test-agent",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "tester",
+      "answer": {
+        "type": "choice",
+        "choice": "tester",
+        "confidence": 0.9845,
+        "probabilities": {
+          "implementer": 0.0039,
+          "tester": 0.9845,
+          "reviewer": 0.0068,
+          "review": 0.0047
+        }
+      },
+      "matched": true,
+      "latency_ms": 364.8043329885695
+    },
+    {
+      "case_id": "choice-review-agent",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "reviewer",
+      "answer": {
+        "type": "choice",
+        "choice": "reviewer",
+        "confidence": 0.9738,
+        "probabilities": {
+          "implementer": 0.003,
+          "tester": 0.0028,
+          "reviewer": 0.9738,
+          "review": 0.0204
+        }
+      },
+      "matched": true,
+      "latency_ms": 369.9155409995001
+    },
+    {
+      "case_id": "score-no-tests",
+      "type": "score",
+      "repeat": 2,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0238,
+        "confidence": 0.9833,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.9833,
+          "1": 0.0095,
+          "2": 0.0072
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.1995839844458
+    },
+    {
+      "case_id": "score-partial-tests",
+      "type": "score",
+      "repeat": 2,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9915,
+        "confidence": 0.9754,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0165,
+          "1": 0.9754,
+          "2": 0.0081
+        }
+      },
+      "matched": true,
+      "latency_ms": 376.564000005601
+    },
+    {
+      "case_id": "score-complete-tests",
+      "type": "score",
+      "repeat": 2,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.8515,
+        "confidence": 0.8766,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0251,
+          "1": 0.0984,
+          "2": 0.8766
+        }
+      },
+      "matched": true,
+      "latency_ms": 365.7724169897847
+    },
+    {
+      "case_id": "score-cosmetic",
+      "type": "score",
+      "repeat": 2,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0326,
+        "confidence": 0.9752,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.9752,
+          "1": 0.017,
+          "2": 0.0078
+        }
+      },
+      "matched": true,
+      "latency_ms": 348.9597500010859
+    },
+    {
+      "case_id": "score-workaround",
+      "type": "score",
+      "repeat": 2,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9766,
+        "confidence": 0.9655,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0289,
+          "1": 0.9655,
+          "2": 0.0056
+        }
+      },
+      "matched": true,
+      "latency_ms": 366.4229999994859
+    },
+    {
+      "case_id": "score-data-loss",
+      "type": "score",
+      "repeat": 2,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.9832,
+        "confidence": 0.989,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0058,
+          "1": 0.0052,
+          "2": 0.989
+        }
+      },
+      "matched": true,
+      "latency_ms": 645.8198330074083
+    },
+    {
+      "case_id": "noul-delete-source",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9936
+      },
+      "matched": true,
+      "latency_ms": 357.7401250076946
+    },
+    {
+      "case_id": "noul-delete-build",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0116
+      },
+      "matched": true,
+      "latency_ms": 389.42345799296163
+    },
+    {
+      "case_id": "noul-overwrite-disk",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9841
+      },
+      "matched": true,
+      "latency_ms": 521.1499590077437
+    },
+    {
+      "case_id": "noul-force-main",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9919
+      },
+      "matched": true,
+      "latency_ms": 932.9389170161448
+    },
+    {
+      "case_id": "noul-read-diff",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0044
+      },
+      "matched": true,
+      "latency_ms": 448.9505410019774
+    },
+    {
+      "case_id": "noul-plan-only",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0064
+      },
+      "matched": true,
+      "latency_ms": 487.7889170020353
+    },
+    {
+      "case_id": "choice-outage",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "technical",
+      "answer": {
+        "type": "choice",
+        "choice": "technical",
+        "confidence": 0.9798,
+        "probabilities": {
+          "technical": 0.9798,
+          "billing": 0.0055,
+          "sales": 0.0085,
+          "review": 0.0062
+        }
+      },
+      "matched": true,
+      "latency_ms": 348.60158298397437
+    },
+    {
+      "case_id": "choice-refund",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "billing",
+      "answer": {
+        "type": "choice",
+        "choice": "billing",
+        "confidence": 0.9748,
+        "probabilities": {
+          "technical": 0.0073,
+          "billing": 0.9748,
+          "sales": 0.0052,
+          "review": 0.0127
+        }
+      },
+      "matched": true,
+      "latency_ms": 348.6782909894828
+    },
+    {
+      "case_id": "choice-sales",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "sales",
+      "answer": {
+        "type": "choice",
+        "choice": "sales",
+        "confidence": 0.9804,
+        "probabilities": {
+          "technical": 0.0054,
+          "billing": 0.0052,
+          "sales": 0.9804,
+          "review": 0.009
+        }
+      },
+      "matched": true,
+      "latency_ms": 365.1394590269774
+    },
+    {
+      "case_id": "choice-missing-context",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "review",
+      "answer": {
+        "type": "choice",
+        "choice": "review",
+        "confidence": 0.9547,
+        "probabilities": {
+          "technical": 0.0263,
+          "billing": 0.0097,
+          "sales": 0.0094,
+          "review": 0.9547
+        }
+      },
+      "matched": true,
+      "latency_ms": 370.26625001453795
+    },
+    {
+      "case_id": "choice-test-agent",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "tester",
+      "answer": {
+        "type": "choice",
+        "choice": "tester",
+        "confidence": 0.9845,
+        "probabilities": {
+          "implementer": 0.0039,
+          "tester": 0.9845,
+          "reviewer": 0.0068,
+          "review": 0.0047
+        }
+      },
+      "matched": true,
+      "latency_ms": 371.851042000344
+    },
+    {
+      "case_id": "choice-review-agent",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "reviewer",
+      "answer": {
+        "type": "choice",
+        "choice": "reviewer",
+        "confidence": 0.9738,
+        "probabilities": {
+          "implementer": 0.003,
+          "tester": 0.0028,
+          "reviewer": 0.9738,
+          "review": 0.0204
+        }
+      },
+      "matched": true,
+      "latency_ms": 360.70983301033266
+    },
+    {
+      "case_id": "score-no-tests",
+      "type": "score",
+      "repeat": 3,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0238,
+        "confidence": 0.9833,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.9833,
+          "1": 0.0095,
+          "2": 0.0072
+        }
+      },
+      "matched": true,
+      "latency_ms": 357.79383301269263
+    },
+    {
+      "case_id": "score-partial-tests",
+      "type": "score",
+      "repeat": 3,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9915,
+        "confidence": 0.9754,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0165,
+          "1": 0.9754,
+          "2": 0.0081
+        }
+      },
+      "matched": true,
+      "latency_ms": 363.31112499465235
+    },
+    {
+      "case_id": "score-complete-tests",
+      "type": "score",
+      "repeat": 3,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.8515,
+        "confidence": 0.8766,
+        "legend": {
+          "0": "None of the required behaviors are tested",
+          "1": "Some but not all required behaviors are tested",
+          "2": "Every required behavior is tested"
+        },
+        "probabilities": {
+          "0": 0.0251,
+          "1": 0.0984,
+          "2": 0.8766
+        }
+      },
+      "matched": true,
+      "latency_ms": 362.64420801308006
+    },
+    {
+      "case_id": "score-cosmetic",
+      "type": "score",
+      "repeat": 3,
+      "expected": 0,
+      "answer": {
+        "type": "score",
+        "score": 0.0326,
+        "confidence": 0.9752,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.9752,
+          "1": 0.017,
+          "2": 0.0078
+        }
+      },
+      "matched": true,
+      "latency_ms": 346.9898340117652
+    },
+    {
+      "case_id": "score-workaround",
+      "type": "score",
+      "repeat": 3,
+      "expected": 1,
+      "answer": {
+        "type": "score",
+        "score": 0.9766,
+        "confidence": 0.9655,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0289,
+          "1": 0.9655,
+          "2": 0.0056
+        }
+      },
+      "matched": true,
+      "latency_ms": 427.7378339902498
+    },
+    {
+      "case_id": "score-data-loss",
+      "type": "score",
+      "repeat": 3,
+      "expected": 2,
+      "answer": {
+        "type": "score",
+        "score": 1.9832,
+        "confidence": 0.989,
+        "legend": {
+          "0": "Cosmetic issue with no functional impact",
+          "1": "Functional defect with a working workaround and no data loss",
+          "2": "Critical issue causing irreversible data loss or a security breach"
+        },
+        "probabilities": {
+          "0": 0.0058,
+          "1": 0.0052,
+          "2": 0.989
+        }
+      },
+      "matched": true,
+      "latency_ms": 356.70224999194033
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@lyhu/cloudflare-clef",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Local Cloudflare Clef System One decision skill",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lyhu/skills-cloudflare-clef.git",
+    "directory": "skills/cloudflare-clef"
+  },
+  "files": ["SKILL.md", "scripts/*.py", "references/*.json", "templates/*.py", "templates/*.ts"]
+}

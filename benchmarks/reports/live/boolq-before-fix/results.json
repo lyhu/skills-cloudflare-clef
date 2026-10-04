@@ -1,0 +1,1085 @@
+{
+  "metadata": {
+    "mode": "live-http",
+    "timestamp_utc": "2026-10-04T07:43:52.958992+00:00",
+    "python": "3.12.14",
+    "client_platform": "macOS-27.0.1-arm64-arm-64bit",
+    "model": "clef",
+    "transport_note": "Direct LAN HTTP to user-provided service; no SSH tunnel; server hardware/load unverified",
+    "timeout_seconds": "10.0",
+    "max_retries": "0",
+    "case_count": 24,
+    "repeats": 3,
+    "warmup_requests": 3,
+    "warmup_errors": 3,
+    "source_sha256": {
+      "benchmarks/datasets/boolq.json": "99a1723d6eb3be261e0c4674db494dbad3e388ed54c0bfdc5772267b37ac485e",
+      "skills/cloudflare-clef/scripts/evaluate.py": "b4b30dd82d3ec25a38f023fd7cb06fdd9542922e3683f26d6a6b9b84043bcb6f",
+      "benchmarks/run.py": "553ff3c6cd730e8803adbef6f405e93a2c8e0c3dcfa511fae8f9c637e33a5007"
+    },
+    "dataset": "benchmarks/datasets/boolq.json",
+    "endpoint_recorded": false
+  },
+  "summary": {
+    "requests": 72,
+    "successful": 0,
+    "errors": 72,
+    "matched": 0,
+    "agreement_rate": 0.0,
+    "valid_answer_agreement_rate": null,
+    "latency_ms": {
+      "mean": 81.89367997288679,
+      "p50": 39.522667007986456,
+      "p95": 385.24874998256564,
+      "max": 431.0703750234097
+    },
+    "successful_latency_ms": null
+  },
+  "by_primitive": {
+    "noul": {
+      "requests": 72,
+      "successful": 0,
+      "errors": 72,
+      "matched": 0,
+      "agreement_rate": 0.0,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": {
+        "mean": 81.89367997288679,
+        "p50": 39.522667007986456,
+        "p95": 385.24874998256564,
+        "max": 431.0703750234097
+      },
+      "successful_latency_ms": null
+    },
+    "choice": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    },
+    "score": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    }
+  },
+  "records": [
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.43083400372416
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 384.0455840108916
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.11233298620209
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 46.24187501030974
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.75012498954311
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 419.39108399674296
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.831666006240994
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.004582999041304
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.727750001475215
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 414.61124998750165
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.61712498473935
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 44.559208006830886
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 36.91770799923688
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 431.0703750234097
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 41.933209024136886
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.31383302551694
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 45.76654199627228
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.522667007986456
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 357.35591701813973
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 78.02862499374896
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 47.151834005489945
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 41.83766699861735
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 385.24874998256564
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 43.96412498317659
+    },
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 40.74945900356397
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 42.57487499853596
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.458208011230454
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 107.71791599108838
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 346.1372500169091
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 40.04320901003666
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.300540996715426
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 98.67549999034964
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 257.1111659926828
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 41.489249997539446
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 40.079165977658704
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 41.332207998493686
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 54.644916992401704
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 104.13074999814853
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.58799999579787
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.41691599134356
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.623749987687916
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.36899999016896
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.211625000461936
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 44.70270799356513
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.08266600733623
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.04737500124611
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 40.823624993208796
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 43.39000000618398
+    },
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.84345799451694
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 103.60270799719729
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 39.9287500185892
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 40.785874996799976
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.82241599401459
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.22354199271649
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.96458299621008
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 43.452708021504804
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.122458008117974
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 34.784667019266635
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 36.137624992989004
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.66437499830499
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 34.66291699442081
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 104.9635419913102
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 37.84441601601429
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 52.764249994652346
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.36441700696014
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.52008399856277
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 36.86337498947978
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 34.64608400827274
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.58350002276711
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 35.20079201553017
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.49795798305422
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "error": "CLEF_SERVICE_UNAVAILABLE",
+        "message": "Clef remained unavailable after retries",
+        "fallback_used": true,
+        "http_status": 500
+      },
+      "matched": false,
+      "latency_ms": 38.965709012700245
+    }
+  ]
+}

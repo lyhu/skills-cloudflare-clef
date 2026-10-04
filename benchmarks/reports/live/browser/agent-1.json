@@ -1,0 +1,55 @@
+{
+  "id": "agent-1",
+  "arm": "agent",
+  "timestamp_utc": "2026-10-04T07:42:46.973Z",
+  "query": "jev typesafe",
+  "browser_ms": 3306,
+  "decision_ms": 4348,
+  "total_ms": 7654,
+  "workload": "Navigate to Latest search URL, wait for 8 posts, extract 600 characters/post, judge application relevance",
+  "page_calls": 3,
+  "agent_judgment_turns": 1,
+  "judgments": [
+    {
+      "url": "https://x.com/SupersocksIntel/status/2106649139744235748",
+      "application": true,
+      "text_sha256": "ac28ba8e4c8e004344571fd3e984d92a3f3b44a3deb0a7751c00965502e6a9a4"
+    },
+    {
+      "url": "https://x.com/LangChainJP/status/2106648085577240797",
+      "application": true,
+      "text_sha256": "2ae6e20df33af5ef5baea477e97d1bfa4faa5d7c071bf27e2a99159f2900b579"
+    },
+    {
+      "url": "https://x.com/Colourpixels/status/2106636574423503176",
+      "application": true,
+      "text_sha256": "2a2248c2c734c41e872271b817d66c0d46c7539f27911311d882f4a10067298a"
+    },
+    {
+      "url": "https://x.com/LilTea_eth/status/2106634441720557615",
+      "application": true,
+      "text_sha256": "a06abd00411fb30da4908c8e7afb74e904f1b9752fababd6234b3436385dc6dc"
+    },
+    {
+      "url": "https://x.com/catcheronthesly/status/2106626811283009761",
+      "application": false,
+      "text_sha256": "5ee558eca71b2573b5f6ff070a5ad0df3be7d5e936a8815b5998f2889935ca5c"
+    },
+    {
+      "url": "https://x.com/MartinSzerment/status/2106622920151704053",
+      "application": false,
+      "text_sha256": "02e1f49f7d084c0d373fd6024e52534ba844c25068c6538297e73c1e2c11065d"
+    },
+    {
+      "url": "https://x.com/umiyosh/status/2106620158060183727",
+      "application": true,
+      "text_sha256": "51c5edaa272da1c6d8608637ad6f0ed28aaee7d287deaf57a6e0e19bdfa84bc1"
+    },
+    {
+      "url": "https://x.com/konig0000/status/2106608643110289912",
+      "application": true,
+      "text_sha256": "4f165c88ac220261624c9947165ffe2013ed59ab16ac050359f44efc0f49d834"
+    }
+  ],
+  "model": "Codex current session; exact model ID unavailable"
+}

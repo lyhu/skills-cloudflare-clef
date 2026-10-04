@@ -1,0 +1,8 @@
+{
+  "id": "clef-1",
+  "arm": "clef",
+  "status": "failed",
+  "error": "HTTP 500: CUDA out of memory",
+  "timing_available": false,
+  "note": "First 8-question batch failed; no decisions returned. Excluded from successful-task latency, retained as a failure."
+}

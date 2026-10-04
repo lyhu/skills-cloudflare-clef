@@ -1,0 +1,73 @@
+{
+  "id": "normalized-clef-2",
+  "arm": "clef",
+  "timestamp_utc": "2026-10-04T07:52:33.005Z",
+  "query": "jev typesafe",
+  "browser_ms": 2610,
+  "decision_ms": 1203,
+  "total_ms": 3813,
+  "workload": "Navigate to Latest search URL, wait for 8 posts, extract 600 characters/post, judge application relevance",
+  "page_calls": 3,
+  "agent_judgment_turns": 0,
+  "driver_sha256": "c4072d036230e7cebf03b8d747b657d5c8995e6f998784e3a2c6581532c43d6b",
+  "judgments": [
+    {
+      "url": "https://x.com/SeoSamantha/status/2106652326689726940",
+      "application": false,
+      "text_sha256": "31ba837127bcdc56c58d9134ac7309956371ac0af17bdad81b208ad5e8582e4c"
+    },
+    {
+      "url": "https://x.com/SupersocksIntel/status/2106649139744235748",
+      "application": true,
+      "text_sha256": "f19b97df0d5c6d3cb9c6cece6234073b5072410a42968da6353d26bb7953eed0"
+    },
+    {
+      "url": "https://x.com/LangChainJP/status/2106648085577240797",
+      "application": true,
+      "text_sha256": "ea4876e53f29f67eacb28233a74191b195b085fe0c8ba2949af2e598d3628b2c"
+    },
+    {
+      "url": "https://x.com/Colourpixels/status/2106636574423503176",
+      "application": true,
+      "text_sha256": "eadbcca7ea6db25977d61e5e6eba78986dfd933184388f912df0be3208021871"
+    },
+    {
+      "url": "https://x.com/LilTea_eth/status/2106634441720557615",
+      "application": true,
+      "text_sha256": "2d91892b782308d8833af0db3d3638078c8210b29d44e9ce6384412ae0f10315"
+    },
+    {
+      "url": "https://x.com/catcheronthesly/status/2106626811283009761",
+      "application": false,
+      "text_sha256": "c528460dbde7b1732ae6b987d276dfccd1af8fa7b20051d124ae06877ace32ac"
+    },
+    {
+      "url": "https://x.com/MartinSzerment/status/2106622920151704053",
+      "application": false,
+      "text_sha256": "02e1f49f7d084c0d373fd6024e52534ba844c25068c6538297e73c1e2c11065d"
+    },
+    {
+      "url": "https://x.com/umiyosh/status/2106620158060183727",
+      "application": true,
+      "text_sha256": "d12fe26549b565eef49e53367220baa48a39acde28c076a19cbe50d594bae5a7"
+    }
+  ],
+  "model": "clef",
+  "decision_requests": 1,
+  "http_ms": 1202.122000000003,
+  "usage": {
+    "input_tokens": 2098,
+    "output_tokens": 0
+  },
+  "probabilities": [
+    0.0437,
+    0.6183,
+    0.8284,
+    0.9478,
+    0.8199,
+    0.0323,
+    0.0538,
+    0.8807
+  ],
+  "retries": 0
+}

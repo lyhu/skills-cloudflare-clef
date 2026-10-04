@@ -1,0 +1,2033 @@
+{
+  "metadata": {
+    "mode": "live-http",
+    "timestamp_utc": "2026-10-04T07:54:45.154674+00:00",
+    "python": "3.12.14",
+    "client_platform": "macOS-27.0.1-arm64-arm-64bit",
+    "model": "clef",
+    "transport_note": "LAN HTTP via Nginx to A800 GPU 7; inference_mode patch applied; no concurrent benchmark requests",
+    "timeout_seconds": "10.0",
+    "max_retries": "0",
+    "case_count": 24,
+    "repeats": 3,
+    "warmup_requests": 3,
+    "warmup_errors": 0,
+    "source_sha256": {
+      "benchmarks/datasets/banking77.json": "cf25129c24edc9bfbf903b89a32bd3bfc14e45f36d6ab2912ced6a551db74763",
+      "skills/cloudflare-clef/scripts/evaluate.py": "b4b30dd82d3ec25a38f023fd7cb06fdd9542922e3683f26d6a6b9b84043bcb6f",
+      "benchmarks/run.py": "d9f1cefee5eb96ff6f74d67a376f9160b952a33d03d1ac377ad149789eca70b4"
+    },
+    "dataset": "benchmarks/datasets/banking77.json",
+    "endpoint_recorded": false
+  },
+  "summary": {
+    "requests": 72,
+    "successful": 72,
+    "errors": 0,
+    "matched": 69,
+    "agreement_rate": 0.9583333333333334,
+    "valid_answer_agreement_rate": 0.9583333333333334,
+    "latency_ms": {
+      "mean": 442.68318979124564,
+      "p50": 415.83737498149276,
+      "p95": 555.858082982013,
+      "max": 916.516249999404
+    },
+    "successful_latency_ms": {
+      "mean": 442.68318979124564,
+      "p50": 415.83737498149276,
+      "p95": 555.858082982013,
+      "max": 916.516249999404
+    },
+    "multiclass_brier_score": 0.041444723333333336
+  },
+  "by_primitive": {
+    "noul": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    },
+    "choice": {
+      "requests": 72,
+      "successful": 72,
+      "errors": 0,
+      "matched": 69,
+      "agreement_rate": 0.9583333333333334,
+      "valid_answer_agreement_rate": 0.9583333333333334,
+      "latency_ms": {
+        "mean": 442.68318979124564,
+        "p50": 415.83737498149276,
+        "p95": 555.858082982013,
+        "max": 916.516249999404
+      },
+      "successful_latency_ms": {
+        "mean": 442.68318979124564,
+        "p50": 415.83737498149276,
+        "p95": 555.858082982013,
+        "max": 916.516249999404
+      },
+      "multiclass_brier_score": 0.041444723333333336
+    },
+    "score": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    }
+  },
+  "records": [
+    {
+      "case_id": "banking77-test-0",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.6847,
+        "probabilities": {
+          "card_arrival": 0.2788,
+          "card_not_working": 0.0098,
+          "lost_or_stolen_card": 0.6847,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0003,
+          "change_pin": 0.0013,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0231,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": false,
+      "latency_ms": 410.82437499426305
+    },
+    {
+      "case_id": "banking77-test-1",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "card_arrival",
+        "confidence": 0.9849,
+        "probabilities": {
+          "card_arrival": 0.9849,
+          "card_not_working": 0.0038,
+          "lost_or_stolen_card": 0.0023,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0026,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 438.51995799923316
+    },
+    {
+      "case_id": "banking77-test-120",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9901,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0008,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0027,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.9901
+        }
+      },
+      "matched": true,
+      "latency_ms": 444.353915983811
+    },
+    {
+      "case_id": "banking77-test-121",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9935,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0002,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0005,
+          "card_payment_wrong_exchange_rate": 0.9935
+        }
+      },
+      "matched": true,
+      "latency_ms": 407.3340829927474
+    },
+    {
+      "case_id": "banking77-test-200",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0008,
+          "cash_withdrawal_charge": 0.0021,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0039,
+          "pending_cash_withdrawal": 0.988,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 407.9945419798605
+    },
+    {
+      "case_id": "banking77-test-201",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.9827,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0015,
+          "cash_withdrawal_charge": 0.0027,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0038,
+          "pending_cash_withdrawal": 0.9827,
+          "cancel_transfer": 0.0024,
+          "failed_transfer": 0.0011,
+          "card_swallowed": 0.0023,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 407.4887079768814
+    },
+    {
+      "case_id": "banking77-test-360",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9768,
+        "probabilities": {
+          "card_arrival": 0.0059,
+          "card_not_working": 0.9768,
+          "lost_or_stolen_card": 0.0019,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.0019,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.005,
+          "card_swallowed": 0.0047,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.20083300443366
+    },
+    {
+      "case_id": "banking77-test-361",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9874,
+        "probabilities": {
+          "card_arrival": 0.0031,
+          "card_not_working": 0.9874,
+          "lost_or_stolen_card": 0.0014,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0008,
+          "card_swallowed": 0.0032,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 416.84825002448633
+    },
+    {
+      "case_id": "banking77-test-440",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0018,
+          "card_not_working": 0.002,
+          "lost_or_stolen_card": 0.988,
+          "wrong_amount_of_cash_received": 0.0006,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0014,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0015,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 415.42495900648646
+    },
+    {
+      "case_id": "banking77-test-441",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.9932,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.9932,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0008,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 435.6552920071408
+    },
+    {
+      "case_id": "banking77-test-680",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9834,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0014,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0017,
+          "cancel_transfer": 0.9834,
+          "failed_transfer": 0.003,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0016
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.4277090043761
+    },
+    {
+      "case_id": "banking77-test-681",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9898,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0019,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.9898,
+          "failed_transfer": 0.0018,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0011
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.2590840009507
+    },
+    {
+      "case_id": "banking77-test-760",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9824,
+        "probabilities": {
+          "card_arrival": 0.001,
+          "card_not_working": 0.001,
+          "lost_or_stolen_card": 0.0012,
+          "wrong_amount_of_cash_received": 0.9824,
+          "cash_withdrawal_charge": 0.0025,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0053,
+          "cancel_transfer": 0.0009,
+          "failed_transfer": 0.001,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 454.1097499895841
+    },
+    {
+      "case_id": "banking77-test-761",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9851,
+        "probabilities": {
+          "card_arrival": 0.0008,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.001,
+          "wrong_amount_of_cash_received": 0.9851,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.001,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0012,
+          "card_payment_wrong_exchange_rate": 0.0014
+        }
+      },
+      "matched": true,
+      "latency_ms": 410.65245802747086
+    },
+    {
+      "case_id": "banking77-test-1600",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9838,
+        "probabilities": {
+          "card_arrival": 0.0022,
+          "card_not_working": 0.0026,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.9838,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0014,
+          "card_payment_wrong_exchange_rate": 0.0024
+        }
+      },
+      "matched": true,
+      "latency_ms": 410.74408299755305
+    },
+    {
+      "case_id": "banking77-test-1601",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9877,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.9877,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0009,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 403.21300001232885
+    },
+    {
+      "case_id": "banking77-test-1920",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9814,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0034,
+          "lost_or_stolen_card": 0.0051,
+          "wrong_amount_of_cash_received": 0.0011,
+          "cash_withdrawal_charge": 0.0014,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.002,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9814,
+          "card_payment_wrong_exchange_rate": 0.0009
+        }
+      },
+      "matched": true,
+      "latency_ms": 414.79624999919906
+    },
+    {
+      "case_id": "banking77-test-1921",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9753,
+        "probabilities": {
+          "card_arrival": 0.0063,
+          "card_not_working": 0.0049,
+          "lost_or_stolen_card": 0.0025,
+          "wrong_amount_of_cash_received": 0.0014,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0018,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0024,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9753,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 413.4930830041412
+    },
+    {
+      "case_id": "banking77-test-2120",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9856,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0023,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.9856,
+          "pending_card_payment": 0.0009,
+          "pending_cash_withdrawal": 0.0016,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0011,
+          "card_payment_wrong_exchange_rate": 0.001
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.5995830108877
+    },
+    {
+      "case_id": "banking77-test-2121",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9931,
+        "probabilities": {
+          "card_arrival": 0.0007,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0007,
+          "change_pin": 0.9931,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 454.8515420174226
+    },
+    {
+      "case_id": "banking77-test-2280",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9945,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0004,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.9945,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 407.81262499513105
+    },
+    {
+      "case_id": "banking77-test-2281",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9929,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0007,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0016,
+          "failed_transfer": 0.9929,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 415.6484169943724
+    },
+    {
+      "case_id": "banking77-test-2880",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9903,
+        "probabilities": {
+          "card_arrival": 0.0004,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9903,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.005,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 410.16762499930337
+    },
+    {
+      "case_id": "banking77-test-2881",
+      "type": "choice",
+      "repeat": 1,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9927,
+        "probabilities": {
+          "card_arrival": 0.0003,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9927,
+          "change_pin": 0.0003,
+          "pending_card_payment": 0.0004,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.54508402198553
+    },
+    {
+      "case_id": "banking77-test-0",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.6847,
+        "probabilities": {
+          "card_arrival": 0.2788,
+          "card_not_working": 0.0098,
+          "lost_or_stolen_card": 0.6847,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0003,
+          "change_pin": 0.0013,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0231,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": false,
+      "latency_ms": 450.34120901254937
+    },
+    {
+      "case_id": "banking77-test-1",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "card_arrival",
+        "confidence": 0.9849,
+        "probabilities": {
+          "card_arrival": 0.9849,
+          "card_not_working": 0.0038,
+          "lost_or_stolen_card": 0.0023,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0026,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 415.02145800041035
+    },
+    {
+      "case_id": "banking77-test-120",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9901,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0008,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0027,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.9901
+        }
+      },
+      "matched": true,
+      "latency_ms": 417.43504197802395
+    },
+    {
+      "case_id": "banking77-test-121",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9935,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0002,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0005,
+          "card_payment_wrong_exchange_rate": 0.9935
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.23687498131767
+    },
+    {
+      "case_id": "banking77-test-200",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0008,
+          "cash_withdrawal_charge": 0.0021,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0039,
+          "pending_cash_withdrawal": 0.988,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 418.9945409889333
+    },
+    {
+      "case_id": "banking77-test-201",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.9827,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0015,
+          "cash_withdrawal_charge": 0.0027,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0038,
+          "pending_cash_withdrawal": 0.9827,
+          "cancel_transfer": 0.0024,
+          "failed_transfer": 0.0011,
+          "card_swallowed": 0.0023,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 434.13691699970514
+    },
+    {
+      "case_id": "banking77-test-360",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9768,
+        "probabilities": {
+          "card_arrival": 0.0059,
+          "card_not_working": 0.9768,
+          "lost_or_stolen_card": 0.0019,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.0019,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.005,
+          "card_swallowed": 0.0047,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 415.83737498149276
+    },
+    {
+      "case_id": "banking77-test-361",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9874,
+        "probabilities": {
+          "card_arrival": 0.0031,
+          "card_not_working": 0.9874,
+          "lost_or_stolen_card": 0.0014,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0008,
+          "card_swallowed": 0.0032,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 419.61541699129157
+    },
+    {
+      "case_id": "banking77-test-440",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0018,
+          "card_not_working": 0.002,
+          "lost_or_stolen_card": 0.988,
+          "wrong_amount_of_cash_received": 0.0006,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0014,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0015,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 423.04920800961554
+    },
+    {
+      "case_id": "banking77-test-441",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.9932,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.9932,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0008,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 425.504999991972
+    },
+    {
+      "case_id": "banking77-test-680",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9834,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0014,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0017,
+          "cancel_transfer": 0.9834,
+          "failed_transfer": 0.003,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0016
+        }
+      },
+      "matched": true,
+      "latency_ms": 410.55025000241585
+    },
+    {
+      "case_id": "banking77-test-681",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9898,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0019,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.9898,
+          "failed_transfer": 0.0018,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0011
+        }
+      },
+      "matched": true,
+      "latency_ms": 411.1345419951249
+    },
+    {
+      "case_id": "banking77-test-760",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9824,
+        "probabilities": {
+          "card_arrival": 0.001,
+          "card_not_working": 0.001,
+          "lost_or_stolen_card": 0.0012,
+          "wrong_amount_of_cash_received": 0.9824,
+          "cash_withdrawal_charge": 0.0025,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0053,
+          "cancel_transfer": 0.0009,
+          "failed_transfer": 0.001,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.74349999730475
+    },
+    {
+      "case_id": "banking77-test-761",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9851,
+        "probabilities": {
+          "card_arrival": 0.0008,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.001,
+          "wrong_amount_of_cash_received": 0.9851,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.001,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0012,
+          "card_payment_wrong_exchange_rate": 0.0014
+        }
+      },
+      "matched": true,
+      "latency_ms": 416.1660829850007
+    },
+    {
+      "case_id": "banking77-test-1600",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9838,
+        "probabilities": {
+          "card_arrival": 0.0022,
+          "card_not_working": 0.0026,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.9838,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0014,
+          "card_payment_wrong_exchange_rate": 0.0024
+        }
+      },
+      "matched": true,
+      "latency_ms": 472.8796250128653
+    },
+    {
+      "case_id": "banking77-test-1601",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9877,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.9877,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0009,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 408.2820420153439
+    },
+    {
+      "case_id": "banking77-test-1920",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9814,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0034,
+          "lost_or_stolen_card": 0.0051,
+          "wrong_amount_of_cash_received": 0.0011,
+          "cash_withdrawal_charge": 0.0014,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.002,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9814,
+          "card_payment_wrong_exchange_rate": 0.0009
+        }
+      },
+      "matched": true,
+      "latency_ms": 513.8525420043152
+    },
+    {
+      "case_id": "banking77-test-1921",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9753,
+        "probabilities": {
+          "card_arrival": 0.0063,
+          "card_not_working": 0.0049,
+          "lost_or_stolen_card": 0.0025,
+          "wrong_amount_of_cash_received": 0.0014,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0018,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0024,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9753,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 411.43591600121
+    },
+    {
+      "case_id": "banking77-test-2120",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9856,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0023,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.9856,
+          "pending_card_payment": 0.0009,
+          "pending_cash_withdrawal": 0.0016,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0011,
+          "card_payment_wrong_exchange_rate": 0.001
+        }
+      },
+      "matched": true,
+      "latency_ms": 416.709292010637
+    },
+    {
+      "case_id": "banking77-test-2121",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9931,
+        "probabilities": {
+          "card_arrival": 0.0007,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0007,
+          "change_pin": 0.9931,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.6869999775663
+    },
+    {
+      "case_id": "banking77-test-2280",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9945,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0004,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.9945,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 437.37354199402034
+    },
+    {
+      "case_id": "banking77-test-2281",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9929,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0007,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0016,
+          "failed_transfer": 0.9929,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 555.858082982013
+    },
+    {
+      "case_id": "banking77-test-2880",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9903,
+        "probabilities": {
+          "card_arrival": 0.0004,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9903,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.005,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 500.39433300844394
+    },
+    {
+      "case_id": "banking77-test-2881",
+      "type": "choice",
+      "repeat": 2,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9927,
+        "probabilities": {
+          "card_arrival": 0.0003,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9927,
+          "change_pin": 0.0003,
+          "pending_card_payment": 0.0004,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 536.6740000026766
+    },
+    {
+      "case_id": "banking77-test-0",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.6847,
+        "probabilities": {
+          "card_arrival": 0.2788,
+          "card_not_working": 0.0098,
+          "lost_or_stolen_card": 0.6847,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0003,
+          "change_pin": 0.0013,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0231,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": false,
+      "latency_ms": 725.1457909878809
+    },
+    {
+      "case_id": "banking77-test-1",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_arrival",
+      "answer": {
+        "type": "choice",
+        "choice": "card_arrival",
+        "confidence": 0.9849,
+        "probabilities": {
+          "card_arrival": 0.9849,
+          "card_not_working": 0.0038,
+          "lost_or_stolen_card": 0.0023,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0026,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 916.516249999404
+    },
+    {
+      "case_id": "banking77-test-120",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9901,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0008,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0027,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.9901
+        }
+      },
+      "matched": true,
+      "latency_ms": 564.3705830152612
+    },
+    {
+      "case_id": "banking77-test-121",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_payment_wrong_exchange_rate",
+      "answer": {
+        "type": "choice",
+        "choice": "card_payment_wrong_exchange_rate",
+        "confidence": 0.9935,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0002,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0005,
+          "card_payment_wrong_exchange_rate": 0.9935
+        }
+      },
+      "matched": true,
+      "latency_ms": 418.84487500647083
+    },
+    {
+      "case_id": "banking77-test-200",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0008,
+          "cash_withdrawal_charge": 0.0021,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.0039,
+          "pending_cash_withdrawal": 0.988,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 426.17458300082944
+    },
+    {
+      "case_id": "banking77-test-201",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "pending_cash_withdrawal",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_cash_withdrawal",
+        "confidence": 0.9827,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0015,
+          "cash_withdrawal_charge": 0.0027,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0038,
+          "pending_cash_withdrawal": 0.9827,
+          "cancel_transfer": 0.0024,
+          "failed_transfer": 0.0011,
+          "card_swallowed": 0.0023,
+          "card_payment_wrong_exchange_rate": 0.0006
+        }
+      },
+      "matched": true,
+      "latency_ms": 478.160915983608
+    },
+    {
+      "case_id": "banking77-test-360",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9768,
+        "probabilities": {
+          "card_arrival": 0.0059,
+          "card_not_working": 0.9768,
+          "lost_or_stolen_card": 0.0019,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.0019,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.005,
+          "card_swallowed": 0.0047,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 410.25758397881873
+    },
+    {
+      "case_id": "banking77-test-361",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_not_working",
+      "answer": {
+        "type": "choice",
+        "choice": "card_not_working",
+        "confidence": 0.9874,
+        "probabilities": {
+          "card_arrival": 0.0031,
+          "card_not_working": 0.9874,
+          "lost_or_stolen_card": 0.0014,
+          "wrong_amount_of_cash_received": 0.0003,
+          "cash_withdrawal_charge": 0.0004,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0003,
+          "cancel_transfer": 0.0003,
+          "failed_transfer": 0.0008,
+          "card_swallowed": 0.0032,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 408.29108300385997
+    },
+    {
+      "case_id": "banking77-test-440",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.988,
+        "probabilities": {
+          "card_arrival": 0.0018,
+          "card_not_working": 0.002,
+          "lost_or_stolen_card": 0.988,
+          "wrong_amount_of_cash_received": 0.0006,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0014,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0015,
+          "card_payment_wrong_exchange_rate": 0.0008
+        }
+      },
+      "matched": true,
+      "latency_ms": 411.4349589799531
+    },
+    {
+      "case_id": "banking77-test-441",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "lost_or_stolen_card",
+      "answer": {
+        "type": "choice",
+        "choice": "lost_or_stolen_card",
+        "confidence": 0.9932,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.9932,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0005,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0008,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 462.1317499841098
+    },
+    {
+      "case_id": "banking77-test-680",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9834,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0011,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0014,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0017,
+          "cancel_transfer": 0.9834,
+          "failed_transfer": 0.003,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0016
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.60645899455994
+    },
+    {
+      "case_id": "banking77-test-681",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "cancel_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "cancel_transfer",
+        "confidence": 0.9898,
+        "probabilities": {
+          "card_arrival": 0.0006,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0019,
+          "change_pin": 0.0006,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.9898,
+          "failed_transfer": 0.0018,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0011
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.34304098482244
+    },
+    {
+      "case_id": "banking77-test-760",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9824,
+        "probabilities": {
+          "card_arrival": 0.001,
+          "card_not_working": 0.001,
+          "lost_or_stolen_card": 0.0012,
+          "wrong_amount_of_cash_received": 0.9824,
+          "cash_withdrawal_charge": 0.0025,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0012,
+          "pending_cash_withdrawal": 0.0053,
+          "cancel_transfer": 0.0009,
+          "failed_transfer": 0.001,
+          "card_swallowed": 0.001,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 409.6390829945449
+    },
+    {
+      "case_id": "banking77-test-761",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "wrong_amount_of_cash_received",
+      "answer": {
+        "type": "choice",
+        "choice": "wrong_amount_of_cash_received",
+        "confidence": 0.9851,
+        "probabilities": {
+          "card_arrival": 0.0008,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.001,
+          "wrong_amount_of_cash_received": 0.9851,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.0009,
+          "pending_card_payment": 0.001,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0008,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0012,
+          "card_payment_wrong_exchange_rate": 0.0014
+        }
+      },
+      "matched": true,
+      "latency_ms": 421.70562501996756
+    },
+    {
+      "case_id": "banking77-test-1600",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9838,
+        "probabilities": {
+          "card_arrival": 0.0022,
+          "card_not_working": 0.0026,
+          "lost_or_stolen_card": 0.0011,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0008,
+          "pending_card_payment": 0.9838,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0014,
+          "card_payment_wrong_exchange_rate": 0.0024
+        }
+      },
+      "matched": true,
+      "latency_ms": 442.6170410006307
+    },
+    {
+      "case_id": "banking77-test-1601",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "pending_card_payment",
+      "answer": {
+        "type": "choice",
+        "choice": "pending_card_payment",
+        "confidence": 0.9877,
+        "probabilities": {
+          "card_arrival": 0.0009,
+          "card_not_working": 0.0008,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0006,
+          "change_pin": 0.0007,
+          "pending_card_payment": 0.9877,
+          "pending_cash_withdrawal": 0.0039,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0012,
+          "card_swallowed": 0.0009,
+          "card_payment_wrong_exchange_rate": 0.0015
+        }
+      },
+      "matched": true,
+      "latency_ms": 416.02116700960323
+    },
+    {
+      "case_id": "banking77-test-1920",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9814,
+        "probabilities": {
+          "card_arrival": 0.0013,
+          "card_not_working": 0.0034,
+          "lost_or_stolen_card": 0.0051,
+          "wrong_amount_of_cash_received": 0.0011,
+          "cash_withdrawal_charge": 0.0014,
+          "change_pin": 0.001,
+          "pending_card_payment": 0.0011,
+          "pending_cash_withdrawal": 0.002,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9814,
+          "card_payment_wrong_exchange_rate": 0.0009
+        }
+      },
+      "matched": true,
+      "latency_ms": 412.4475829885341
+    },
+    {
+      "case_id": "banking77-test-1921",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "card_swallowed",
+      "answer": {
+        "type": "choice",
+        "choice": "card_swallowed",
+        "confidence": 0.9753,
+        "probabilities": {
+          "card_arrival": 0.0063,
+          "card_not_working": 0.0049,
+          "lost_or_stolen_card": 0.0025,
+          "wrong_amount_of_cash_received": 0.0014,
+          "cash_withdrawal_charge": 0.0015,
+          "change_pin": 0.0018,
+          "pending_card_payment": 0.0017,
+          "pending_cash_withdrawal": 0.0024,
+          "cancel_transfer": 0.0005,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.9753,
+          "card_payment_wrong_exchange_rate": 0.0012
+        }
+      },
+      "matched": true,
+      "latency_ms": 403.98429200286046
+    },
+    {
+      "case_id": "banking77-test-2120",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9856,
+        "probabilities": {
+          "card_arrival": 0.0011,
+          "card_not_working": 0.0023,
+          "lost_or_stolen_card": 0.0009,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.0023,
+          "change_pin": 0.9856,
+          "pending_card_payment": 0.0009,
+          "pending_cash_withdrawal": 0.0016,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.0009,
+          "card_swallowed": 0.0011,
+          "card_payment_wrong_exchange_rate": 0.001
+        }
+      },
+      "matched": true,
+      "latency_ms": 406.8371660250705
+    },
+    {
+      "case_id": "banking77-test-2121",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "change_pin",
+      "answer": {
+        "type": "choice",
+        "choice": "change_pin",
+        "confidence": 0.9931,
+        "probabilities": {
+          "card_arrival": 0.0007,
+          "card_not_working": 0.0007,
+          "lost_or_stolen_card": 0.0007,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0007,
+          "change_pin": 0.9931,
+          "pending_card_payment": 0.0006,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0006,
+          "failed_transfer": 0.0006,
+          "card_swallowed": 0.0006,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 458.0027500051074
+    },
+    {
+      "case_id": "banking77-test-2280",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9945,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0004,
+          "lost_or_stolen_card": 0.0006,
+          "wrong_amount_of_cash_received": 0.0004,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.0004,
+          "cancel_transfer": 0.001,
+          "failed_transfer": 0.9945,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 523.3042080071755
+    },
+    {
+      "case_id": "banking77-test-2281",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "failed_transfer",
+      "answer": {
+        "type": "choice",
+        "choice": "failed_transfer",
+        "confidence": 0.9929,
+        "probabilities": {
+          "card_arrival": 0.0005,
+          "card_not_working": 0.0005,
+          "lost_or_stolen_card": 0.0005,
+          "wrong_amount_of_cash_received": 0.0005,
+          "cash_withdrawal_charge": 0.0005,
+          "change_pin": 0.0005,
+          "pending_card_payment": 0.0007,
+          "pending_cash_withdrawal": 0.0006,
+          "cancel_transfer": 0.0016,
+          "failed_transfer": 0.9929,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0007
+        }
+      },
+      "matched": true,
+      "latency_ms": 446.5304170153104
+    },
+    {
+      "case_id": "banking77-test-2880",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9903,
+        "probabilities": {
+          "card_arrival": 0.0004,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9903,
+          "change_pin": 0.0004,
+          "pending_card_payment": 0.0005,
+          "pending_cash_withdrawal": 0.005,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0004,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0004
+        }
+      },
+      "matched": true,
+      "latency_ms": 484.51237499830313
+    },
+    {
+      "case_id": "banking77-test-2881",
+      "type": "choice",
+      "repeat": 3,
+      "expected": "cash_withdrawal_charge",
+      "answer": {
+        "type": "choice",
+        "choice": "cash_withdrawal_charge",
+        "confidence": 0.9927,
+        "probabilities": {
+          "card_arrival": 0.0003,
+          "card_not_working": 0.0003,
+          "lost_or_stolen_card": 0.0003,
+          "wrong_amount_of_cash_received": 0.0012,
+          "cash_withdrawal_charge": 0.9927,
+          "change_pin": 0.0003,
+          "pending_card_payment": 0.0004,
+          "pending_cash_withdrawal": 0.003,
+          "cancel_transfer": 0.0004,
+          "failed_transfer": 0.0003,
+          "card_swallowed": 0.0004,
+          "card_payment_wrong_exchange_rate": 0.0005
+        }
+      },
+      "matched": true,
+      "latency_ms": 425.43108301470056
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lyhu/skills-cloudflare-clef/blob/main/skills/cloudflare-clef/references/primitives.json",
+  "title": "Deployed Clef SystemOne text subset",
+  "description": "Request schema. Response, answer, and error schemas are in $defs. Cross-field probability and criteria matching is enforced by evaluate.py.",
+  "$ref": "#/$defs/request",
+  "$defs": {
+    "request": {
+      "type": "object",
+      "required": ["model", "state", "questions"],
+      "additionalProperties": false,
+      "properties": {
+        "model": {"enum": ["clef", "Cloudflare/clef"]},
+        "state": {},
+        "questions": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 16,
+          "additionalProperties": {"$ref": "#/$defs/question"}
+        }
+      }
+    },
+    "question": {
+      "oneOf": [
+        {"$ref": "#/$defs/noul_question"},
+        {"$ref": "#/$defs/choice_question"},
+        {"$ref": "#/$defs/score_question"}
+      ]
+    },
+    "noul_question": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "noul"},
+        "instructions": {"type": "string"}
+      },
+      "description": "The deployed server ignores custom Noul criteria; express the full proposition in instructions."
+    },
+    "choice_question": {
+      "type": "object",
+      "required": ["type", "criteria"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "choice"},
+        "instructions": {"type": "string"},
+        "criteria": {"type": "object", "minProperties": 1, "maxProperties": 64}
+      }
+    },
+    "score_question": {
+      "type": "object",
+      "required": ["type", "criteria"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "score"},
+        "instructions": {"type": "string"},
+        "criteria": {"type": "array", "minItems": 1, "maxItems": 16, "items": {}}
+      },
+      "description": "Each array item describes a zero-based ordinal level; prefer at least two distinct descriptions."
+    },
+    "probability": {"type": "number", "minimum": 0, "maximum": 1},
+    "probabilities": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "additionalProperties": {"$ref": "#/$defs/probability"}
+    },
+    "answer": {
+      "oneOf": [
+        {"$ref": "#/$defs/noul_answer"},
+        {"$ref": "#/$defs/choice_answer"},
+        {"$ref": "#/$defs/score_answer"}
+      ]
+    },
+    "noul_answer": {
+      "type": "object",
+      "required": ["type", "noul"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "noul"},
+        "noul": {"$ref": "#/$defs/probability"}
+      }
+    },
+    "choice_answer": {
+      "type": "object",
+      "required": ["type", "choice", "confidence", "probabilities"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "choice"},
+        "choice": {"type": "string"},
+        "confidence": {"$ref": "#/$defs/probability"},
+        "probabilities": {"$ref": "#/$defs/probabilities"}
+      }
+    },
+    "score_answer": {
+      "type": "object",
+      "required": ["type", "score", "confidence", "legend", "probabilities"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "score"},
+        "score": {"type": "number", "minimum": 0, "maximum": 15},
+        "confidence": {"$ref": "#/$defs/probability"},
+        "legend": {
+          "type": "object", "minProperties": 1, "maxProperties": 16,
+          "propertyNames": {"pattern": "^(?:[0-9]|1[0-5])$"}
+        },
+        "probabilities": {
+          "$ref": "#/$defs/probabilities", "maxProperties": 16,
+          "propertyNames": {"pattern": "^(?:[0-9]|1[0-5])$"}
+        }
+      },
+      "description": "score is sum(index * probability). Confidence is max(probabilities) for this Clef deployment."
+    },
+    "response": {
+      "type": "object",
+      "required": ["model", "answers", "usage"],
+      "additionalProperties": false,
+      "properties": {
+        "model": {"enum": ["clef", "Cloudflare/clef"]},
+        "answers": {
+          "type": "object", "minProperties": 1, "maxProperties": 16,
+          "additionalProperties": {"$ref": "#/$defs/answer"}
+        },
+        "usage": {
+          "type": "object", "required": ["input_tokens", "output_tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "input_tokens": {"type": "integer", "minimum": 0},
+            "output_tokens": {"const": 0}
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": ["error", "message", "fallback_used"],
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "enum": ["CLEF_INVALID_INPUT", "CLEF_INVALID_CONFIG", "CLEF_SERVICE_UNAVAILABLE", "CLEF_HTTP_ERROR", "CLEF_INVALID_RESPONSE", "CLEF_CLIENT_ERROR"]
+        },
+        "message": {"type": "string"},
+        "fallback_used": {"const": true},
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599}
+      }
+    }
+  }
+}

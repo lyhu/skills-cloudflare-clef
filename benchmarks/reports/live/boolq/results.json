@@ -1,0 +1,955 @@
+{
+  "metadata": {
+    "mode": "live-http",
+    "timestamp_utc": "2026-10-04T07:54:11.830373+00:00",
+    "python": "3.12.14",
+    "client_platform": "macOS-27.0.1-arm64-arm-64bit",
+    "model": "clef",
+    "transport_note": "LAN HTTP via Nginx to A800 GPU 7; inference_mode patch applied; no concurrent benchmark requests",
+    "timeout_seconds": "10.0",
+    "max_retries": "0",
+    "case_count": 24,
+    "repeats": 3,
+    "warmup_requests": 3,
+    "warmup_errors": 0,
+    "source_sha256": {
+      "benchmarks/datasets/boolq.json": "99a1723d6eb3be261e0c4674db494dbad3e388ed54c0bfdc5772267b37ac485e",
+      "skills/cloudflare-clef/scripts/evaluate.py": "b4b30dd82d3ec25a38f023fd7cb06fdd9542922e3683f26d6a6b9b84043bcb6f",
+      "benchmarks/run.py": "d9f1cefee5eb96ff6f74d67a376f9160b952a33d03d1ac377ad149789eca70b4"
+    },
+    "dataset": "benchmarks/datasets/boolq.json",
+    "endpoint_recorded": false
+  },
+  "summary": {
+    "requests": 72,
+    "successful": 72,
+    "errors": 0,
+    "matched": 66,
+    "agreement_rate": 0.9166666666666666,
+    "valid_answer_agreement_rate": 0.9166666666666666,
+    "latency_ms": {
+      "mean": 416.77174887566554,
+      "p50": 386.351667024428,
+      "p95": 538.358124991646,
+      "max": 1074.2507499817293
+    },
+    "successful_latency_ms": {
+      "mean": 416.77174887566554,
+      "p50": 386.351667024428,
+      "p95": 538.358124991646,
+      "max": 1074.2507499817293
+    },
+    "brier_score": 0.06158012375,
+    "uncertain_answers": 6
+  },
+  "by_primitive": {
+    "noul": {
+      "requests": 72,
+      "successful": 72,
+      "errors": 0,
+      "matched": 66,
+      "agreement_rate": 0.9166666666666666,
+      "valid_answer_agreement_rate": 0.9166666666666666,
+      "latency_ms": {
+        "mean": 416.77174887566554,
+        "p50": 386.351667024428,
+        "p95": 538.358124991646,
+        "max": 1074.2507499817293
+      },
+      "successful_latency_ms": {
+        "mean": 416.77174887566554,
+        "p50": 386.351667024428,
+        "p95": 538.358124991646,
+        "max": 1074.2507499817293
+      },
+      "brier_score": 0.06158012375,
+      "uncertain_answers": 6
+    },
+    "choice": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    },
+    "score": {
+      "requests": 0,
+      "successful": 0,
+      "errors": 0,
+      "matched": 0,
+      "agreement_rate": null,
+      "valid_answer_agreement_rate": null,
+      "latency_ms": null,
+      "successful_latency_ms": null
+    }
+  },
+  "records": [
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.1569
+      },
+      "matched": true,
+      "latency_ms": 408.9327499968931
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9847
+      },
+      "matched": true,
+      "latency_ms": 430.69879201357253
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9789
+      },
+      "matched": true,
+      "latency_ms": 362.55391701706685
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9928
+      },
+      "matched": true,
+      "latency_ms": 383.9933330018539
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9374
+      },
+      "matched": true,
+      "latency_ms": 383.4264170145616
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0208
+      },
+      "matched": true,
+      "latency_ms": 366.21391598600894
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9236
+      },
+      "matched": true,
+      "latency_ms": 417.81350001110695
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9912
+      },
+      "matched": true,
+      "latency_ms": 394.3900419981219
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9474
+      },
+      "matched": true,
+      "latency_ms": 354.0412910224404
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.993
+      },
+      "matched": true,
+      "latency_ms": 379.3744590075221
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9749
+      },
+      "matched": true,
+      "latency_ms": 393.9112079970073
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0199
+      },
+      "matched": true,
+      "latency_ms": 444.78241601609625
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0138
+      },
+      "matched": false,
+      "latency_ms": 382.5967500160914
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9121
+      },
+      "matched": true,
+      "latency_ms": 378.6069169873372
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 1,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9918
+      },
+      "matched": true,
+      "latency_ms": 382.0054160023574
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.346
+      },
+      "matched": true,
+      "latency_ms": 428.85979200946167
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.5742
+      },
+      "matched": false,
+      "latency_ms": 402.9640420048963
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0274
+      },
+      "matched": true,
+      "latency_ms": 386.351667024428
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0191
+      },
+      "matched": true,
+      "latency_ms": 393.31941699492745
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0325
+      },
+      "matched": true,
+      "latency_ms": 393.6733329901472
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.059
+      },
+      "matched": true,
+      "latency_ms": 372.22866699448787
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0131
+      },
+      "matched": true,
+      "latency_ms": 387.4164169828873
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0288
+      },
+      "matched": true,
+      "latency_ms": 383.51220899494365
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 1,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0448
+      },
+      "matched": true,
+      "latency_ms": 428.923333005514
+    },
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.1569
+      },
+      "matched": true,
+      "latency_ms": 418.0987500003539
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9847
+      },
+      "matched": true,
+      "latency_ms": 407.4228329991456
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9789
+      },
+      "matched": true,
+      "latency_ms": 377.16358399484307
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9928
+      },
+      "matched": true,
+      "latency_ms": 380.96979199326597
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9374
+      },
+      "matched": true,
+      "latency_ms": 380.2602499781642
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0208
+      },
+      "matched": true,
+      "latency_ms": 366.2069170095492
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9236
+      },
+      "matched": true,
+      "latency_ms": 378.82516701938584
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9912
+      },
+      "matched": true,
+      "latency_ms": 432.7759169973433
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9474
+      },
+      "matched": true,
+      "latency_ms": 364.3909169768449
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.993
+      },
+      "matched": true,
+      "latency_ms": 408.52691599866375
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9749
+      },
+      "matched": true,
+      "latency_ms": 417.0264589774888
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0199
+      },
+      "matched": true,
+      "latency_ms": 384.7537090186961
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0138
+      },
+      "matched": false,
+      "latency_ms": 395.88224998442456
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9121
+      },
+      "matched": true,
+      "latency_ms": 385.1921670138836
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 2,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9918
+      },
+      "matched": true,
+      "latency_ms": 380.9843329945579
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.346
+      },
+      "matched": true,
+      "latency_ms": 411.6699160076678
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.5742
+      },
+      "matched": false,
+      "latency_ms": 393.67608400061727
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0274
+      },
+      "matched": true,
+      "latency_ms": 365.11595800402574
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0191
+      },
+      "matched": true,
+      "latency_ms": 385.58883298537694
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0325
+      },
+      "matched": true,
+      "latency_ms": 428.612499992596
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.059
+      },
+      "matched": true,
+      "latency_ms": 366.6874160117004
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0131
+      },
+      "matched": true,
+      "latency_ms": 382.1790000074543
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0288
+      },
+      "matched": true,
+      "latency_ms": 369.86179201630875
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 2,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0448
+      },
+      "matched": true,
+      "latency_ms": 465.10570897953585
+    },
+    {
+      "case_id": "boolq-validation-0",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.1569
+      },
+      "matched": true,
+      "latency_ms": 408.3924170117825
+    },
+    {
+      "case_id": "boolq-validation-1",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9847
+      },
+      "matched": true,
+      "latency_ms": 409.18283301289193
+    },
+    {
+      "case_id": "boolq-validation-2",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9789
+      },
+      "matched": true,
+      "latency_ms": 367.234000004828
+    },
+    {
+      "case_id": "boolq-validation-3",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9928
+      },
+      "matched": true,
+      "latency_ms": 380.6747089838609
+    },
+    {
+      "case_id": "boolq-validation-4",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9374
+      },
+      "matched": true,
+      "latency_ms": 381.1864580202382
+    },
+    {
+      "case_id": "boolq-validation-5",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0208
+      },
+      "matched": true,
+      "latency_ms": 486.1897090158891
+    },
+    {
+      "case_id": "boolq-validation-6",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9236
+      },
+      "matched": true,
+      "latency_ms": 445.13141698553227
+    },
+    {
+      "case_id": "boolq-validation-7",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9912
+      },
+      "matched": true,
+      "latency_ms": 538.358124991646
+    },
+    {
+      "case_id": "boolq-validation-8",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9474
+      },
+      "matched": true,
+      "latency_ms": 410.7282079930883
+    },
+    {
+      "case_id": "boolq-validation-9",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.993
+      },
+      "matched": true,
+      "latency_ms": 635.5519590142649
+    },
+    {
+      "case_id": "boolq-validation-10",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9749
+      },
+      "matched": true,
+      "latency_ms": 1074.2507499817293
+    },
+    {
+      "case_id": "boolq-validation-11",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0199
+      },
+      "matched": true,
+      "latency_ms": 853.8307080161758
+    },
+    {
+      "case_id": "boolq-validation-12",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0138
+      },
+      "matched": false,
+      "latency_ms": 410.86016700137407
+    },
+    {
+      "case_id": "boolq-validation-13",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9121
+      },
+      "matched": true,
+      "latency_ms": 382.77937498060055
+    },
+    {
+      "case_id": "boolq-validation-14",
+      "type": "noul",
+      "repeat": 3,
+      "expected": true,
+      "answer": {
+        "type": "noul",
+        "noul": 0.9918
+      },
+      "matched": true,
+      "latency_ms": 373.8318329851609
+    },
+    {
+      "case_id": "boolq-validation-20",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.346
+      },
+      "matched": true,
+      "latency_ms": 405.93554099905305
+    },
+    {
+      "case_id": "boolq-validation-27",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.5742
+      },
+      "matched": false,
+      "latency_ms": 451.20579199283384
+    },
+    {
+      "case_id": "boolq-validation-32",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0274
+      },
+      "matched": true,
+      "latency_ms": 360.5245409999043
+    },
+    {
+      "case_id": "boolq-validation-36",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0191
+      },
+      "matched": true,
+      "latency_ms": 372.5914999959059
+    },
+    {
+      "case_id": "boolq-validation-38",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0325
+      },
+      "matched": true,
+      "latency_ms": 383.6795829993207
+    },
+    {
+      "case_id": "boolq-validation-39",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.059
+      },
+      "matched": true,
+      "latency_ms": 418.534416006878
+    },
+    {
+      "case_id": "boolq-validation-41",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0131
+      },
+      "matched": true,
+      "latency_ms": 377.1829580073245
+    },
+    {
+      "case_id": "boolq-validation-43",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0288
+      },
+      "matched": true,
+      "latency_ms": 363.8182919821702
+    },
+    {
+      "case_id": "boolq-validation-52",
+      "type": "noul",
+      "repeat": 3,
+      "expected": false,
+      "answer": {
+        "type": "noul",
+        "noul": 0.0448
+      },
+      "matched": true,
+      "latency_ms": 428.3434580138419
+    }
+  ]
+}

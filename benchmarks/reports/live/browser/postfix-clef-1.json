@@ -1,0 +1,72 @@
+{
+  "id": "postfix-clef-1",
+  "arm": "clef",
+  "timestamp_utc": "2026-10-04T07:51:24.244Z",
+  "query": "jev typesafe",
+  "browser_ms": 3014,
+  "decision_ms": 1275,
+  "total_ms": 4289,
+  "workload": "Navigate to Latest search URL, wait for 8 posts, extract 600 characters/post, judge application relevance",
+  "page_calls": 3,
+  "agent_judgment_turns": 0,
+  "judgments": [
+    {
+      "url": "https://x.com/SeoSamantha/status/2106652326689726940",
+      "application": false,
+      "text_sha256": "03d5ca1ef62402f57edb41904a6e4645a80b9bb7289e5b385df460cb152b176d"
+    },
+    {
+      "url": "https://x.com/SupersocksIntel/status/2106649139744235748",
+      "application": true,
+      "text_sha256": "ac28ba8e4c8e004344571fd3e984d92a3f3b44a3deb0a7751c00965502e6a9a4"
+    },
+    {
+      "url": "https://x.com/LangChainJP/status/2106648085577240797",
+      "application": true,
+      "text_sha256": "47131e6aed01c56ce3b51026c1890ec5a9a7f6cf7142f3d4378581fc6506e9fd"
+    },
+    {
+      "url": "https://x.com/Colourpixels/status/2106636574423503176",
+      "application": true,
+      "text_sha256": "8e125a1a186ecace32a914226ae98f4449293c74cc870ae9a0a199564f233a4c"
+    },
+    {
+      "url": "https://x.com/LilTea_eth/status/2106634441720557615",
+      "application": true,
+      "text_sha256": "a06abd00411fb30da4908c8e7afb74e904f1b9752fababd6234b3436385dc6dc"
+    },
+    {
+      "url": "https://x.com/catcheronthesly/status/2106626811283009761",
+      "application": false,
+      "text_sha256": "5ee558eca71b2573b5f6ff070a5ad0df3be7d5e936a8815b5998f2889935ca5c"
+    },
+    {
+      "url": "https://x.com/MartinSzerment/status/2106622920151704053",
+      "application": false,
+      "text_sha256": "02e1f49f7d084c0d373fd6024e52534ba844c25068c6538297e73c1e2c11065d"
+    },
+    {
+      "url": "https://x.com/umiyosh/status/2106620158060183727",
+      "application": true,
+      "text_sha256": "51c5edaa272da1c6d8608637ad6f0ed28aaee7d287deaf57a6e0e19bdfa84bc1"
+    }
+  ],
+  "model": "clef",
+  "decision_requests": 1,
+  "http_ms": 1272.3501669999969,
+  "usage": {
+    "input_tokens": 2175,
+    "output_tokens": 0
+  },
+  "probabilities": [
+    0.045,
+    0.6132,
+    0.8437,
+    0.9301,
+    0.8404,
+    0.0332,
+    0.0593,
+    0.8731
+  ],
+  "retries": 0
+}

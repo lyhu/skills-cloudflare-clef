@@ -1,0 +1,16 @@
+{
+  "included_trials": [
+    "normalized-agent-1",
+    "normalized-clef-1",
+    "normalized-clef-2",
+    "normalized-agent-2"
+  ],
+  "excluded_records": {
+    "agent-1.json": "Before service repair; different live corpus.",
+    "clef-1-failed.json": "Before service repair; HTTP 500 CUDA OOM; no successful decisions.",
+    "postfix-agent-1.json": "Pilot before normalization; translation changed input.",
+    "postfix-clef-1.json": "Pilot before normalization; translation changed input."
+  },
+  "agent_reference": "Current Codex session, exact base model ID unavailable; no independent human gold labels.",
+  "input_policy": "600 characters of normalized original visible post text; no full tweets or account UI published."
+}
