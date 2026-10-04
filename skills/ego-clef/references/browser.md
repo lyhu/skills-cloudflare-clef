@@ -24,6 +24,20 @@ tail -f ~/.local/state/clef-browser/events.jsonl
 
 同一次运行用 `run_id` 关联，时间为 UTC。只记录站点域名，不保存完整 URL、查询参数、正文、任务原文、链接文字、密钥或原始异常。日志写入失败不改变导航结果，真实后端运行的返回值 `log_written: false` 可用于排查。
 
+通用客户端另外写入 `~/.local/state/clef/events.jsonl`：每次模型调用的 `source` 为 `ego-clef`，与这里的 `decision` 共用 `call_id` 和 `run_id`，包含原语、HTTP 尝试、重试、用量与客户端耗时。两个文件承担不同统计用途，不能将它们的每一行都当作一次调用。浏览器 `log_written` 仅反映浏览器日志写入；通用日志需单独检查。
+
+```bash
+# 模型调用统计，自动覆盖 ego-clef
+python3 <cloudflare-clef-dir>/scripts/log_stats.py --today --source ego-clef
+
+# 同时统计浏览器任务的完成/交接；不会重复计算 decision
+python3 <cloudflare-clef-dir>/scripts/log_stats.py --today --json \
+  --file ~/.local/state/clef/events.jsonl \
+  --file ~/.local/state/clef-browser/events.jsonl
+```
+
+`schema_version: 1` 与 `source` 是新版浏览器记录字段；旧记录原样保留，没有补造调用历史。旧记录缺少 source 时统计归为 unknown。`CLEF_LOG_ENABLED=0` 可停用两种日志；`CLEF_LOG_PATH` 与 `CLEF_BROWSER_LOG_PATH` 分别更改客户端和浏览器日志路径。模拟 decider 不写默认调用记录。通用统计和配置见 cloudflare-clef 的 `references/logging.md`。
+
 没有新增日志只能说明这个模块没有留下新记录，不能据此判断服务坏了：单一已知链接直接打开等步骤不需要调用它。用户可以直接问 Agent：“查看最近一次浏览器任务的日志，确认有没有调用 Clef。”
 
 ## 一次性安装（Agent 执行）

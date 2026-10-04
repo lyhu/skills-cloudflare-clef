@@ -24,7 +24,7 @@ test("generic CLI runs from an isolated install with only Python standard librar
     await copyFile(new URL("../skills/cloudflare-clef/scripts/evaluate.py", import.meta.url), client);
     const { stdout } = await execute("python3", ["-S", client, "--state", "A checkout outage",
       "--type", "noul", "--instructions", "Does this require technical support?"], {
-      cwd: dir, env: { ...process.env, CLEF_BACKEND_URL:
+      cwd: dir, env: { ...process.env, CLEF_LOG_ENABLED:'0', CLEF_BACKEND_URL:
         `http://127.0.0.1:${server.address().port}/v1/systemone` },
     });
     assert.deepEqual(JSON.parse(stdout), { type: "noul", noul: 0.9 });
@@ -39,7 +39,8 @@ test("separately installed browser skill uses generic client; missing dependency
   const generic = join(dir, "custom-generic");
   const browser = join(dir, "custom-browser");
   const logFile = join(dir, "events.jsonl");
-  const previous = { endpoint: process.env.CLEF_BACKEND_URL, skill: process.env.CLEF_SKILL_DIR };
+  const previous = { endpoint: process.env.CLEF_BACKEND_URL, skill: process.env.CLEF_SKILL_DIR,
+    log:process.env.CLEF_LOG_PATH };
   let requests = 0;
   const server = createServer(async (request, response) => {
     requests++;
@@ -57,6 +58,7 @@ test("separately installed browser skill uses generic client; missing dependency
       join(generic, "scripts/evaluate.py"));
     await cp(new URL("../skills/ego-clef/scripts/", import.meta.url), browser, { recursive: true });
     process.env.CLEF_SKILL_DIR = generic;
+    process.env.CLEF_LOG_PATH = join(dir,'calls.jsonl');
     process.env.CLEF_BACKEND_URL = `http://127.0.0.1:${server.address().port}/v1/systemone`;
     const { runClefBrowser, resolveClefClient } = await import(pathToFileURL(join(browser, "browser.mjs")));
     assert.equal(await resolveClefClient(), join(generic, "scripts/evaluate.py"));
@@ -74,7 +76,8 @@ test("separately installed browser skill uses generic client; missing dependency
     assert.equal(events.at(-2).error_code, "CLEF_CLIENT_NOT_INSTALLED");
     assert.equal(events.at(-1).successful_decisions, 0);
   } finally {
-    for (const [key, value] of [["CLEF_BACKEND_URL", previous.endpoint], ["CLEF_SKILL_DIR", previous.skill]]) {
+    for (const [key, value] of [["CLEF_BACKEND_URL", previous.endpoint], ["CLEF_SKILL_DIR", previous.skill],
+      ["CLEF_LOG_PATH", previous.log]]) {
       if (value === undefined) delete process.env[key]; else process.env[key] = value;
     }
     await new Promise(resolve => server.close(resolve));

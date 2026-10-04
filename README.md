@@ -285,6 +285,20 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 ## 应用集成示例
 
+### 调用日志与统计
+
+默认开启元数据日志，直接调用 CLI/Python/TypeScript 及 ego-clef 都会记录。模型调用日志位于 `~/.local/state/clef/events.jsonl`，浏览器任务日志位于 `~/.local/state/clef-browser/events.jsonl`。以 `call_id` 和 `run_id` 关联：一次 `call` 可以包含多个 HTTP `attempt`，浏览器的 `decision` 是同次调用的视图，不额外计数。
+
+```bash
+# 今天全部来源的调用情况
+python3 skills/cloudflare-clef/scripts/log_stats.py --today
+
+# 只看 ego-clef；JSON 方便导入后续分析
+python3 skills/cloudflare-clef/scripts/log_stats.py --today --source ego-clef --json
+```
+
+统计包含来源/原语/模型分组、调用量、HTTP 尝试与重试、成功率、p50/p95、错误码与 token 用量覆盖率。只保存统计元数据，不保存正文、候选文字、密钥或完整 URL。stdout 和原调用协议保持不变。配置、计数口径及多日志/浏览器任务统计见 [日志说明](skills/cloudflare-clef/references/logging.md) 和 [浏览器日志说明](skills/ego-clef/references/browser.md#查看是否生效)。
+
 ### ego-clef：跨站点的 ego-browser 语义决策技能
 
 **一次配置，日常只说任务。** 例如：“搜索文档里的 retry 用法”“展开菜单、选择工具分类再搜索”“填写这些已知筛选条件”。Agent 在内部根据当前页面语义选择下一步，用户无需提到 Clef、编写函数或查看置信度；GitHub/X 只是已有评测示例。

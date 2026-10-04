@@ -27,6 +27,7 @@ test("real stdlib HTTP calls and completed run share an ID; failed response logs
   const dir = await mkdtemp(join(tmpdir(), "clef-http-log-"));
   const file = join(dir, "events.jsonl");
   const originalEndpoint = process.env.CLEF_BACKEND_URL;
+  const originalLog = process.env.CLEF_LOG_PATH;
   let failing = false;
   let requests = 0;
   const server = createServer(async (request, response) => {
@@ -44,6 +45,7 @@ test("real stdlib HTTP calls and completed run share an ID; failed response logs
   });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   process.env.CLEF_BACKEND_URL = `http://127.0.0.1:${server.address().port}/v1/systemone`;
+  process.env.CLEF_LOG_PATH = join(dir, 'calls.jsonl');
   try {
     let url = "https://example.test/docs";
     const page = { evaluate:async()=>({url,title:"Docs",text:"private page body",
@@ -58,6 +60,12 @@ test("real stdlib HTTP calls and completed run share an ID; failed response logs
     assert.equal(new Set(entries.map(e=>e.run_id)).size, 1);
     assert.equal(entries[2].successful_decisions, 2);
     assert.equal(entries[2].run_id, completed.run_id);
+    const clientEvents = (await readFile(process.env.CLEF_LOG_PATH, 'utf8')).trim().split('\n').map(JSON.parse);
+    const calls = clientEvents.filter(e=>e.event==='call');
+    assert.equal(calls.length,2);
+    assert.deepEqual(calls.map(e=>e.call_id),entries.slice(0,2).map(e=>e.call_id));
+    assert.ok(calls.every(e=>e.source==='ego-clef' && e.run_id===completed.run_id));
+    assert.equal(clientEvents.filter(e=>e.event==='attempt').length,2);
     assert.equal((await readFile(file,"utf8")).includes("private"), false);
     failing = true;
     const failed = await runClefBrowser(page, options);
@@ -74,6 +82,8 @@ test("real stdlib HTTP calls and completed run share an ID; failed response logs
   } finally {
     if (originalEndpoint === undefined) delete process.env.CLEF_BACKEND_URL;
     else process.env.CLEF_BACKEND_URL = originalEndpoint;
+    if (originalLog === undefined) delete process.env.CLEF_LOG_PATH;
+    else process.env.CLEF_LOG_PATH = originalLog;
     await new Promise(resolve => server.close(resolve));
     await rm(dir, { recursive: true });
   }

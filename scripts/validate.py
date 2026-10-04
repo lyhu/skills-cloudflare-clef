@@ -60,6 +60,7 @@ def main():
         raise ValueError("CI workflow requires jobs")
     required = [
         ROOT / "README.md", ROOT / "LICENSE", SKILL / "scripts" / "evaluate.py",
+        SKILL / "scripts/log_stats.py", SKILL / "references/logging.md",
         SKILL / "templates" / "client.py", SKILL / "templates" / "client.ts",
         ROOT / "skills/ego-clef/scripts/browser.mjs",
         ROOT / "skills/ego-clef/scripts/browser-log.mjs",

@@ -28,7 +28,7 @@ metadata:
 
 配置读取 `CLEF_BACKEND_URL` 或 `~/.config/clef-browser/config.json`。缺配置、低置信度、目标变化、无进展、服务异常或未覆盖交互时，主 Agent 检查当前页面并在同一会话继续；不要求用户切换后端。
 
-默认回答任务结果与来源，省略模型、概率和耗时表。运行元数据追加到 `~/.local/state/clef-browser/events.jsonl`；用户要求排查时，以 `run_id` 核对实际 HTTP 决策与完成记录。工具调用是否显示由宿主界面决定。
+默认回答任务结果与来源，省略模型、概率和耗时表。浏览器元数据追加到 `~/.local/state/clef-browser/events.jsonl`；通用客户端同时记录 `~/.local/state/clef/events.jsonl`，来源为 `ego-clef`。用户要求统计时，用通用 `scripts/log_stats.py` 查询，两份日志以 `call_id` 和 `run_id` 关联，不能把浏览器 decision 与客户端 call 重复计数。详细字段见调用说明。工具调用是否显示由宿主界面决定。
 
 ## 执行边界
 

@@ -9,5 +9,5 @@
     "url": "https://github.com/lyhu/skills-cloudflare-clef.git",
     "directory": "skills/cloudflare-clef"
   },
-  "files": ["SKILL.md", "scripts/*.py", "references/*.json", "templates/*.py", "templates/*.ts"]
+  "files": ["SKILL.md", "scripts/*.py", "references/*.json", "references/*.md", "templates/*.py", "templates/*.ts"]
 }

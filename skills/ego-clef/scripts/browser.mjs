@@ -47,7 +47,8 @@ export async function browserConfiguration({ env = process.env,
 
 export async function askClef(state, choices, goal, { runId = randomUUID(), logFile } = {}) {
   const started = performance.now();
-  const event = { event: "decision", run_id: runId, transport: "http",
+  const callId = randomUUID();
+  const event = { event: "decision", run_id: runId, call_id: callId, transport: "http",
     site: new URL(state.url).hostname };
   try {
     const config = await browserConfiguration();
@@ -66,7 +67,8 @@ export async function askClef(state, choices, goal, { runId = randomUUID(), logF
       "--choices", ...choices], {
       timeout: 15000, maxBuffer: 256 * 1024,
       env: { ...process.env, ...(config.endpoint ? { CLEF_BACKEND_URL: config.endpoint } : {}),
-        CLEF_MAX_RETRIES: "0", CLEF_TIMEOUT: "10" },
+        CLEF_MAX_RETRIES: "0", CLEF_TIMEOUT: "10", CLEF_LOG_SOURCE: "ego-clef",
+        CLEF_RUN_ID: runId, CLEF_CALL_ID: callId },
     });
     const answer = JSON.parse(stdout);
     await appendBrowserEvent({ ...event, outcome: "success", confidence: answer.confidence,

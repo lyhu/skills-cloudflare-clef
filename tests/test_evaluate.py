@@ -72,6 +72,7 @@ class ClientTests(unittest.TestCase):
             "CLEF_BACKEND_URL": f"http://127.0.0.1:{self.server.server_port}/v1/systemone",
             "CLEF_MODEL": "clef", "CLEF_TIMEOUT": "0.3", "CLEF_MAX_RETRIES": "0",
             "CLEF_API_KEY": "", "NO_PROXY": "127.0.0.1",
+            "CLEF_LOG_ENABLED": "0",
         })
         self.environment.start()
 
@@ -347,7 +348,95 @@ console.log(JSON.stringify(result));'''
         self.assert_failure(result, "CLEF_HTTP_ERROR")
         self.assertIn("Authentication error", result["message"])
 
+    def test_logs_retry_usage_correlation_and_no_sensitive_content(self):
+        self.queue(status=503)
+        self.queue({"type": "choice", "choice": "PRIVATE_OPTION", "confidence": 0.9,
+            "probabilities": {"PRIVATE_OPTION": 0.9, "OTHER_PRIVATE_OPTION": 0.1}})
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "logs/events.jsonl"
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": str(log),
+                "CLEF_LOG_SOURCE": "ego-clef", "CLEF_MAX_RETRIES": "1", "CLEF_API_KEY": "PRIVATE_KEY",
+                "CLEF_RUN_ID": "00000000-0000-4000-8000-000000000001",
+                "CLEF_CALL_ID": "00000000-0000-4000-8000-000000000002"}), patch.object(client.time, "sleep"):
+                result = client.evaluate_clef("PRIVATE_STATE", "choice", "PRIVATE_INSTRUCTIONS",
+                    ["PRIVATE_OPTION", "OTHER_PRIVATE_OPTION"])
+            self.assertNotIn("error", result)
+            text = log.read_text()
+            events = [json.loads(line) for line in text.splitlines()]
+            self.assertNotIn("PRIVATE", text)
+            self.assertNotIn(str(self.server.server_port), text)
+            self.assertEqual([e["event"] for e in events], ["attempt", "attempt", "call"])
+            self.assertEqual([e["http_status"] for e in events], [503, 200, 200])
+            self.assertEqual({e["call_id"] for e in events}, {"00000000-0000-4000-8000-000000000002"})
+            self.assertTrue(all(e["source"] == "ego-clef" and e["run_id"].endswith("0001") for e in events))
+            call = events[-1]
+            self.assertEqual((call["attempt_count"], call["retry_count"]), (2, 1))
+            self.assertEqual((call["input_tokens"], call["output_tokens"]), (20, 0))
+            self.assertEqual(call["confidence"], 0.9)
+            self.assertGreater(call["request_bytes"], 0)
+            self.assertGreaterEqual(call["duration_ms"], events[1]["duration_ms"])
+            self.assertEqual(log.stat().st_mode & 0o777, 0o600)
+
+    def test_logs_local_failures_without_claiming_http_attempts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "events.jsonl"
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": str(log)}):
+                self.assert_failure(self.evaluate("choice"), "CLEF_INVALID_INPUT")
+                with patch.dict(os.environ, {"CLEF_MODEL": "PRIVATE_INVALID_MODEL"}):
+                    self.assert_failure(self.evaluate(), "CLEF_INVALID_CONFIG")
+            events = [json.loads(line) for line in log.read_text().splitlines()]
+            self.assertEqual(len(events), 2)
+            self.assertTrue(all(e["event"] == "call" and e["attempt_count"] == 0 and e["fallback_used"] for e in events))
+            self.assertNotIn("PRIVATE", log.read_text())
+            self.assertEqual(self.requests, [])
+
+    def test_logs_http_failure_and_tolerates_disabled_or_unwritable_sink(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "events.jsonl"
+            self.queue(status=401)
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": str(log)}):
+                self.assert_failure(self.evaluate(), "CLEF_HTTP_ERROR")
+            events = [json.loads(line) for line in log.read_text().splitlines()]
+            self.assertTrue(all(e["error_code"] == "CLEF_HTTP_ERROR" and e["http_status"] == 401 for e in events))
+            self.queue()
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": directory}):
+                self.assertEqual(self.evaluate(), NOUL)
+            self.queue()
+            absent = Path(directory) / "disabled.jsonl"
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "0", "CLEF_LOG_PATH": str(absent)}):
+                self.assertEqual(self.evaluate(), NOUL)
+            self.assertFalse(absent.exists())
+
+    def test_usage_validation_and_cloudflare_envelope_logging(self):
+        self.queue(raw=json.dumps({"success": True, "result": {"answers": {"verdict": NOUL},
+            "model": {"private": "not a model"}, "usage": {"input_tokens": True, "output_tokens": -2,
+                "total_tokens": "PRIVATE_USAGE", "prompt": "PRIVATE_PROMPT"}}}).encode())
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "events.jsonl"
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": str(log)}):
+                self.assertEqual(self.evaluate(), NOUL)
+            text = log.read_text()
+            self.assertNotIn("PRIVATE", text)
+            call = json.loads(text.splitlines()[-1])
+            self.assertNotIn("input_tokens", call)
+            self.assertNotIn("output_tokens", call)
+            self.assertNotIn("served_model", call)
+
+    def test_concurrent_calls_append_complete_records(self):
+        from concurrent.futures import ThreadPoolExecutor
+        for _ in range(12):
+            self.queue()
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "events.jsonl"
+            with patch.dict(os.environ, {"CLEF_LOG_ENABLED": "1", "CLEF_LOG_PATH": str(log)}):
+                with ThreadPoolExecutor(max_workers=4) as pool:
+                    results = list(pool.map(lambda _: self.evaluate(), range(12)))
+            self.assertTrue(all(result == NOUL for result in results))
+            events = [json.loads(line) for line in log.read_text().splitlines()]
+            self.assertEqual(len(events), 24)
+            calls = [e for e in events if e["event"] == "call"]
+            self.assertEqual(len({e["call_id"] for e in calls}), 12)
+
 
 if __name__ == "__main__":
     unittest.main()
-

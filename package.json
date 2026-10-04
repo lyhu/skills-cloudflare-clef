@@ -14,6 +14,7 @@
     "skills/cloudflare-clef/package.json",
     "skills/cloudflare-clef/scripts/*.py",
     "skills/cloudflare-clef/references/*.json",
+    "skills/cloudflare-clef/references/*.md",
     "skills/cloudflare-clef/templates/*.py",
     "skills/cloudflare-clef/templates/*.ts",
     "skills/ego-clef/SKILL.md",

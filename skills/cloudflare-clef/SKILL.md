@@ -93,6 +93,7 @@ python3 <skill-dir>/scripts/evaluate.py \
 - 请求/响应 Schema 规范：[references/primitives.json](references/primitives.json)
 - Python 集成客户端模板：[templates/client.py](templates/client.py)
 - TypeScript / Node 集成模板：[templates/client.ts](templates/client.ts)
+- 调用日志与统计：默认记录 `~/.local/state/clef/events.jsonl`；需要检查调用量、耗时、重试或来源时读取 [references/logging.md](references/logging.md)，运行 `scripts/log_stats.py`。正常任务无需展示日志，stdout 与原决策协议保持一致。
 
 ## 6. 环境配置速查
 

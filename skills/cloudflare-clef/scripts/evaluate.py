@@ -6,6 +6,9 @@ import json
 import math
 import os
 import time
+import uuid
+from datetime import datetime, timezone
+from pathlib import Path
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -23,6 +26,70 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 ALLOWED_MODELS = {"clef", "clef-flash", "Cloudflare/clef", "@cf/cloudflare/clef", "@cf/cloudflare/clef-flash"}
+
+
+def _identifier(value):
+    try:
+        return str(uuid.UUID(value))
+    except (ValueError, TypeError, AttributeError):
+        return None
+
+
+def _append_log(entry):
+    """One append-only write per metadata record; logging never changes the verdict."""
+    if os.getenv("CLEF_LOG_ENABLED", "1") == "0":
+        return
+    try:
+        path = Path(os.getenv("CLEF_LOG_PATH", str(Path.home() / ".local/state/clef/events.jsonl"))).expanduser()
+        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        data = json.dumps({"schema_version": 1,
+            "timestamp": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+            **entry}, ensure_ascii=False, allow_nan=False).encode("utf-8") + b"\n"
+        descriptor = os.open(path, os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
+        try:
+            os.chmod(path, 0o600)
+            os.write(descriptor, data)
+        finally:
+            os.close(descriptor)
+    except (OSError, ValueError, TypeError):
+        pass
+
+
+def _outcome(result):
+    if result is None:
+        return {"outcome": "error", "error_code": "CLEF_CLIENT_EXCEPTION"}
+    if "error" in result:
+        return {"outcome": "error", "error_code": result["error"],
+            **({"http_status": result["http_status"]} if "http_status" in result else {})}
+    return {"outcome": "success"}
+
+
+def evaluate_clef(state, question_type: str, instructions: str, choices=None, *, levels=None) -> dict:
+    """Return a typed verdict; log metadata for Python, CLI and subprocess callers alike."""
+    started = time.perf_counter()
+    source = os.getenv("CLEF_LOG_SOURCE", "cloudflare-clef")
+    if not source or len(source) > 48 or not all(c in "abcdefghijklmnopqrstuvwxyz0123456789-_" for c in source):
+        source = "cloudflare-clef"
+    model = os.getenv("CLEF_MODEL", "clef")
+    context = {"call_id": _identifier(os.getenv("CLEF_CALL_ID")) or str(uuid.uuid4()),
+        "source": source, "primitive": question_type if question_type in ("noul", "choice", "score") else "unknown",
+        "attempt_count": 0}
+    if model in ALLOWED_MODELS:
+        context["model"] = model
+    run_id = _identifier(os.getenv("CLEF_RUN_ID"))
+    if run_id:
+        context["run_id"] = run_id
+    result = None
+    try:
+        result = _evaluate_clef(state, question_type, instructions, choices, levels=levels, context=context)
+        return result
+    finally:
+        numeric = {key: result[key] for key in ("noul", "score", "confidence")
+            if result is not None and key in result and _number(result[key], 0, 15)}
+        _append_log({**context, "event": "call", **_outcome(result), **numeric,
+            "retry_count": max(0, context["attempt_count"] - 1),
+            "fallback_used": bool(result and result.get("fallback_used")),
+            "duration_ms": round((time.perf_counter() - started) * 1000, 3)})
 
 
 def _error(code, message, status=None):
@@ -87,7 +154,7 @@ def _validate_answer(answer, question):
     return answer
 
 
-def evaluate_clef(state, question_type: str, instructions: str, choices=None, *, levels=None) -> dict:
+def _evaluate_clef(state, question_type: str, instructions: str, choices=None, *, levels=None, context) -> dict:
     """Return a validated verdict or an error dict; never invent a fallback verdict.
 
     choices: list of labels or dict mapping labels to descriptions.
@@ -126,6 +193,9 @@ def evaluate_clef(state, question_type: str, instructions: str, choices=None, *,
             "state": state,
             "questions": {"verdict": question},
         }, ensure_ascii=False, allow_nan=False).encode("utf-8")
+        context["request_bytes"] = len(payload)
+        if "criteria" in question:
+            context["candidate_count"] = len(question["criteria"])
     except (ValueError, TypeError) as exc:
         return _error("CLEF_INVALID_INPUT", str(exc))
 
@@ -154,15 +224,24 @@ def evaluate_clef(state, question_type: str, instructions: str, choices=None, *,
         return _error("CLEF_INVALID_CONFIG", str(exc))
 
     for attempt in range(retries + 1):
+        attempt_started = time.perf_counter()
+        context["attempt_count"] += 1
+        context.pop("http_status", None)
+        status = None
+        result = None
         try:
             with opener.open(req, timeout=timeout) as response:
+                status = response.status
+                context["http_status"] = status
                 if response.status != 200:
-                    return _error("CLEF_HTTP_ERROR", "Expected HTTP 200", response.status)
+                    result = _error("CLEF_HTTP_ERROR", "Expected HTTP 200", response.status)
+                    return result
                 data = json.loads(response.read().decode("utf-8"))
             if not isinstance(data, dict):
                 raise ValueError("Expected a JSON object from Clef")
             if data.get("success") is False and "errors" in data:
-                return _error("CLEF_HTTP_ERROR", f"Cloudflare API error: {json.dumps(data['errors'], ensure_ascii=False)}")
+                result = _error("CLEF_HTTP_ERROR", f"Cloudflare API error: {json.dumps(data['errors'], ensure_ascii=False)}")
+                return result
             # 严格兼容 Cloudflare Client v4 API 标准响应信封 {"result": {...}, "success": true}
             if data.get("success") is True and isinstance(data.get("result"), dict) and "answers" in data["result"]:
                 payload_data = data["result"]
@@ -170,17 +249,33 @@ def evaluate_clef(state, question_type: str, instructions: str, choices=None, *,
                 payload_data = data
             if not isinstance(payload_data, dict) or "error" in payload_data or not isinstance(payload_data.get("answers"), dict):
                 raise ValueError("Expected answers.verdict in the SystemOne response")
-            return _validate_answer(payload_data["answers"].get("verdict"), question)
+            usage = payload_data.get("usage", {})
+            if isinstance(usage, dict):
+                for key in ("input_tokens", "output_tokens", "total_tokens"):
+                    if type(usage.get(key)) is int and usage[key] >= 0:
+                        context[key] = usage[key]
+            if isinstance(payload_data.get("model"), str) and payload_data["model"] in ALLOWED_MODELS:
+                context["served_model"] = payload_data["model"]
+            result = _validate_answer(payload_data["answers"].get("verdict"), question)
+            return result
         except urllib.error.HTTPError as exc:
             status = exc.code
+            context["http_status"] = status
             exc.close()
             if status not in RETRYABLE_STATUSES:
-                return _error("CLEF_HTTP_ERROR", "Clef rejected the request", status)
+                result = _error("CLEF_HTTP_ERROR", "Clef rejected the request", status)
+                return result
             result = _error("CLEF_SERVICE_UNAVAILABLE", "Clef remained unavailable after retries", status)
         except (urllib.error.URLError, OSError, HTTPException):
             result = _error("CLEF_SERVICE_UNAVAILABLE", "Connection failed or timed out after retries")
         except (ValueError, UnicodeError) as exc:
-            return _error("CLEF_INVALID_RESPONSE", str(exc))
+            result = _error("CLEF_INVALID_RESPONSE", str(exc))
+            return result
+        finally:
+            _append_log({**context, "event": "attempt", "attempt": attempt + 1,
+                "transport": "http", **_outcome(result),
+                **({"http_status": status} if status is not None else {}),
+                "duration_ms": round((time.perf_counter() - attempt_started) * 1000, 3)})
         if attempt < retries:
             time.sleep(0.5 * 2 ** attempt)
     return result
