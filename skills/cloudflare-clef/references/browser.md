@@ -10,6 +10,22 @@
 
 不要求用户提到 Clef、函数名、阈值或调试输出。成功后回答任务结果和来源。中间的模型判断留在工具内部；用户要求评测时才展示轨迹。
 
+## 查看是否生效
+
+默认持久化日志：`~/.local/state/clef-browser/events.jsonl`，首次运行时创建，每行一条 JSON。文件权限 0600，日志不进入仓库，不影响日常回答。
+
+```bash
+tail -f ~/.local/state/clef-browser/events.jsonl
+```
+
+- `event: decision`、`transport: http`、`outcome: success`：标准库 HTTP 客户端收到并验证了 Clef 答案，证明该次实际调用成功。包含所选动作类别、概率、耗时及请求的模型别名。
+- `event: run`、`status: completed`、`reason: verified`：导航循环完成，独立目标检查通过。`successful_decisions` 是有效决策次数，`decision_attempts` 是尝试次数。
+- `status: handoff`：交回主 Agent，`reason` 表明配置、站点、低置信度或服务等原因；可能已经成功调用模型，也可能是零次调用。
+
+同一次运行用 `run_id` 关联，时间为 UTC。只记录站点域名，不保存完整 URL、查询参数、正文、任务原文、链接文字、密钥或原始异常。日志写入失败不改变导航结果，真实后端运行的返回值 `log_written: false` 可用于排查。
+
+没有新增日志只能说明这个模块没有留下新记录，不能据此判断服务坏了：单一已知链接直接打开等步骤不需要调用它。用户可以直接问 Agent：“查看最近一次浏览器任务的日志，确认有没有调用 Clef。”
+
 ## 一次性安装（Agent 执行）
 
 用用户给定的端点运行 `<skill-dir>/scripts/install-browser.py --endpoint <url>`。它写入 `~/.config/clef-browser/config.json`，并在已有 `~/.agents/skills/ego-browser/SKILL.md` 中加入默认路由提示。原文件备份在配置目录中，重复安装不追加重复提示；未安装 ego-browser 时不创建冒充的浏览器技能。

@@ -286,6 +286,8 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 支持多步链接导航、低置信度交接、步数与时间预算，以及独立完成检查。当前范围为只读导航；按钮、表单、登录、发布及视觉操作需要后续实现。
 
+需要核对是否生效时，查看本机 `~/.local/state/clef-browser/events.jsonl`：`decision` 的 HTTP 成功记录证明收到有效 Clef 答案，`run` 记录独立验证结果和调用次数。同次运行以 `run_id` 关联；不记录正文、完整 URL 或密钥。也可直接让 Agent 查看最近一次日志，日常回答仍保持简洁。
+
 使用方法见 [调用说明](skills/cloudflare-clef/references/browser.md)，真实 GitHub 与 X 导航测试见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md)。该测试独立于前面的搜索结果筛选评测，速度收益须通过同任务的配对实验测量。
 
 ### Python 集成
