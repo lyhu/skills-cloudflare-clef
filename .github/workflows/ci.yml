@@ -30,6 +30,10 @@ jobs:
       - name: Check TypeScript template loads
         run: node --input-type=module -e "await import('./skills/cloudflare-clef/templates/client.ts')"
       - name: Check browser benchmark syntax
-        run: node --check benchmarks/browser.mjs
+        run: |
+          node --check benchmarks/browser.mjs
+          node --check benchmarks/clef-browser.mjs
+          node --check skills/cloudflare-clef/scripts/browser.mjs
+          node --test tests/*.test.mjs
       - name: Check npm distribution contents
         run: npm pack --dry-run

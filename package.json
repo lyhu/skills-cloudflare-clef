@@ -13,12 +13,14 @@
     "skills/cloudflare-clef/SKILL.md",
     "skills/cloudflare-clef/package.json",
     "skills/cloudflare-clef/scripts/*.py",
+    "skills/cloudflare-clef/scripts/*.mjs",
     "skills/cloudflare-clef/references/*.json",
+    "skills/cloudflare-clef/references/*.md",
     "skills/cloudflare-clef/templates/*.py",
     "skills/cloudflare-clef/templates/*.ts"
   ],
   "scripts": {
-    "test": "python3 -m unittest discover -s tests -v",
+    "test": "python3 -m unittest discover -s tests -v && node --test tests/*.test.mjs",
     "check": "python3 scripts/validate.py",
     "benchmark": "python3 benchmarks/run.py"
   },

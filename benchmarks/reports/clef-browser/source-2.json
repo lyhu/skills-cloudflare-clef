@@ -1,0 +1,44 @@
+{
+  "task": "source",
+  "repeat": 2,
+  "timestamp": "2026-10-04T09:47:32.008Z",
+  "setup_ms": 1275.3400420000544,
+  "end_to_end_ms": 6065.680833999999,
+  "status": "completed",
+  "reason": "verified",
+  "final_url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+  "total_ms": 4790.317625000025,
+  "decision_ms": 3200.321208999958,
+  "navigation_ms": 1512.5611239998834,
+  "trace": [
+    {
+      "step": 0,
+      "url": "https://github.com/jkudish/jev-browser",
+      "candidate_count": 19,
+      "decision_ms": 1590.0578749999404,
+      "action": "navigate",
+      "choice": "LINK 5: src | https://github.com/jkudish/jev-browser/tree/main/src",
+      "confidence": 0.9644,
+      "navigation_ms": 703.5115409999853
+    },
+    {
+      "step": 1,
+      "url": "https://github.com/jkudish/jev-browser/tree/main/src",
+      "candidate_count": 10,
+      "decision_ms": 991.2711669999408,
+      "action": "navigate",
+      "choice": "LINK 0: cli.ts | https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+      "confidence": 0.9642,
+      "navigation_ms": 809.0495829998981
+    },
+    {
+      "step": 2,
+      "url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+      "candidate_count": 0,
+      "decision_ms": 618.9921670000767,
+      "action": "done",
+      "choice": "DONE: the requested destination has been reached",
+      "confidence": 0.9956
+    }
+  ]
+}

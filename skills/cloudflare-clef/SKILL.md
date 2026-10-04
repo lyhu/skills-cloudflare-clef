@@ -1,6 +1,6 @@
 ---
 name: cloudflare-clef
-description: 基于本地 Cloudflare Clef (Qwen3.8-27B) 服务的强类型 System One 决策技能。适用于语义工作流分流、高危 Shell 操作前置风险评估及代码审查多维评分。
+description: 基于本地 Cloudflare Clef (Qwen3.8-27B) 服务的强类型 System One 决策技能。适用于语义工作流分流、高危 Shell 操作前置风险评估、代码审查多维评分，以及通过 Clef-Browser 在 ego-browser 中选择只读导航链接。
 license: Apache-2.0
 metadata:
   version: "1.0.0"
@@ -90,6 +90,7 @@ python3 <skill-dir>/scripts/evaluate.py \
 
 ## 5. 支撑资源
 
+- 浏览器链接导航原型：需要将页面导航判断交给 Clef 时，阅读 [references/browser.md](references/browser.md)，通过现有 ego-browser Page 调用 `scripts/browser.mjs`。
 - 请求/响应 Schema 规范：[references/primitives.json](references/primitives.json)
 - Python 集成客户端模板：[templates/client.py](templates/client.py)
 - TypeScript / Node 集成模板：[templates/client.ts](templates/client.ts)

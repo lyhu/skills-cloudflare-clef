@@ -1,0 +1,347 @@
+{
+  "model": "clef",
+  "transport": "Python stdlib client over HTTP",
+  "browser": "ego-browser",
+  "threshold": 0.6,
+  "max_steps": 5,
+  "repeats": 3,
+  "driver_sha256": "f93abff4a8e3ba816e889a88b22a04e7857a7d5b94281662669fd69dcfff270b",
+  "records": [
+    {
+      "task": "contributing",
+      "repeat": 1,
+      "timestamp": "2026-10-04T09:46:59.867Z",
+      "setup_ms": 1556.6030419999734,
+      "end_to_end_ms": 4696.477249999996,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+      "total_ms": 3139.7461660000263,
+      "decision_ms": 2196.576207999955,
+      "navigation_ms": 896.9458749999758,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1624.109582999954,
+          "action": "navigate",
+          "choice": "LINK 9: CONTRIBUTING.md | https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "confidence": 0.9646,
+          "navigation_ms": 896.9458749999758
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "candidate_count": 0,
+          "decision_ms": 572.4666250000009,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9965
+        }
+      ]
+    },
+    {
+      "task": "contributing",
+      "repeat": 2,
+      "timestamp": "2026-10-04T09:47:36.866Z",
+      "setup_ms": 1845.7459159999853,
+      "end_to_end_ms": 4857.7972500000615,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+      "total_ms": 3012.0359590000007,
+      "decision_ms": 2179.8812920000637,
+      "navigation_ms": 776.9636669999454,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1613.611583000049,
+          "action": "navigate",
+          "choice": "LINK 9: CONTRIBUTING.md | https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "confidence": 0.9646,
+          "navigation_ms": 776.9636669999454
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "candidate_count": 0,
+          "decision_ms": 566.2697090000147,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9965
+        }
+      ]
+    },
+    {
+      "task": "contributing",
+      "repeat": 3,
+      "timestamp": "2026-10-04T09:48:17.797Z",
+      "setup_ms": 1760.0084999999963,
+      "end_to_end_ms": 4817.949249999947,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+      "total_ms": 3057.918958000024,
+      "decision_ms": 2171.5602909999434,
+      "navigation_ms": 831.7610829999903,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1584.4588749998948,
+          "action": "navigate",
+          "choice": "LINK 9: CONTRIBUTING.md | https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "confidence": 0.9646,
+          "navigation_ms": 831.7610829999903
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/CONTRIBUTING.md",
+          "candidate_count": 0,
+          "decision_ms": 587.1014160000486,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9965
+        }
+      ]
+    },
+    {
+      "task": "source",
+      "repeat": 1,
+      "timestamp": "2026-10-04T09:47:06.278Z",
+      "setup_ms": 1494.266667000018,
+      "end_to_end_ms": 6410.025792,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+      "total_ms": 4915.720332999947,
+      "decision_ms": 3182.842667000019,
+      "navigation_ms": 1636.811250000028,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1565.3791249999776,
+          "action": "navigate",
+          "choice": "LINK 5: src | https://github.com/jkudish/jev-browser/tree/main/src",
+          "confidence": 0.9644,
+          "navigation_ms": 756.9953750000568
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/tree/main/src",
+          "candidate_count": 10,
+          "decision_ms": 1005.0197090000147,
+          "action": "navigate",
+          "choice": "LINK 0: cli.ts | https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "confidence": 0.9642,
+          "navigation_ms": 879.8158749999711
+        },
+        {
+          "step": 2,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "candidate_count": 0,
+          "decision_ms": 612.4438330000266,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9956
+        }
+      ]
+    },
+    {
+      "task": "source",
+      "repeat": 2,
+      "timestamp": "2026-10-04T09:47:32.008Z",
+      "setup_ms": 1275.3400420000544,
+      "end_to_end_ms": 6065.680833999999,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+      "total_ms": 4790.317625000025,
+      "decision_ms": 3200.321208999958,
+      "navigation_ms": 1512.5611239998834,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1590.0578749999404,
+          "action": "navigate",
+          "choice": "LINK 5: src | https://github.com/jkudish/jev-browser/tree/main/src",
+          "confidence": 0.9644,
+          "navigation_ms": 703.5115409999853
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/tree/main/src",
+          "candidate_count": 10,
+          "decision_ms": 991.2711669999408,
+          "action": "navigate",
+          "choice": "LINK 0: cli.ts | https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "confidence": 0.9642,
+          "navigation_ms": 809.0495829998981
+        },
+        {
+          "step": 2,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "candidate_count": 0,
+          "decision_ms": 618.9921670000767,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9956
+        }
+      ]
+    },
+    {
+      "task": "source",
+      "repeat": 3,
+      "timestamp": "2026-10-04T09:48:12.977Z",
+      "setup_ms": 1466.0380419999128,
+      "end_to_end_ms": 6524.898042000015,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+      "total_ms": 5058.658042000025,
+      "decision_ms": 3225.6667930000694,
+      "navigation_ms": 1758.9966250000289,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://github.com/jkudish/jev-browser",
+          "candidate_count": 19,
+          "decision_ms": 1588.7839590000222,
+          "action": "navigate",
+          "choice": "LINK 5: src | https://github.com/jkudish/jev-browser/tree/main/src",
+          "confidence": 0.9644,
+          "navigation_ms": 819.5143750000279
+        },
+        {
+          "step": 1,
+          "url": "https://github.com/jkudish/jev-browser/tree/main/src",
+          "candidate_count": 10,
+          "decision_ms": 1011.123459000024,
+          "action": "navigate",
+          "choice": "LINK 0: cli.ts | https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "confidence": 0.9642,
+          "navigation_ms": 939.4822500000009
+        },
+        {
+          "step": 2,
+          "url": "https://github.com/jkudish/jev-browser/blob/main/src/cli.ts",
+          "candidate_count": 0,
+          "decision_ms": 625.7593750000233,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9956
+        }
+      ]
+    },
+    {
+      "task": "x-browser",
+      "repeat": 1,
+      "timestamp": "2026-10-04T09:47:11.695Z",
+      "setup_ms": 2398.4522080000024,
+      "end_to_end_ms": 5415.7675000000745,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://x.com/Asteri_eth/status/2106014727595807105",
+      "total_ms": 3017.291499999934,
+      "decision_ms": 2054.4709590000566,
+      "navigation_ms": 915.7369160000235,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://x.com/search?q=Jev%20typesafe&src=typed_query",
+          "candidate_count": 10,
+          "decision_ms": 1383.734000000055,
+          "action": "navigate",
+          "choice": "LINK 5: Oct 2 | https://x.com/Asteri_eth/status/2106014727595807105",
+          "confidence": 0.9667,
+          "navigation_ms": 915.7369160000235
+        },
+        {
+          "step": 1,
+          "url": "https://x.com/Asteri_eth/status/2106014727595807105",
+          "candidate_count": 0,
+          "decision_ms": 670.7369590000017,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9854
+        }
+      ]
+    },
+    {
+      "task": "x-browser",
+      "repeat": 2,
+      "timestamp": "2026-10-04T09:47:25.940Z",
+      "setup_ms": 2105.078542000032,
+      "end_to_end_ms": 5135.338625000091,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://x.com/Asteri_eth/status/2106014727595807105",
+      "total_ms": 3030.093916999991,
+      "decision_ms": 2051.1547919999575,
+      "navigation_ms": 923.5396249999758,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://x.com/search?q=Jev%20typesafe&src=typed_query",
+          "candidate_count": 10,
+          "decision_ms": 1392.2987919999287,
+          "action": "navigate",
+          "choice": "LINK 5: Oct 2 | https://x.com/Asteri_eth/status/2106014727595807105",
+          "confidence": 0.9647,
+          "navigation_ms": 923.5396249999758
+        },
+        {
+          "step": 1,
+          "url": "https://x.com/Asteri_eth/status/2106014727595807105",
+          "candidate_count": 0,
+          "decision_ms": 658.8560000000289,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9854
+        }
+      ]
+    },
+    {
+      "task": "x-browser",
+      "repeat": 3,
+      "timestamp": "2026-10-04T09:48:23.742Z",
+      "setup_ms": 2385.7980420000385,
+      "end_to_end_ms": 5943.91412500001,
+      "status": "completed",
+      "reason": "verified",
+      "final_url": "https://x.com/Asteri_eth/status/2106014727595807105",
+      "total_ms": 3558.100541999913,
+      "decision_ms": 2035.2911669999594,
+      "navigation_ms": 1469.8441250000615,
+      "trace": [
+        {
+          "step": 0,
+          "url": "https://x.com/search?q=Jev%20typesafe&src=typed_query",
+          "candidate_count": 10,
+          "decision_ms": 1399.2529169999762,
+          "action": "navigate",
+          "choice": "LINK 5: Oct 2 | https://x.com/Asteri_eth/status/2106014727595807105",
+          "confidence": 0.9662,
+          "navigation_ms": 1469.8441250000615
+        },
+        {
+          "step": 1,
+          "url": "https://x.com/Asteri_eth/status/2106014727595807105",
+          "candidate_count": 0,
+          "decision_ms": 636.0382499999832,
+          "action": "done",
+          "choice": "DONE: the requested destination has been reached",
+          "confidence": 0.9854
+        }
+      ]
+    }
+  ]
+}

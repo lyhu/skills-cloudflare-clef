@@ -1,0 +1,34 @@
+{
+  "task": "x-browser",
+  "repeat": 1,
+  "timestamp": "2026-10-04T09:46:16.095Z",
+  "setup_ms": 2502.5720420000143,
+  "end_to_end_ms": 4779.713334000087,
+  "status": "handoff",
+  "reason": "model_handoff",
+  "final_url": "https://x.com/Asteri_eth/status/2106014727595807105",
+  "total_ms": 2277.124708999996,
+  "decision_ms": 1879.450251000002,
+  "navigation_ms": 381.83170799992513,
+  "trace": [
+    {
+      "step": 0,
+      "url": "https://x.com/search?q=Jev%20typesafe&src=typed_query",
+      "candidate_count": 10,
+      "decision_ms": 1400.4419169999892,
+      "action": "navigate",
+      "choice": "LINK 5: Oct 2 | https://x.com/Asteri_eth/status/2106014727595807105",
+      "confidence": 0.9663,
+      "navigation_ms": 381.83170799992513
+    },
+    {
+      "step": 1,
+      "url": "https://x.com/Asteri_eth/status/2106014727595807105",
+      "candidate_count": 0,
+      "decision_ms": 479.00833400001284,
+      "action": "handoff",
+      "choice": "HANDOFF: no suitable link, uncertainty, or interaction needs the main agent",
+      "confidence": 0.7718
+    }
+  ]
+}

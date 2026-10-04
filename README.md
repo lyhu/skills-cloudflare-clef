@@ -276,6 +276,14 @@ export CLEF_MODEL="clef"  # 也支持 @cf/cloudflare/clef 或 clef-flash
 
 ## 应用集成示例
 
+### Clef-Browser：浏览器导航原型
+
+已提供 [Clef-Browser 模块](skills/cloudflare-clef/scripts/browser.mjs)，可在现有 `ego-browser` 会话中运行“页面观察 → Clef 选择链接 → 导航 → 核对完成条件”的循环。主 Agent 给定目标与只读路由范围，Clef 每步返回强类型决策，代码执行并记录耗时；不需要另装浏览器自动化框架。
+
+支持多步链接导航、低置信度交接、步数与时间预算，以及独立完成检查。当前范围为只读导航；按钮、表单、登录、发布及视觉操作需要后续实现。
+
+使用方法见 [调用说明](skills/cloudflare-clef/references/browser.md)，真实 GitHub 与 X 导航测试见 [可行性评测](benchmarks/CLEF_BROWSER_REPORT.md)。该测试独立于前面的搜索结果筛选评测，速度收益须通过同任务的配对实验测量。
+
 ### Python 集成
 使用随技能分发的 [Python 模板](skills/cloudflare-clef/templates/client.py)：
 
