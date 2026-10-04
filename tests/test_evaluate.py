@@ -319,6 +319,35 @@ console.log(JSON.stringify(result));'''
         failed = subprocess.run([node, "--input-type=module", "-e", code], capture_output=True, text=True, timeout=5)
         self.assert_failure(json.loads(failed.stdout), "CLEF_SERVICE_UNAVAILABLE")
 
+    def test_cloudflare_official_api_envelope_and_errors(self):
+        # 1. 验证 Cloudflare Client v4 API 标准响应信封: {"result": {...}, "success": true}
+        cf_envelope = {
+            "result": {
+                "model": "@cf/cloudflare/clef",
+                "answers": {"verdict": NOUL},
+                "usage": {"input_tokens": 15, "output_tokens": 0},
+            },
+            "success": True,
+            "errors": [],
+            "messages": [],
+        }
+        self.queue(raw=json.dumps(cf_envelope).encode())
+        with patch.dict(os.environ, {"CLEF_MODEL": "@cf/cloudflare/clef"}):
+            self.assertEqual(self.evaluate(), NOUL)
+
+        # 2. 验证 Cloudflare API 错误响应: {"success": false, "errors": [...]}
+        cf_error = {
+            "result": None,
+            "success": False,
+            "errors": [{"code": 1000, "message": "Authentication error"}],
+            "messages": [],
+        }
+        self.queue(raw=json.dumps(cf_error).encode())
+        result = self.evaluate()
+        self.assert_failure(result, "CLEF_HTTP_ERROR")
+        self.assertIn("Authentication error", result["message"])
+
 
 if __name__ == "__main__":
     unittest.main()
+

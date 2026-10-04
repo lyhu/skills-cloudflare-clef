@@ -10,7 +10,7 @@
       "required": ["model", "state", "questions"],
       "additionalProperties": false,
       "properties": {
-        "model": {"enum": ["clef", "Cloudflare/clef"]},
+        "model": {"enum": ["clef", "clef-flash", "Cloudflare/clef", "@cf/cloudflare/clef", "@cf/cloudflare/clef-flash"]},
         "state": {},
         "questions": {
           "type": "object",

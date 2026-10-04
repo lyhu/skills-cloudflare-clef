@@ -22,6 +22,9 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
+ALLOWED_MODELS = {"clef", "clef-flash", "Cloudflare/clef", "@cf/cloudflare/clef", "@cf/cloudflare/clef-flash"}
+
+
 def _error(code, message, status=None):
     result = {"error": code, "message": message, "fallback_used": True}
     if status is not None:
@@ -131,8 +134,8 @@ def evaluate_clef(state, question_type: str, instructions: str, choices=None, *,
         parsed = urllib.parse.urlsplit(endpoint)
         if parsed.scheme not in ("http", "https") or not parsed.hostname or parsed.username is not None:
             raise ValueError("CLEF_BACKEND_URL must be an HTTP(S) URL without embedded credentials")
-        if os.getenv("CLEF_MODEL", "clef") not in ("clef", "Cloudflare/clef"):
-            raise ValueError("CLEF_MODEL must be clef or Cloudflare/clef")
+        if os.getenv("CLEF_MODEL", "clef") not in ALLOWED_MODELS:
+            raise ValueError(f"CLEF_MODEL must be one of: {', '.join(sorted(ALLOWED_MODELS))}")
         timeout = float(os.getenv("CLEF_TIMEOUT", "10.0"))
         retries = int(os.getenv("CLEF_MAX_RETRIES", "2"))
         if not math.isfinite(timeout) or timeout <= 0:
@@ -156,9 +159,18 @@ def evaluate_clef(state, question_type: str, instructions: str, choices=None, *,
                 if response.status != 200:
                     return _error("CLEF_HTTP_ERROR", "Expected HTTP 200", response.status)
                 data = json.loads(response.read().decode("utf-8"))
-            if not isinstance(data, dict) or "error" in data or not isinstance(data.get("answers"), dict):
+            if not isinstance(data, dict):
+                raise ValueError("Expected a JSON object from Clef")
+            if data.get("success") is False and "errors" in data:
+                return _error("CLEF_HTTP_ERROR", f"Cloudflare API error: {json.dumps(data['errors'], ensure_ascii=False)}")
+            # 严格兼容 Cloudflare Client v4 API 标准响应信封 {"result": {...}, "success": true}
+            if data.get("success") is True and isinstance(data.get("result"), dict) and "answers" in data["result"]:
+                payload_data = data["result"]
+            else:
+                payload_data = data
+            if not isinstance(payload_data, dict) or "error" in payload_data or not isinstance(payload_data.get("answers"), dict):
                 raise ValueError("Expected answers.verdict in the SystemOne response")
-            return _validate_answer(data["answers"].get("verdict"), question)
+            return _validate_answer(payload_data["answers"].get("verdict"), question)
         except urllib.error.HTTPError as exc:
             status = exc.code
             exc.close()
