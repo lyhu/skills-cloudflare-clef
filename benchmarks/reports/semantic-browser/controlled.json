@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-10-04T11:28:00.390Z",
+  "model": "clef",
+  "browser": "ego-browser",
+  "repeats": 1,
+  "records": [
+    {
+      "task": "menu",
+      "status": "completed",
+      "reason": "verified",
+      "run_id": "8197508c-2a71-42d1-9a95-ce5d671c64b0",
+      "end_to_end_ms": 793.1634170000034,
+      "loop_ms": 598.40716599999,
+      "decision_ms": 492.67379099997925,
+      "successful_decisions": 1,
+      "operations": [
+        "click"
+      ],
+      "log_written": true
+    },
+    {
+      "task": "search",
+      "status": "completed",
+      "reason": "verified",
+      "run_id": "9aeb7bb8-9922-44a0-a1ea-50c4c57fe94d",
+      "end_to_end_ms": 2390.643875000009,
+      "loop_ms": 2313.703333000012,
+      "decision_ms": 1138.8694999999716,
+      "successful_decisions": 2,
+      "operations": [
+        "fill",
+        "click"
+      ],
+      "log_written": true
+    },
+    {
+      "task": "filter",
+      "status": "completed",
+      "reason": "verified",
+      "run_id": "1b5f58a8-b6d5-4b8b-85ce-0405fa63bfea",
+      "end_to_end_ms": 2124.503875000024,
+      "loop_ms": 1938.3734159999876,
+      "decision_ms": 1732.1229570000432,
+      "successful_decisions": 3,
+      "operations": [
+        "click",
+        "select",
+        "click"
+      ],
+      "log_written": true
+    }
+  ]
+}

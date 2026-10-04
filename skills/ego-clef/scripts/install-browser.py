@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configure local Clef navigation and add a backed-up ego-browser routing hint."""
+"""Configure local Clef semantic interaction and add a backed-up ego-browser routing hint."""
 import argparse
 import hashlib
 import json
@@ -31,12 +31,13 @@ def install(endpoint, *, config_dir=None, browser_skill=None):
         block = f"""{START}
 ## Ego Clef navigation
 
-For tasks that require choosing among read-only page links, prefer the configured
-local Clef navigation loop. Read [ego-clef]({skill}) and use its `navigate`
-entry point with the user's goal and an agent-owned completion check. Reuse this
+For browser tasks that require choosing among semantic page controls, prefer the
+configured local Clef loop across websites. Read [ego-clef]({skill}); use `interact`
+for menus, filters, search and supplied-value forms, or `navigate` for links. The
+agent binds task-scoped action/route policies and an independent completion check. Reuse this
 task's Page and TaskSpace. The user need not name a model, skill or function.
 Report task results normally; omit backend names, confidence and timing tables
-unless requested. Missing configuration, unsupported sites or loop handoff go
+unless requested. Missing configuration, unsupported interactions or loop handoff go
 back to the main agent's normal browser workflow, preserving the same task;
 do not ask the user to choose a backend. Human login and permission requirements
 still follow the rules below. Follow explicit user provider preferences.

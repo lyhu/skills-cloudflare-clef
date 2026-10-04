@@ -103,18 +103,21 @@ test("local configuration works without inherited shell variables; environment w
   } finally { await rm(dir, { recursive: true }); }
 });
 
-test("default site scopes allow reading and reject write/account routes", () => {
+test("default origin scope works on arbitrary sites and rejects obvious write/account routes", () => {
   const github = readOnlyScope("https://github.com/owner/repo/tree/main/src");
   assert.equal(github(new URL("https://github.com/owner/repo/blob/main/README.md")), true);
-  for (const path of ["/owner/other/blob/main/a", "/owner/repo/settings", "/owner/repo/issues/new",
+  assert.equal(github(new URL("https://github.com/owner/other/blob/main/a")), true);
+  for (const path of ["/owner/repo/settings", "/owner/repo/issues/new",
     "/owner/repo/delete", "/owner/repo/blob/main/a?edit=true"]) {
     assert.equal(github(new URL("https://github.com" + path)), false);
   }
   const x = readOnlyScope("https://x.com/search?q=test");
   assert.equal(x(new URL("https://x.com/author/status/123")), true);
-  assert.equal(x(new URL("https://x.com/compose/post")), false);
-  assert.equal(x(new URL("https://x.com/i/chat")), false);
-  assert.equal(readOnlyScope("https://unknown.test/"), null);
+  assert.equal(x(new URL("https://x.com/publish")), false);
+  const docs = readOnlyScope("https://unknown.test/docs");
+  assert.equal(docs(new URL("https://unknown.test/search?q=decision")), true);
+  assert.equal(docs(new URL("https://other.test/docs")), false);
+  assert.equal(readOnlyScope("file:///tmp/page.html"), null);
 });
 
 test("automatic shortcut navigates with inferred scope and a target URL", async () => {

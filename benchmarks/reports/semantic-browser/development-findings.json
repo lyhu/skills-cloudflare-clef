@@ -1,0 +1,19 @@
+{
+  "development_findings": [
+    {
+      "run_id": "79b9123d-990e-4b91-9066-0b2e5e84a436",
+      "reason": "HTTP 413",
+      "fix": "Send only eligible actions and related field state, not all page controls"
+    },
+    {
+      "run_id": "73e15840-61c6-4056-b1d5-ec98cb857d18",
+      "reason": "Submitted an empty search, then low confidence",
+      "fix": "Agent-owned policy enforces the supplied query before submission"
+    },
+    {
+      "run_id": "ec3cf4db-e74a-4498-ae25-b56b055a3b5a",
+      "reason": "Wait selector expected main tag; page used role=main",
+      "fix": "Verify actual result anchors; do not equate an accessibility role with an HTML tag"
+    }
+  ]
+}

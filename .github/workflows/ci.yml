@@ -33,7 +33,9 @@ jobs:
         run: |
           node --check benchmarks/browser.mjs
           node --check benchmarks/clef-browser.mjs
+          node --check benchmarks/semantic-browser.mjs
           node --check skills/ego-clef/scripts/browser.mjs
+          node --check skills/ego-clef/scripts/semantic.mjs
           node --test tests/*.test.mjs
       - name: Check npm distribution contents
         run: |

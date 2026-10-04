@@ -4,9 +4,9 @@
 
 完成一次安装和端点配置后，用户直接说浏览器任务：
 
-- “打开这个 GitHub 项目的贡献指南。”
-- “找到这个仓库的命令行入口源码。”
-- “在 X 上找 Jev 的浏览器应用案例，打开原帖看看。”
+- “在这个文档站搜索 pathlib，显示搜索结果。”
+- “展开菜单，选择 Tools 分类并应用筛选。”
+- “填写这些已知条件，再打开匹配的详情页。”
 
 不要求用户提到 Clef、函数名、阈值或调试输出。成功后回答任务结果和来源。中间的模型判断留在工具内部；用户要求评测时才展示轨迹。
 
@@ -19,8 +19,8 @@ tail -f ~/.local/state/clef-browser/events.jsonl
 ```
 
 - `event: decision`、`transport: http`、`outcome: success`：标准库 HTTP 客户端收到并验证了 Clef 答案，证明该次实际调用成功。包含所选动作类别、概率、耗时及请求的模型别名。
-- `event: run`、`status: completed`、`reason: verified`：导航循环完成，独立目标检查通过。`successful_decisions` 是有效决策次数，`decision_attempts` 是尝试次数。
-- `status: handoff`：交回主 Agent，`reason` 表明配置、站点、低置信度或服务等原因；可能已经成功调用模型，也可能是零次调用。
+- `event: run`、`status: completed`、`reason: verified`：循环完成，独立目标检查通过。`successful_decisions` 是有效决策次数，`decision_attempts` 是尝试次数。目标已满足时可为零次，不能将零次完成记录视为实际模型调用。
+- `status: handoff`：交回主 Agent，`reason` 表明配置、范围、低置信度或服务等原因；可能已经成功调用模型，也可能是零次调用。
 
 同一次运行用 `run_id` 关联，时间为 UTC。只记录站点域名，不保存完整 URL、查询参数、正文、任务原文、链接文字、密钥或原始异常。日志写入失败不改变导航结果，真实后端运行的返回值 `log_written: false` 可用于排查。
 
@@ -36,20 +36,45 @@ tail -f ~/.local/state/clef-browser/events.jsonl
 
 ## Agent 的默认流程
 
-读取 ego-browser 的 TaskSpace/Page 规则。用户指定的单一 URL 可以直接打开；当需要选择页面链接时，使用当前 Page 调用：
+先读取 ego-browser 的会话与权限规则。同一 TaskSpace/Page 中，确定操作可直接执行，需要连续选择语义控件时使用 `interact`；仅跟随链接时使用 `navigate`。不按域名名单触发。
+
+| 功能 | Clef 参与方式 |
+| --- | --- |
+| 页面、目录、详情、搜索结果导航 | 从观察到的链接选择目标；默认同源，Agent 按任务收窄或明确允许跨域 |
+| 菜单、标签、筛选、复选项、语义按钮 | 选择已获任务策略允许的 click / hover |
+| 搜索与表单 | 从 `values` 选择键，代码原样 fill；Enter 也须由操作策略允许 |
+| 原生下拉框 | 选择页面实际提供的选项；自定义下拉框通过授权的点击序列处理 |
+| 寻找页面下方控件 | 选择 scroll；ego-browser 执行滚动，再观察 |
+| 内容阅读、截图/坐标、Canvas、拖拽、iframe/Shadow DOM 专项操作 | 主 Agent 使用普通 ego-browser；可将其中的语义子步骤交给 Clef |
+| 登录、验证码、付款、发布/删除、文件、弹窗或对话框 | 交回主 Agent，按用户授权与 ego-browser 规则处理 |
+
+Agent 根据当前观察和用户目标绑定策略，用户不需要写函数。例如已观察到 `#query`、`#category`、`#apply` 后：
 
 ```javascript
-const { navigate } = await import('/absolute/path/ego-clef/scripts/browser.mjs');
-const result = await navigate(page, userGoal, { targetUrl: observedTargetUrl });
+const { interact } = await import('/absolute/path/ego-clef/scripts/browser.mjs');
+const permitted = new Set(['#query', '#category', '#apply']);
+const result = await interact(page, userGoal, {
+  values: { query: { value: knownQuery, hint: 'Site search query' } },
+  allowAction: action => permitted.has(action.selector) &&
+    ['fill', 'select', 'click', 'press'].includes(action.kind),
+  verify: async (state, p) => p.evaluate(() =>
+    document.querySelector('#results')?.dataset.ready === 'true'),
+});
 ```
 
-`observedTargetUrl` 来自实际页面或用户给定目标。目标无法预先确定时，由 Agent 提供 `verify(observation)`，验证 URL 或 DOM 中的真实目标状态。GitHub 仓库阅读和 X 搜索/原帖有内置路由范围及正文等待条件；其他站点由主 Agent 接手，或按任务提供明确的 `allowNavigation`。
+上述选择器和输入必须来自真实页面及用户任务，不照搬示例。模型不生成选择器、文本或新权限。同源与关键词过滤只能挡住部分明显风险，不能证明按钮无副作用；`allowAction` 必须按任务限制元素和操作，不直接返回 `true` 允许整站操作。值必须是非敏感的准确输入，不传密码、验证码或支付信息。
 
-`completed` 后读取页面并报告用户所需内容。`handoff` 是**交回主 Agent**，主 Agent 检查当前页面后，沿用同一 TaskSpace/Page 继续普通 ego-browser 操作；不能因为模型不可用就要求用户选择后端。仅当用户确实需要登录、处理浏览器权限或授权时才调用 `task.handOff()` 交给用户。不要默认打印 `trace` 或延迟表。
+操作策略也应包含必要的状态条件，例如搜索字段达到给定值后才允许提交、选好分类后才允许应用。动态页面由 Agent 绑定 `waitForPage(page)` 等待实际内容就绪；页面已加载或表单已提交不能替代结果验证。
 
-这个接入借鉴 [ego-jev](https://github.com/ZephyrDeng/ego-jev) 的 Agent 内部决策循环与完成验证模式；当前仍只有只读链接导航，没有复制其表单/菜单执行器。自动路由属于技能指引，需要宿主 Agent 加载这些技能；不拦截所有底层浏览器 API，也不能隐藏宿主界面的工具调用。
+两个入口均需要独立 `verify(observation, page)` 或准确 `targetUrl`。每步观察页面及字段值，提供最多 24 个操作加 DONE/HANDOFF；只发送相关字段与精简上下文，避免将整页控件数据塞入模型请求；执行前重新观察，目标或策略改变即停止，同一状态的同一动作不会重复执行。默认 6 步/60 秒，复杂任务由 Agent 拆分，单次最多 20 步/300 秒。
 
-## 底层原型与高级调用
+仅有模型 DONE 不算完成；`verify` 通过才返回 `completed`。`handoff` 表示交回主 Agent，检查当前页面后继续同一会话，不能据此创建新 TaskSpace 或要求用户切换模型。实际登录或浏览器权限需要用户时才调用 `task.handOff()`。
+
+缺配置、低置信度、目标变化、无进展、服务错误及弹窗/对话框均停止循环。弹窗可能已经产生，主 Agent 检查当前 TaskSpace 中的 Page 后处理。没有实现自动接管新窗口或确认对话框。
+
+借鉴 [ego-jev](https://github.com/ZephyrDeng/ego-jev) 的 typed inner loop，使用独立 cloudflare-clef 客户端；不是对全部浏览器 API 的底层拦截，也不保证隐藏工具调用。正常回答只展示结果，调试与评测时才展示轨迹。
+
+## 链接模式与高级调用
 
 将已有 ego-browser Page 的**链接导航决策**交给 Clef。代码提取页面文字和链接，Clef 每步用一次 `choice` 选择链接、完成或交接；代码控制范围、预算与执行，并独立核对完成条件。主 Agent 仍负责目标拆解和内容总结。
 
@@ -94,7 +119,7 @@ waitForPage: p => p.waitForFunction(
   undefined, { timeout: 10000 }),
 ```
 
-### 输出和边界
+### 链接模式输出和边界
 
 - `status`：`completed` 仅表示调用方的完成检查通过；其他情况为 `handoff`。
 - `trace`：每步起始 URL、候选数、选择、概率、决策和导航耗时。不存储完整页面正文或凭据。
@@ -104,4 +129,4 @@ waitForPage: p => p.waitForFunction(
 - 低于阈值、服务异常、页面未就绪、导航失败、范围越界或完成检查不通过，停止自动导航并交回调用方。`handoff` 本身不会调用另一模型或取得新授权。
 - 时间预算在步骤之间检查；正在运行的浏览器调用使用其自身超时，不保证硬实时截止。重定向目标在导航后检查，不能阻止初始重定向请求；范围严格时应配合浏览器或网络层拦截。
 
-这是可复用的导航原型，不是通用浏览器 Agent。复杂规划、阅读理解及未覆盖交互由主 Agent 处理；概率阈值需要用具体任务校准。
+两个入口都由主 Agent 规划、授权与验证；概率阈值需要用具体任务校准。

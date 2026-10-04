@@ -2,7 +2,7 @@
   "name": "@lyhu/ego-clef",
   "version": "1.0.0",
   "type": "module",
-  "description": "Optional Clef decision loop for ego-browser read-only navigation",
+  "description": "Site-independent Clef decision loop for ego-browser semantic controls",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

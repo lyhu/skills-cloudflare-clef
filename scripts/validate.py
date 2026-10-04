@@ -63,6 +63,7 @@ def main():
         SKILL / "templates" / "client.py", SKILL / "templates" / "client.ts",
         ROOT / "skills/ego-clef/scripts/browser.mjs",
         ROOT / "skills/ego-clef/scripts/browser-log.mjs",
+        ROOT / "skills/ego-clef/scripts/semantic.mjs",
         ROOT / "skills/ego-clef/scripts/install-browser.py",
         ROOT / "skills/ego-clef/references/browser.md",
     ]

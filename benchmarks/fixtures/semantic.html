@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Semantic catalog fixture</title>
+<style>body { font: 18px system-ui; max-width: 720px; margin: 40px auto; } input,select,button {font:inherit; margin:8px;} [hidden] {display:none;}</style>
+<main>
+  <h1>Catalog</h1>
+  <form id="search-form" aria-label="Catalog search">
+    <label for="query">Search catalog</label>
+    <input id="query" type="search">
+    <button id="search" type="submit">Search</button>
+  </form>
+  <button id="filters" aria-expanded="false">Open Filters menu</button>
+  <section id="filter-panel" hidden>
+    <label for="category">Category</label>
+    <select id="category"><option value="all">All</option><option value="tools">Tools</option><option value="services">Services</option></select>
+    <button id="apply">Apply filters</button>
+  </section>
+  <output id="results" aria-live="polite">No search or filter applied.</output>
+</main>
+<script>
+const byId = id => document.getElementById(id);
+byId('filters').addEventListener('click', () => {
+  byId('filter-panel').hidden = !byId('filter-panel').hidden;
+  byId('filters').setAttribute('aria-expanded', String(!byId('filter-panel').hidden));
+});
+byId('search-form').addEventListener('submit', event => {
+  event.preventDefault();
+  byId('results').textContent = 'Search results for: ' + byId('query').value;
+  byId('results').dataset.query = byId('query').value;
+});
+byId('apply').addEventListener('click', () => {
+  byId('results').textContent = 'Applied category: ' + byId('category').selectedOptions[0].textContent;
+  byId('results').dataset.category = byId('category').value;
+});
+</script>
+</html>
